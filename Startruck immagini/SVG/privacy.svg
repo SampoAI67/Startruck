@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Livello_1" data-name="Livello 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 462.55 178.9">
+  <polyline points="5.99 143.4 6.37 152.39 25.33 152.29" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+  <polyline points="68.89 152.06 71.27 152.05 258.17 152.39" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+  <g>
+    <path d="M120.97,51.96s-36.09-2.04-37.79,2.38c-1.47,3.82-27.57,28.21-34.66,34.79-1.15,1.06-2.5,1.87-3.98,2.37-6.77,2.28-26.9,9.33-29.44,13.57-3.06,5.11-11.49,26.6-8.43,50.09" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+    <path d="M111.4,50.21l-1.23,38.95c-.18,5.8-4.82,10.47-10.62,10.69l-26.21,1.01c-6.43.25-11.7-5.02-11.47-11.45s.44-13.16.24-13.03" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+  </g>
+  <path d="M68.89,152.06v.03c0,11.47-9.75,20.76-21.79,20.76s-21.67-9.18-21.77-20.56c-.01-.07-.01-.13-.01-.2,0-11.47,9.75-20.77,21.78-20.77s21.77,9.28,21.79,20.74Z" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+  <path d="M456.55,6v145.92h-153.42s.01.03.01.04h-1.25l-40.21.06s.02-.07.03-.1H121.99V6h334.56Z" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+  <line x1="136.46" y1="147.49" x2="136.46" y2="25.53" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+  <path d="M128.21,12s2.38,19.74,10.21,14.3,11.42-22.23,14.55-9.57" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+  <path d="M152.46,14.6s3.61,19.83,9.62,12.43c4.9-6.04,14.66-24.89,14.47-11.06" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+  <line x1="157.31" y1="149.53" x2="157.31" y2="28.26" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+  <line x1="176.55" y1="146.3" x2="176.55" y2="15.96" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+  <polyline points="176.21 130.34 399.19 130.34 450.59 146.34" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+  <line x1="329.57" y1="151.92" x2="303.14" y2="151.96" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+  <line x1="258.32" y1="152.02" x2="212.46" y2="152.09" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+  <path d="M301.89,151.96v.18c0,11.47-9.75,20.76-21.79,20.76s-21.67-9.18-21.77-20.56c-.01-.07-.01-.13-.01-.2v-.12h3.36l40.21-.06Z" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+  <path d="M261.71,151.92s-.02.07-.03.1h-3.36s0-.07.01-.1h3.38Z" style="fill: none; stroke: #dbdbdb; stroke-miterlimit: 10; stroke-width: 12px;"/>
+</svg>

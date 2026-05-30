@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Startruck — Confronto Font & Palette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Familjen+Grotesk:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&family=Sora:wght@400;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --char:#292929; --ink:#111; --line:#e7e7e7; --muted:#8a8a8a;
+    --bronze:#A9743B; --bronze-d:#7d5226; --amber:#D9A441; --bronze-tint:#f4ece2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#fff;color:var(--char);font-family:'Familjen Grotesk',sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:56px 40px 80px}
+  .pagehead{border-bottom:2px solid var(--char);padding-bottom:18px;margin-bottom:14px;display:flex;align-items:flex-end;justify-content:space-between;gap:24px}
+  .pagehead h1{font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:700;letter-spacing:-.02em}
+  .pagehead span{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em}
+  .sec-label{font-size:12px;text-transform:uppercase;letter-spacing:.22em;color:var(--muted);margin:54px 0 18px;font-weight:600}
+
+  /* ---------- LOGO MARK (CSS recreation) ---------- */
+  .mark{display:inline-flex;gap:5px;align-items:center}
+  .mark i{display:block;width:13px;height:34px;transform:skewX(-22deg);border-radius:1px}
+  .mark.grey i:nth-child(1){background:#606060}
+  .mark.grey i:nth-child(2){background:#8e8e8e}
+  .mark.grey i:nth-child(3){background:#bdbdbd}
+  .mark.char i{background:var(--char)}
+  .mark.bronze i:nth-child(1){background:var(--bronze-d)}
+  .mark.bronze i:nth-child(2){background:var(--bronze)}
+  .mark.bronze i:nth-child(3){background:var(--amber)}
+  .mark.sm i{width:9px;height:24px}
+
+  /* ---------- FONTS ---------- */
+  .font-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .fcard{border:1px solid var(--line);border-radius:14px;padding:26px 28px}
+  .fcard .tag{font-family:'Familjen Grotesk';font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--bronze-d);font-weight:700;margin-bottom:4px}
+  .fcard .pair{font-size:13px;color:var(--muted);margin-bottom:18px}
+  .fcard .word{font-size:40px;font-weight:700;letter-spacing:.02em;line-height:1;margin-bottom:14px}
+  .fcard h3{font-size:25px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px}
+  .fcard p{font-size:14.5px;color:#444;max-width:46ch}
+  .fcard .note{margin-top:16px;font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:12px}
+  .f1 .word,.f1 h3{font-family:'Poppins'} .f1 p{font-family:'Familjen Grotesk'}
+  .f2 .word,.f2 h3{font-family:'Space Grotesk'} .f2 p{font-family:'Inter'}
+  .f3 .word,.f3 h3{font-family:'Fraunces'} .f3 p{font-family:'Familjen Grotesk'}
+  .f4 .word,.f4 h3{font-family:'Sora'} .f4 p{font-family:'Manrope'}
+  .badge{display:inline-block;font-size:10.5px;background:#f2f2f2;color:#666;padding:2px 8px;border-radius:20px;margin-left:8px;letter-spacing:.04em;vertical-align:middle;font-weight:600}
+
+  /* ---------- PALETTES ---------- */
+  .pal-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .pal{border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .pal-h{padding:20px 26px;border-bottom:1px solid var(--line)}
+  .pal-h .t{font-family:'Space Grotesk';font-size:19px;font-weight:700}
+  .pal-h .d{font-size:13px;color:var(--muted);margin-top:3px}
+  .swatches{display:flex;flex-wrap:wrap;gap:0}
+  .sw{flex:1 1 33.33%;min-width:110px;height:84px;display:flex;flex-direction:column;justify-content:flex-end;padding:8px 10px;font-size:11px;font-family:'Familjen Grotesk'}
+  .sw .hex{font-weight:700;letter-spacing:.02em}
+  .sw .nm{opacity:.7;font-size:10px}
+  .sw.b{border:1px solid var(--line)}
+  /* preview */
+  .prev{padding:30px 26px}
+  .prev .eyebrow{font-family:'Familjen Grotesk';font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px}
+  .prev .hd{font-family:'Poppins';font-weight:800;font-size:30px;line-height:1.04;letter-spacing:-.01em;margin-bottom:12px}
+  .prev p{font-size:13.5px;margin-bottom:18px;max-width:40ch}
+  .btn{display:inline-block;padding:12px 22px;border-radius:8px;font-family:'Space Grotesk';font-weight:700;font-size:13.5px;letter-spacing:.02em;text-decoration:none}
+  .btn.ghost{margin-left:8px;background:transparent}
+  .chip{display:inline-block;font-size:11px;padding:4px 11px;border-radius:30px;font-weight:600;margin-right:6px;font-family:'Familjen Grotesk'}
+
+  /* palette A applied */
+  .A .prev{background:#fff}
+  .A .eyebrow{color:#8a8a8a}
+  .A .hd{color:var(--char)}
+  .A .prev p{color:#555}
+  .A .btn.solid{background:var(--char);color:#fff}
+  .A .btn.ghost{color:var(--char);border:1.5px solid var(--char)}
+  .A .chip{background:#f0f0f0;color:#444}
+  /* palette B applied */
+  .B .prev{background:#fff}
+  .B .eyebrow{color:var(--bronze-d)}
+  .B .hd{color:var(--char)}
+  .B .prev p{color:#555}
+  .B .btn.solid{background:var(--bronze);color:#fff}
+  .B .btn.ghost{color:var(--bronze-d);border:1.5px solid var(--bronze)}
+  .B .chip{background:var(--bronze-tint);color:var(--bronze-d)}
+
+  .linecolors{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+  .lc{display:flex;align-items:center;gap:7px;font-size:12px;border:1px solid var(--line);border-radius:30px;padding:5px 12px 5px 6px}
+  .lc b{width:16px;height:16px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.12)}
+  .foot{margin-top:60px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="pagehead">
+    <div style="display:flex;align-items:center;gap:18px">
+      <span class="mark char"><i></i><i></i><i></i></span>
+      <h1>Startruck — Font &amp; Palette</h1>
+    </div>
+    <span>Base bianca · v1 confronto</span>
+  </div>
+  <p style="font-size:14px;color:#666;max-width:70ch">Confronto su <b>fondo bianco</b> (direzione cliente). Sopra: 4 abbinamenti tipografici. Sotto: due palette — <b>A</b> grigi del logo + bianco primario · <b>B</b> bianco + accenti bronzo/ambra. I colori-linea (Le&nbsp;Mans / Privacy / Type&nbsp;H) restano un sotto-sistema valido per entrambe.</p>
+
+  <!-- ============ FONTS ============ -->
+  <div class="sec-label">1 · Tipografia</div>
+  <div class="font-grid">
+
+    <div class="fcard f1">
+      <div class="tag">Attuale <span class="badge">in uso oggi</span></div>
+      <div class="pair">Poppins Bold · Familjen Grotesk</div>
+      <div class="word">STARTRUCK</div>
+      <h3>Allestimenti su misura</h3>
+      <p>Artigianalità italiana al servizio del trasporto del tuo bene più prezioso. Ogni allestimento costruito attorno alle tue auto.</p>
+      <div class="note">Geometrico, amichevole, molto diffuso. Sicuro ma poco “su misura/sartoriale”.</div>
+    </div>
+
+    <div class="fcard f2">
+      <div class="tag">Moderno distintivo</div>
+      <div class="pair">Space Grotesk · Inter</div>
+      <div class="word">STARTRUCK</div>
+      <h3>Allestimenti su misura</h3>
+      <p>Artigianalità italiana al servizio del trasporto del tuo bene più prezioso. Ogni allestimento costruito attorno alle tue auto.</p>
+      <div class="note">Grotesque con carattere tecnico/automotive. Premium e contemporaneo, più “engineering” che lusso caldo.</div>
+    </div>
+
+    <div class="fcard f3">
+      <div class="tag">Editoriale di lusso</div>
+      <div class="pair">Fraunces · Familjen Grotesk</div>
+      <div class="word">STARTRUCK</div>
+      <h3>Allestimenti su misura</h3>
+      <p>Artigianalità italiana al servizio del trasporto del tuo bene più prezioso. Ogni allestimento costruito attorno alle tue auto.</p>
+      <div class="note">Serif alto-contrasto: emozione, status, sartorialità (B2C collezionista). Si sposa col bronzo/ambra.</div>
+    </div>
+
+    <div class="fcard f4">
+      <div class="tag">Pulito premium</div>
+      <div class="pair">Sora · Manrope</div>
+      <div class="word">STARTRUCK</div>
+      <h3>Allestimenti su misura</h3>
+      <p>Artigianalità italiana al servizio del trasporto del tuo bene più prezioso. Ogni allestimento costruito attorno alle tue auto.</p>
+      <div class="note">Neutro, ordinato, ottimo per il binario B2B/specifiche. Meno personalità del serif.</div>
+    </div>
+
+  </div>
+
+  <!-- ============ PALETTES ============ -->
+  <div class="sec-label">2 · Palette (su base bianca)</div>
+  <div class="pal-grid">
+
+    <!-- Palette A -->
+    <div class="pal A">
+      <div class="pal-h">
+        <div class="t">A · Grigi del logo + Bianco</div>
+        <div class="d">Monocromatica, fedele al marchio. Lusso sobrio, “understatement”.</div>
+      </div>
+      <div class="swatches">
+        <div class="sw b" style="background:#fff;color:#292929"><span class="hex">#FFFFFF</span><span class="nm">Base / primario</span></div>
+        <div class="sw" style="background:#292929;color:#fff"><span class="hex">#292929</span><span class="nm">Charcoal · testo/CTA</span></div>
+        <div class="sw" style="background:#606060;color:#fff"><span class="hex">#606060</span><span class="nm">Grigio logo scuro</span></div>
+        <div class="sw" style="background:#8e8e8e;color:#fff"><span class="hex">#8E8E8E</span><span class="nm">Grigio logo medio</span></div>
+        <div class="sw" style="background:#dbdbdb;color:#333"><span class="hex">#DBDBDB</span><span class="nm">Grigio chiaro / bordi</span></div>
+        <div class="sw b" style="background:#f5f5f5;color:#333"><span class="hex">#F5F5F5</span><span class="nm">Superficie alt</span></div>
+      </div>
+      <div class="prev">
+        <span class="mark grey sm" style="margin-bottom:14px"><i></i><i></i><i></i></span>
+        <div class="eyebrow">Made in Italy · Su misura</div>
+        <div class="hd">Il trasporto come<br>estensione della collezione</div>
+        <p>Allestimenti costruiti attorno alle tue auto, con la discrezione che il bene merita.</p>
+        <a class="btn solid">Richiedi preventivo</a><a class="btn ghost">Scopri gli allestimenti</a>
+      </div>
+    </div>
+
+    <!-- Palette B -->
+    <div class="pal B">
+      <div class="pal-h">
+        <div class="t">B · Bianco + Bronzo/Ambra</div>
+        <div class="d">Accento metallico caldo. Lusso emozionale, calore artigianale.</div>
+      </div>
+      <div class="swatches">
+        <div class="sw b" style="background:#fff;color:#292929"><span class="hex">#FFFFFF</span><span class="nm">Base / primario</span></div>
+        <div class="sw" style="background:#292929;color:#fff"><span class="hex">#292929</span><span class="nm">Charcoal · testo</span></div>
+        <div class="sw" style="background:#A9743B;color:#fff"><span class="hex">#A9743B</span><span class="nm">Bronzo · accento/CTA</span></div>
+        <div class="sw" style="background:#D9A441;color:#3a2a08"><span class="hex">#D9A441</span><span class="nm">Ambra · highlight</span></div>
+        <div class="sw" style="background:#f4ece2;color:#7d5226"><span class="hex">#F4ECE2</span><span class="nm">Sabbia · superficie</span></div>
+        <div class="sw b" style="background:#dbdbdb;color:#333"><span class="hex">#DBDBDB</span><span class="nm">Grigio logo · bordi</span></div>
+      </div>
+      <div class="prev">
+        <span class="mark bronze sm" style="margin-bottom:14px"><i></i><i></i><i></i></span>
+        <div class="eyebrow">Made in Italy · Su misura</div>
+        <div class="hd">Il trasporto come<br>estensione della collezione</div>
+        <p>Allestimenti costruiti attorno alle tue auto, con la discrezione che il bene merita.</p>
+        <a class="btn solid">Richiedi preventivo</a><a class="btn ghost">Scopri gli allestimenti</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- line color sub-system -->
+  <div class="sec-label">3 · Colori-linea (sotto-sistema, già esistente negli asset)</div>
+  <div class="linecolors">
+    <span class="lc"><b style="background:#fff"></b> Le&nbsp;Mans — bianco / neutro</span>
+    <span class="lc"><b style="background:#2f5fb0"></b> Privacy — blu</span>
+    <span class="lc"><b style="background:#e8c33a"></b> Type&nbsp;H — giallo</span>
+  </div>
+  <p style="font-size:12.5px;color:#888;margin-top:10px;max-width:72ch">Dai file <code>lemans_white</code> / <code>privacy_blue</code> / <code>typeh_yellow</code>. Possono diventare l'accento identificativo di ogni scheda allestimento, compatibile sia con A che con B (es. il colore-linea su foto/badge, il bronzo/charcoal come sistema globale).</p>
+
+  <div class="foot">Recreazione del mark in CSS a scopo di confronto colore — il logo finale userà gli SVG ufficiali. Font via Google Fonts. · Startruck AI · 2026-05-30</div>
+
+</div>
+</body>
+</html>
