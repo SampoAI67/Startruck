@@ -1,11 +1,12 @@
 ---
+import { base } from '../lib/base';
 const year = new Date().getFullYear();
 ---
 <footer class="border-t border-hairline bg-bg">
   <div class="container-site grid gap-10 py-20 md:grid-cols-[1.6fr_1fr_1fr] md:py-24">
     <div>
       <div class="mb-4 flex items-center gap-3">
-        <img src="/onlylogo.svg" alt="" width="46" height="18" class="h-[18px] w-auto" />
+        <img src={base('onlylogo.svg')} alt="" width="46" height="18" class="h-[18px] w-auto" />
         <span class="font-display text-lg font-bold tracking-tight">STARTRUCK</span>
       </div>
       <p class="max-w-xs text-sm text-ink-soft">
@@ -17,10 +18,10 @@ const year = new Date().getFullYear();
     <nav aria-label="Allestimenti">
       <h2 class="label mb-5" data-index="[ A ]">Allestimenti</h2>
       <ul class="space-y-2.5 text-sm text-ink-soft">
-        <li><a class="transition-colors hover:text-ink" href="/allestimenti/le-mans">Le Mans</a></li>
-        <li><a class="transition-colors hover:text-ink" href="/allestimenti/type-h">Type H</a></li>
-        <li><a class="transition-colors hover:text-ink" href="/allestimenti/privacy">Privacy</a></li>
-        <li><a class="transition-colors hover:text-ink" href="/processo">Processo</a></li>
+        <li><a class="transition-colors hover:text-ink" href={base('allestimenti/le-mans')}>Le Mans</a></li>
+        <li><a class="transition-colors hover:text-ink" href={base('allestimenti/type-h')}>Type H</a></li>
+        <li><a class="transition-colors hover:text-ink" href={base('allestimenti/privacy')}>Privacy</a></li>
+        <li><a class="transition-colors hover:text-ink" href={base('processo')}>Processo</a></li>
       </ul>
     </nav>
 
@@ -38,7 +39,7 @@ const year = new Date().getFullYear();
   <div class="container-site" aria-hidden="true">
     <div class="border-t border-hairline py-8 md:py-10">
       <img
-        src="/wordmark-startruck.svg"
+        src={base('wordmark-startruck.svg')}
         alt=""
         width="2653"
         height="937"
@@ -51,8 +52,8 @@ const year = new Date().getFullYear();
     <div class="container-site flex flex-col gap-2 py-5 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
       <span>© {year} Startruck Italia — P.IVA __________</span>
       <div class="flex gap-5">
-        <a class="transition-colors hover:text-ink" href="/privacy-policy">Privacy Policy</a>
-        <a class="transition-colors hover:text-ink" href="/cookie-policy">Cookie Policy</a>
+        <a class="transition-colors hover:text-ink" href={base('privacy-policy')}>Privacy Policy</a>
+        <a class="transition-colors hover:text-ink" href={base('cookie-policy')}>Cookie Policy</a>
       </div>
     </div>
   </div>

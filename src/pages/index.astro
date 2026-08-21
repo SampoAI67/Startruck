@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
 import LineShowcase from '../components/LineShowcase.astro';
+import { base } from '../lib/base';
 
 const pillars = [
   { n: '01', t: 'Su misura', d: 'Ogni allestimento nasce attorno alle tue auto. Niente standard: solo la tua misura.' },
@@ -24,8 +25,8 @@ const steps = [
     <video
       class="absolute inset-0 h-full w-full object-cover opacity-70"
       style="animation: kenburns 22s ease-out forwards;"
-      src="/hero.mp4"
-      poster="/poster-lemans.webp"
+      src={base('hero.mp4')}
+      poster={base('poster-lemans.webp')}
       autoplay muted loop playsinline preload="metadata"
       aria-hidden="true"
     ></video>
@@ -48,8 +49,8 @@ const steps = [
         discrezione e sicurezza per il tuo bene più prezioso.
       </p>
       <div class="mt-9 flex flex-wrap gap-3" data-reveal data-delay=".26s">
-        <Button href="/contatti">Richiedi preventivo</Button>
-        <a href="/allestimenti" class="inline-flex items-center justify-center rounded-md border-[1.5px] border-white/40 px-5 py-3 font-display text-sm font-semibold text-white transition-colors hover:border-white hover:bg-white hover:text-ink">
+        <Button href={base('contatti')}>Richiedi preventivo</Button>
+        <a href={base('allestimenti')} class="inline-flex items-center justify-center rounded-md border-[1.5px] border-white/40 px-5 py-3 font-display text-sm font-semibold text-white transition-colors hover:border-white hover:bg-white hover:text-ink">
           Scopri gli allestimenti
         </a>
       </div>
@@ -111,8 +112,8 @@ const steps = [
           sempre seguito — e lo restiamo anche dopo.
         </p>
         <div class="flex flex-wrap items-center gap-4">
-          <Button href="/contatti">Richiedi preventivo</Button>
-          <a href="/contatti" class="inline-flex items-center justify-center rounded-md border-[1.5px] border-ink px-5 py-3 font-display text-sm font-semibold text-ink transition-colors hover:bg-ink hover:text-white">
+          <Button href={base('contatti')}>Richiedi preventivo</Button>
+          <a href={base('contatti')} class="inline-flex items-center justify-center rounded-md border-[1.5px] border-ink px-5 py-3 font-display text-sm font-semibold text-ink transition-colors hover:bg-ink hover:text-white">
             Contattaci
           </a>
         </div>
@@ -164,7 +165,7 @@ const steps = [
         Il tuo bene più prezioso merita un allestimento all’altezza.
       </h2>
       <div class="mt-10 flex flex-wrap items-center gap-5" data-reveal data-delay=".14s">
-        <a href="/contatti" class="inline-flex items-center justify-center rounded-md bg-white px-6 py-3.5 font-display text-sm font-semibold text-ink transition-colors hover:bg-white/85">
+        <a href={base('contatti')} class="inline-flex items-center justify-center rounded-md bg-white px-6 py-3.5 font-display text-sm font-semibold text-ink transition-colors hover:bg-white/85">
           Richiedi un preventivo
         </a>
         <a href="tel:+393408427538" class="font-display text-lg font-semibold text-white/80 hover:text-white">+39 340 842 7538</a>

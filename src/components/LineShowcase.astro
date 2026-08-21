@@ -1,8 +1,10 @@
 ---
+import { base } from '../lib/base';
+
 const lines = [
-  { n: '01', name: 'Le Mans', slug: 'le-mans', tag: 'Performance & racing', bar: 'Racing-grade', accent: 'var(--color-line-lemans)', video: '/hero.mp4', poster: '/poster-lemans.webp', desc: 'Per chi vive la pista. Allestimento racing-grade, ancoraggi rapidi, protezione totale.' },
-  { n: '02', name: 'Type H', slug: 'type-h', tag: 'Versatile su misura', bar: 'Su misura', accent: 'var(--color-line-typeh)', video: '/line-typeh.mp4', poster: '/poster-typeh.webp', desc: 'Il cavallo di battaglia configurabile. Si adatta a ogni auto, ogni esigenza, ogni rotta.' },
-  { n: '03', name: 'Privacy', slug: 'privacy', tag: 'Trasporto confidenziale', bar: 'Confidenziale', accent: 'var(--color-line-privacy)', video: '/line-privacy.mp4', poster: '/poster-privacy.webp', desc: 'Discrezione assoluta. Nessuno vede cosa trasporti — solo tu sai cosa c’è dentro.' },
+  { n: '01', name: 'Le Mans', slug: 'le-mans', tag: 'Performance & racing', bar: 'Racing-grade', accent: 'var(--color-line-lemans)', video: base('hero.mp4'), poster: base('poster-lemans.webp'), desc: 'Per chi vive la pista. Allestimento racing-grade, ancoraggi rapidi, protezione totale.' },
+  { n: '02', name: 'Type H', slug: 'type-h', tag: 'Versatile su misura', bar: 'Su misura', accent: 'var(--color-line-typeh)', video: base('line-typeh.mp4'), poster: base('poster-typeh.webp'), desc: 'Il cavallo di battaglia configurabile. Si adatta a ogni auto, ogni esigenza, ogni rotta.' },
+  { n: '03', name: 'Privacy', slug: 'privacy', tag: 'Trasporto confidenziale', bar: 'Confidenziale', accent: 'var(--color-line-privacy)', video: base('line-privacy.mp4'), poster: base('poster-privacy.webp'), desc: 'Discrezione assoluta. Nessuno vede cosa trasporti — solo tu sai cosa c’è dentro.' },
 ];
 const total = String(lines.length).padStart(2, '0');
 ---
@@ -18,7 +20,7 @@ const total = String(lines.length).padStart(2, '0');
           </p>
           <h2 class="ls-title">{l.name}</h2>
           <p class="ls-desc">{l.desc}</p>
-          <a class="ls-cta" href={`/allestimenti/${l.slug}`}>
+          <a class="ls-cta" href={base(`allestimenti/${l.slug}`)}>
             Scopri {l.name}<span aria-hidden="true">→</span>
           </a>
         </div>

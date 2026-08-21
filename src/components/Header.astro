@@ -1,21 +1,23 @@
 ---
+import { base } from '../lib/base';
+
 interface Props {
   overlay?: boolean;
 }
 const { overlay = false } = Astro.props;
 
 const nav = [
-  { label: 'Allestimenti', href: '/allestimenti' },
-  { label: 'Processo', href: '/processo' },
-  { label: 'Chi siamo', href: '/chi-siamo' },
-  { label: 'Contatti', href: '/contatti' },
+  { label: 'Allestimenti', href: base('allestimenti') },
+  { label: 'Processo', href: base('processo') },
+  { label: 'Chi siamo', href: base('chi-siamo') },
+  { label: 'Contatti', href: base('contatti') },
 ];
 ---
 <header id="site-header" data-overlay={String(overlay)} class="site-header">
   <div class="container-site flex items-center justify-between gap-6" style="height:80px">
-    <a href="/" class="flex items-center gap-3" aria-label="Startruck — home">
-      <img class="logo logo-dark" src="/onlylogo.svg" alt="" width="46" height="18" />
-      <img class="logo logo-light" src="/logobianco.svg" alt="" width="46" height="18" />
+    <a href={base('')} class="flex items-center gap-3" aria-label="Startruck — home">
+      <img class="logo logo-dark" src={base('onlylogo.svg')} alt="" width="46" height="18" />
+      <img class="logo logo-light" src={base('logobianco.svg')} alt="" width="46" height="18" />
       <span class="brand">STARTRUCK</span>
     </a>
 
@@ -25,9 +27,9 @@ const nav = [
 
     <div class="flex items-center gap-5">
       <div class="lang" aria-label="Lingua">
-        <span>IT</span><span class="sep">/</span><a href="/en/">EN</a>
+        <span>IT</span><span class="sep">/</span><a href={base('en')}>EN</a>
       </div>
-      <a href="/contatti" class="hs-cta">Richiedi preventivo</a>
+      <a href={base('contatti')} class="hs-cta">Richiedi preventivo</a>
     </div>
   </div>
 </header>
