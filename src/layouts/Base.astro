@@ -1,0 +1,57 @@
+---
+import '@fontsource-variable/sora';
+import '@fontsource-variable/manrope';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  heroOverlay?: boolean;
+}
+const {
+  title = 'Startruck Italia — Allestimenti su misura per il trasporto di auto di lusso',
+  description = 'Allestimenti su misura per il trasporto di auto di lusso. Artigianalità italiana al servizio del tuo bene più prezioso.',
+  heroOverlay = false,
+} = Astro.props;
+---
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/onlylogo.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <Header overlay={heroOverlay} />
+    <main class={heroOverlay ? '' : 'pt-20'}>
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Scroll-reveal: rivela [data-reveal] all'ingresso, con stagger opzionale via data-delay
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              const el = e.target as HTMLElement;
+              const d = el.dataset.delay;
+              if (d) el.style.animationDelay = d;
+              el.classList.add('is-in');
+              io.unobserve(el);
+            }
+          }
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -8% 0px' }
+      );
+      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,123 @@
+---
+interface Props {
+  overlay?: boolean;
+}
+const { overlay = false } = Astro.props;
+
+const nav = [
+  { label: 'Allestimenti', href: '/allestimenti' },
+  { label: 'Processo', href: '/processo' },
+  { label: 'Chi siamo', href: '/chi-siamo' },
+  { label: 'Contatti', href: '/contatti' },
+];
+---
+<header id="site-header" data-overlay={String(overlay)} class="site-header">
+  <div class="container-site flex items-center justify-between gap-6" style="height:80px">
+    <a href="/" class="flex items-center gap-3" aria-label="Startruck — home">
+      <img class="logo logo-dark" src="/onlylogo.svg" alt="" width="46" height="18" />
+      <img class="logo logo-light" src="/logobianco.svg" alt="" width="46" height="18" />
+      <span class="brand">STARTRUCK</span>
+    </a>
+
+    <nav class="hsnav" aria-label="Principale">
+      {nav.map((i) => <a href={i.href}>{i.label}</a>)}
+    </nav>
+
+    <div class="flex items-center gap-5">
+      <div class="lang" aria-label="Lingua">
+        <span>IT</span><span class="sep">/</span><a href="/en/">EN</a>
+      </div>
+      <a href="/contatti" class="hs-cta">Richiedi preventivo</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset-inline: 0;
+    top: 0;
+    z-index: 50;
+    color: var(--color-ink);
+    border-bottom: 1px solid transparent;
+    transition: transform .85s cubic-bezier(.22, 1, .36, 1), opacity .6s ease, background .35s ease, color .35s ease, border-color .35s ease;
+  }
+  .site-header.is-hidden { transform: translateY(-100%); opacity: 0; }
+  .site-header.scrolled,
+  .site-header[data-overlay="false"] {
+    background: color-mix(in srgb, var(--color-bg) 82%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom-color: var(--color-hairline);
+  }
+  .site-header[data-overlay="true"]:not(.scrolled) { color: #fff; }
+
+  .logo { height: 18px; width: auto; }
+  .logo-light { display: none; }
+  .site-header[data-overlay="true"]:not(.scrolled) .logo-dark { display: none; }
+  .site-header[data-overlay="true"]:not(.scrolled) .logo-light { display: block; }
+
+  .brand {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -.02em;
+    color: currentColor;
+  }
+
+  .hsnav { display: none; gap: 2rem; }
+  @media (min-width: 768px) { .hsnav { display: flex; } }
+  .hsnav a {
+    font-size: .76rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .12em; color: currentColor; opacity: .68; transition: opacity .2s;
+  }
+  .hsnav a:hover { opacity: 1; }
+
+  .lang { display: none; align-items: center; gap: .35rem; font-size: .72rem; font-weight: 700; }
+  @media (min-width: 640px) { .lang { display: flex; } }
+  .lang .sep { opacity: .4; }
+  .lang a { opacity: .5; transition: opacity .2s; }
+  .lang a:hover { opacity: 1; }
+
+  .hs-cta {
+    display: none; align-items: center; border-radius: var(--radius-md);
+    padding: .6rem 1.1rem; font-family: var(--font-display); font-size: .8rem; font-weight: 600;
+    border: 1.5px solid currentColor; transition: background .2s, color .2s, border-color .2s;
+  }
+  @media (min-width: 640px) { .hs-cta { display: inline-flex; } }
+  .site-header.scrolled .hs-cta,
+  .site-header[data-overlay="false"] .hs-cta {
+    background: var(--color-ink); color: #fff; border-color: var(--color-ink);
+  }
+  .site-header.scrolled .hs-cta:hover,
+  .site-header[data-overlay="false"] .hs-cta:hover { background: #000; }
+  .site-header[data-overlay="true"]:not(.scrolled) .hs-cta:hover { background: #fff; color: var(--color-ink); }
+</style>
+
+<script>
+  const h = document.getElementById('site-header');
+  if (h) {
+    const DELTA = 24;        // tolleranza px: ignora i micro-scroll
+    const HIDE_AFTER = 160;  // non nascondere finché non sei sceso un po'
+    let last = window.scrollY;
+    let ticking = false;
+
+    const update = () => {
+      ticking = false;
+      const y = window.scrollY;
+      h.classList.toggle('scrolled', y > 40);
+
+      // reagisci solo se ti sei mosso oltre la tolleranza
+      if (Math.abs(y - last) < DELTA) return;
+
+      if (y > last && y > HIDE_AFTER) h.classList.add('is-hidden');   // giù → nascondi
+      else if (y < last) h.classList.remove('is-hidden');             // su → mostra
+      last = y;
+    };
+
+    const onScroll = () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    update();
+  }
+</script>

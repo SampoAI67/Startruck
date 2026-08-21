@@ -1,0 +1,59 @@
+---
+const year = new Date().getFullYear();
+---
+<footer class="border-t border-hairline bg-bg">
+  <div class="container-site grid gap-10 py-20 md:grid-cols-[1.6fr_1fr_1fr] md:py-24">
+    <div>
+      <div class="mb-4 flex items-center gap-3">
+        <img src="/onlylogo.svg" alt="" width="46" height="18" class="h-[18px] w-auto" />
+        <span class="font-display text-lg font-bold tracking-tight">STARTRUCK</span>
+      </div>
+      <p class="max-w-xs text-sm text-ink-soft">
+        Allestimenti su misura per il trasporto di auto di lusso. Artigianalità italiana,
+        Pozzolo sul Mincio (MN).
+      </p>
+    </div>
+
+    <nav aria-label="Allestimenti">
+      <h2 class="label mb-5" data-index="[ A ]">Allestimenti</h2>
+      <ul class="space-y-2.5 text-sm text-ink-soft">
+        <li><a class="transition-colors hover:text-ink" href="/allestimenti/le-mans">Le Mans</a></li>
+        <li><a class="transition-colors hover:text-ink" href="/allestimenti/type-h">Type H</a></li>
+        <li><a class="transition-colors hover:text-ink" href="/allestimenti/privacy">Privacy</a></li>
+        <li><a class="transition-colors hover:text-ink" href="/processo">Processo</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="label mb-5" data-index="[ C ]">Contatti</h2>
+      <ul class="space-y-2.5 text-sm text-ink-soft">
+        <li><a class="transition-colors hover:text-ink" href="tel:+393408427538">+39 340 842 7538</a></li>
+        <li><a class="transition-colors hover:text-ink" href="mailto:Startruck@outlook.it">Startruck@outlook.it</a></li>
+        <li>Str. Boschi, 46045<br />Pozzolo sul Mincio (MN)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Wordmark ufficiale "STARTRUCK ITALIA" (tracciato da No Logo.png) -->
+  <div class="container-site" aria-hidden="true">
+    <div class="border-t border-hairline py-8 md:py-10">
+      <img
+        src="/wordmark-startruck.svg"
+        alt=""
+        width="2653"
+        height="937"
+        class="mx-auto w-full max-w-4xl"
+      />
+    </div>
+  </div>
+
+  <div class="border-t border-hairline">
+    <div class="container-site flex flex-col gap-2 py-5 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
+      <span>© {year} Startruck Italia — P.IVA __________</span>
+      <div class="flex gap-5">
+        <a class="transition-colors hover:text-ink" href="/privacy-policy">Privacy Policy</a>
+        <a class="transition-colors hover:text-ink" href="/cookie-policy">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>

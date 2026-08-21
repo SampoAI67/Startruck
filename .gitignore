@@ -23,6 +23,11 @@ VIdeo AI Startruck/
 # Keep lightweight vector + source assets (SVG is allowed by default)
 !*.svg
 
+# Keep optimized, web-ready site assets in public/ (posters, og image, ecc.)
+!public/poster-*.webp
+!public/og-*.webp
+!public/og-*.jpg
+
 # --- OS / editor cruft ---
 Thumbs.db
 desktop.ini
@@ -35,3 +40,10 @@ node_modules/
 dist/
 .env
 .env.*
+
+# --- Node / Astro build ---
+node_modules/
+dist/
+.astro/
+*.log
+.DS_Store

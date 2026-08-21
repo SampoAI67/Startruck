@@ -1,0 +1,214 @@
+---
+const lines = [
+  { n: '01', name: 'Le Mans', slug: 'le-mans', tag: 'Performance & racing', bar: 'Racing-grade', accent: 'var(--color-line-lemans)', video: '/hero.mp4', poster: '/poster-lemans.webp', desc: 'Per chi vive la pista. Allestimento racing-grade, ancoraggi rapidi, protezione totale.' },
+  { n: '02', name: 'Type H', slug: 'type-h', tag: 'Versatile su misura', bar: 'Su misura', accent: 'var(--color-line-typeh)', video: '/line-typeh.mp4', poster: '/poster-typeh.webp', desc: 'Il cavallo di battaglia configurabile. Si adatta a ogni auto, ogni esigenza, ogni rotta.' },
+  { n: '03', name: 'Privacy', slug: 'privacy', tag: 'Trasporto confidenziale', bar: 'Confidenziale', accent: 'var(--color-line-privacy)', video: '/line-privacy.mp4', poster: '/poster-privacy.webp', desc: 'Discrezione assoluta. Nessuno vede cosa trasporti — solo tu sai cosa c’è dentro.' },
+];
+const total = String(lines.length).padStart(2, '0');
+---
+<section class="ls" id="ls" aria-roledescription="carosello" aria-label="Allestimenti">
+  <div class="ls-track" id="ls-track" style="--i:0">
+    {lines.map((l, idx) => (
+      <article class="ls-slide" data-slide={idx} aria-hidden={idx !== 0 ? 'true' : 'false'}>
+        <video class="ls-video" src={l.video} poster={l.poster} autoplay={idx === 0} muted loop playsinline preload="metadata" aria-hidden="true"></video>
+        <div class="ls-scrim"></div>
+        <div class="container-site ls-content">
+          <p class="label !text-white/60 ls-tag" data-index={`[${l.n}]`}>
+            <span class="ls-dot" style={`background:${l.accent}`}></span>{l.tag}
+          </p>
+          <h2 class="ls-title">{l.name}</h2>
+          <p class="ls-desc">{l.desc}</p>
+          <a class="ls-cta" href={`/allestimenti/${l.slug}`}>
+            Scopri {l.name}<span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <!-- banda di avanzamento (auto-swipe) -->
+  <div class="ls-top container-site">
+    <div class="ls-progress" role="tablist" aria-label="Allestimenti">
+      {lines.map((l, idx) => (
+        <button class="ls-seg" data-go={idx} type="button" role="tab" aria-label={`${l.name} — ${l.tag}`}>
+          <span class="ls-barline"><span class="ls-fill"></span></span>
+          <span class="ls-seg-name">{l.name}</span>
+          <span class="ls-seg-sub">{l.bar}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <!-- nav in basso -->
+  <div class="ls-nav container-site">
+    <button class="ls-arrow" id="ls-next" type="button" aria-label="Allestimento successivo">
+      <span class="ls-lbl">Successivo</span>
+      <svg class="ls-arrowsvg" viewBox="0 0 80 14" fill="none" stroke="currentColor" stroke-width="1.25" aria-hidden="true">
+        <line class="ls-shaft" x1="0" y1="7" x2="74" y2="7" />
+        <path class="ls-head" d="M66 1 L76 7 L66 13" />
+      </svg>
+    </button>
+  </div>
+</section>
+
+<style>
+  .ls {
+    --ls-dur: 6.5s;
+    --over: 6svh;                          /* sforo simmetrico sopra e sotto la piega */
+    --edge: clamp(1.75rem, 4vh, 2.5rem);   /* distanza barra/freccia dai bordi (uguale) */
+    position: relative;
+    height: calc(100svh + var(--over) * 2);
+    margin-top: calc(var(--over) * -1);
+    min-height: 640px;
+    overflow: hidden;
+    background: var(--color-ink);
+    color: #fff;
+  }
+  .ls-track {
+    display: flex; height: 100%;
+    transform: translateX(calc(var(--i) * -100%));
+    transition: transform .9s cubic-bezier(.76, 0, .24, 1);
+    will-change: transform;
+  }
+  .ls-slide { position: relative; flex: 0 0 100%; height: 100%; overflow: hidden; }
+  .ls-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .ls-scrim {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to top, rgba(0,0,0,.88) 0%, rgba(0,0,0,.15) 55%, rgba(0,0,0,.55) 100%),
+      linear-gradient(to right, rgba(0,0,0,.6) 0%, rgba(0,0,0,0) 55%);
+  }
+
+  .ls-content {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    gap: 1.1rem; padding-bottom: calc(var(--over) + clamp(7rem, 16vh, 11rem));
+  }
+  .ls-tag { display: inline-flex; align-items: center; gap: .6rem; }
+  .ls-dot { width: .6rem; height: .6rem; border-radius: 9999px; border: 1px solid rgba(255,255,255,.4); }
+  .ls-title { font-family: var(--font-display); font-weight: 700; font-size: clamp(3rem, 9vw, 7.5rem); line-height: .9; letter-spacing: -.03em; }
+  .ls-desc { max-width: 38ch; font-size: 1.05rem; color: rgba(255,255,255,.82); }
+  .ls-cta {
+    margin-top: .6rem; align-self: flex-start;
+    display: inline-flex; align-items: center; gap: .6rem;
+    background: #fff; color: var(--color-ink);
+    font-family: var(--font-display); font-weight: 600; font-size: .9rem;
+    padding: .85rem 1.4rem; border-radius: var(--radius-md);
+    transition: gap .25s ease, background .2s ease;
+  }
+  .ls-cta:hover { gap: 1rem; background: rgba(255,255,255,.88); }
+
+  /* --- banda avanzamento --- */
+  .ls-top { position: absolute; left: 0; right: 0; top: calc(var(--over) + var(--edge)); }
+  .ls-progress { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(.8rem, 2vw, 1.5rem); }
+  .ls-seg {
+    background: none; border: 0; cursor: pointer; color: #fff; padding: 0; text-align: left;
+    display: flex; flex-direction: column; gap: .55rem;
+  }
+  .ls-barline { position: relative; height: 2px; width: 100%; background: rgba(255,255,255,.22); border-radius: 2px; overflow: hidden; }
+  .ls-fill { position: absolute; inset: 0; background: #fff; transform: scaleX(0); transform-origin: left; }
+  .ls-seg.is-done .ls-fill { transform: scaleX(1); }
+  .ls-seg.is-active .ls-fill { animation: ls-fill var(--ls-dur) linear forwards; }
+  .ls.is-paused .ls-seg.is-active .ls-fill { animation-play-state: paused; }
+  @keyframes ls-fill { to { transform: scaleX(1); } }
+
+  .ls-seg-name { font-family: var(--font-display); font-weight: 600; font-size: .92rem; opacity: .58; transition: opacity .3s; }
+  .ls-seg.is-active .ls-seg-name { opacity: 1; }
+  .ls-seg-sub { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.45); }
+
+  /* --- nav basso --- */
+  .ls-nav { position: absolute; left: 0; right: 0; bottom: calc(var(--over) + var(--edge)); display: flex; align-items: center; justify-content: flex-end; }
+  .ls-count { font-family: var(--font-display); font-size: .85rem; letter-spacing: .12em; color: rgba(255,255,255,.7); font-variant-numeric: tabular-nums; }
+  .ls-sep { opacity: .4; margin: 0 .2rem; }
+
+  .ls-arrow { background: none; border: 0; cursor: pointer; color: #fff; display: inline-flex; align-items: center; gap: .9rem; padding: .4rem 0; }
+  .ls-lbl { font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; opacity: .72; transition: opacity .2s; }
+  .ls-arrow:hover .ls-lbl { opacity: 1; }
+  .ls-arrowsvg { width: 80px; height: 14px; overflow: visible; }
+  .ls-shaft { opacity: .55; transition: opacity .25s; }
+  .ls-head { transition: transform .35s cubic-bezier(.76, 0, .24, 1); }
+  .ls-arrow:hover .ls-head { transform: translateX(6px); }
+  .ls-arrow:hover .ls-shaft { opacity: .9; }
+  .ls-arrow.is-swiping .ls-head { animation: arrow-swipe .55s ease; }
+  @keyframes arrow-swipe {
+    35% { transform: translateX(22px); opacity: 0; }
+    36% { transform: translateX(-22px); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+
+  @media (max-width: 640px) {
+    .ls-lbl { display: none; }
+    .ls-seg-sub { display: none; }
+    .ls-desc { font-size: .98rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ls-track { transition: transform .2s linear; }
+    .ls-seg.is-active .ls-fill { animation: none; transform: scaleX(1); }
+    .ls-arrow.is-swiping .ls-head { animation: none; }
+  }
+</style>
+
+<script>
+  const root = document.getElementById('ls');
+  if (root) {
+    const track = document.getElementById('ls-track')!;
+    const slides = Array.from(track.querySelectorAll<HTMLElement>('.ls-slide'));
+    const segs = Array.from(root.querySelectorAll<HTMLElement>('.ls-seg'));
+    const nextBtn = document.getElementById('ls-next')!;
+    let i = 0;
+    let inView = false;
+
+    const setActive = (n: number) => {
+      i = (n + slides.length) % slides.length;
+      track.style.setProperty('--i', String(i));
+
+      slides.forEach((s, k) => {
+        const v = s.querySelector('video');
+        s.setAttribute('aria-hidden', k === i ? 'false' : 'true');
+        if (v) { if (k === i) v.play?.().catch(() => {}); else v.pause?.(); }
+      });
+
+      segs.forEach((s, k) => {
+        s.classList.toggle('is-done', k < i);
+        s.classList.remove('is-active');
+        s.setAttribute('aria-selected', k === i ? 'true' : 'false');
+      });
+      void root.offsetWidth;          // reflow → riavvia l'animazione della barra
+      segs[i].classList.add('is-active');
+
+      nextBtn.classList.remove('is-swiping');
+      void nextBtn.offsetWidth;
+      nextBtn.classList.add('is-swiping');
+    };
+
+    // auto-swipe: quando la barra attiva finisce di riempirsi → prossima
+    segs.forEach((s) => {
+      const fill = s.querySelector('.ls-fill')!;
+      fill.addEventListener('animationend', () => {
+        if (s.classList.contains('is-active')) setActive(i + 1);
+      });
+    });
+
+    nextBtn.addEventListener('click', () => setActive(i + 1));
+    segs.forEach((s, k) => s.addEventListener('click', () => setActive(k)));
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') setActive(i + 1);
+      if (e.key === 'ArrowLeft') setActive(i - 1);
+    });
+
+    // pausa quando fuori schermo
+    new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        inView = e.isIntersecting;
+        root.classList.toggle('is-paused', !inView);
+      }),
+      { threshold: 0.4 }
+    ).observe(root);
+
+    // pausa al passaggio del mouse (lettura / click CTA)
+    root.addEventListener('pointerenter', () => root.classList.add('is-paused'));
+    root.addEventListener('pointerleave', () => { if (inView) root.classList.remove('is-paused'); });
+
+    setActive(0);
+  }
+</script>

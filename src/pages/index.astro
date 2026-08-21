@@ -1,0 +1,174 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import LineShowcase from '../components/LineShowcase.astro';
+
+const pillars = [
+  { n: '01', t: 'Su misura', d: 'Ogni allestimento nasce attorno alle tue auto. Niente standard: solo la tua misura.' },
+  { n: '02', t: 'Artigianalità', d: 'Mani italiane, alluminio aeronautico, finiture da atelier. Il dettaglio è la firma.' },
+  { n: '03', t: 'Discrezione', d: 'Trasporta senza esporre. Riservatezza e sicurezza costruite nel mezzo, non aggiunte.' },
+  { n: '04', t: 'Affidabilità', d: 'Provata sul campo, su migliaia di chilometri. Quando la consegna non ammette errori.' },
+];
+
+const steps = [
+  { n: '01', t: 'Consulenza', d: 'Ci racconti le tue auto, le tue rotte, le tue esigenze. Ascoltiamo prima di disegnare.' },
+  { n: '02', t: 'Progettazione', d: 'Disegniamo l’allestimento su misura: layout, materiali, finiture, optional.' },
+  { n: '03', t: 'Costruzione', d: 'Lo costruiamo a mano nella nostra officina di Pozzolo sul Mincio.' },
+  { n: '04', t: 'Consegna', d: 'Te lo consegniamo pronto, collaudato, e restiamo al tuo fianco nel tempo.' },
+];
+---
+<Base heroOverlay>
+  <!-- ============================ HERO ============================ -->
+  <section class="relative h-[100svh] min-h-[640px] w-full overflow-hidden bg-ink text-white">
+    <!-- Video full-bleed (sostituibile: public/hero.mp4) -->
+    <video
+      class="absolute inset-0 h-full w-full object-cover opacity-70"
+      style="animation: kenburns 22s ease-out forwards;"
+      src="/hero.mp4"
+      poster="/poster-lemans.webp"
+      autoplay muted loop playsinline preload="metadata"
+      aria-hidden="true"
+    ></video>
+    <!-- Gradiente per leggibilità -->
+    <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-ink/40"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-ink/70 to-transparent"></div>
+
+    <!-- Slash watermark gigante -->
+    <div class="pointer-events-none absolute -right-10 top-1/2 hidden -translate-y-1/2 text-white/10 md:block" aria-hidden="true">
+      <span class="slashes text-[34rem] leading-none"><i></i><i></i><i></i></span>
+    </div>
+
+    <div class="container-site relative flex h-full flex-col justify-end pb-20">
+      <p class="label !text-white/60 mb-6" data-index="[ ST ]" data-reveal>Made in Italy · Allestimenti su misura</p>
+      <h1 class="display-1 max-w-5xl font-bold leading-[0.95]" data-reveal data-delay=".08s">
+        Il trasporto come<br />estensione della<br /><span class="text-white/55">tua collezione.</span>
+      </h1>
+      <p class="mt-7 max-w-lg text-lg text-white/75" data-reveal data-delay=".18s">
+        Allestimenti costruiti a mano attorno alle tue auto. Artigianalità italiana,
+        discrezione e sicurezza per il tuo bene più prezioso.
+      </p>
+      <div class="mt-9 flex flex-wrap gap-3" data-reveal data-delay=".26s">
+        <Button href="/contatti">Richiedi preventivo</Button>
+        <a href="/allestimenti" class="inline-flex items-center justify-center rounded-md border-[1.5px] border-white/40 px-5 py-3 font-display text-sm font-semibold text-white transition-colors hover:border-white hover:bg-white hover:text-ink">
+          Scopri gli allestimenti
+        </a>
+      </div>
+    </div>
+
+    <!-- Scroll cue -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs tracking-[0.3em] text-white/50">SCROLL</div>
+  </section>
+
+  <!-- ===================== MARQUEE / parole-chiave ===================== -->
+  <div class="border-y border-hairline bg-bg py-4 overflow-hidden">
+    <div class="marquee-track text-muted">
+      {Array.from({ length: 2 }).map(() => (
+        <span class="flex items-center">
+          {['Bisarche su misura','Trasporto auto di lusso','Alluminio aeronautico','Discrezione','Made in Italy','Racing-grade','Collezioni private'].map((w) => (
+            <span class="flex items-center">
+              <span class="px-7 font-display text-sm uppercase tracking-[0.18em]">{w}</span>
+              <span class="slashes text-ink/30 text-base"><i></i><i></i><i></i></span>
+            </span>
+          ))}
+        </span>
+      ))}
+    </div>
+  </div>
+
+  <!-- ========================= MANIFESTO ========================= -->
+  <section class="bg-ink py-28 text-white md:py-40">
+    <div class="container-site">
+      <p class="label !text-white/45 mb-10" data-index="[01]" data-reveal>Il nostro perché</p>
+      <p class="display-2 max-w-5xl font-display font-light leading-[1.12] tracking-[-0.02em]">
+        {[
+          { t: 'Il resto del settore tratta il trasporto come una' },
+          { t: 'specifica tecnica.', cls: 'text-white/45' },
+          { t: 'Noi lo trattiamo come ciò che è davvero:' },
+          { t: 'la custodia di valore in movimento.', cls: 'font-semibold' },
+        ]
+          .flatMap((seg) => seg.t.split(' ').map((w) => ({ w, cls: seg.cls })))
+          .map((tok, i) => (
+            <Fragment>
+              <span class:list={['reveal-word', tok.cls]} data-reveal data-delay={`${(i * 0.03).toFixed(2)}s`}>{tok.w}</span>{' '}
+            </Fragment>
+          ))}
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== LE LINEE (showcase video) ===================== -->
+  <LineShowcase />
+
+  <!-- ====================== PROCESSO + CONVERSIONE ====================== -->
+  <section class="border-y border-hairline bg-surface py-24 md:py-32">
+    <div class="container-site grid gap-x-16 gap-y-14 lg:grid-cols-2">
+      <!-- LEFT: intro sticky + CTA -->
+      <div class="lg:sticky lg:top-28 lg:self-start" data-reveal>
+        <p class="label mb-5" data-index="[03]">Come lavoriamo</p>
+        <h2 class="display-2 mb-6">Dal tuo garage alla nostra officina, e ritorno.</h2>
+        <p class="mb-9 max-w-md text-ink-soft">
+          Quattro fasi, un solo interlocutore. Dalla prima telefonata alla consegna sei
+          sempre seguito — e lo restiamo anche dopo.
+        </p>
+        <div class="flex flex-wrap items-center gap-4">
+          <Button href="/contatti">Richiedi preventivo</Button>
+          <a href="/contatti" class="inline-flex items-center justify-center rounded-md border-[1.5px] border-ink px-5 py-3 font-display text-sm font-semibold text-ink transition-colors hover:bg-ink hover:text-white">
+            Contattaci
+          </a>
+        </div>
+        <a href="tel:+393408427538" class="mt-7 inline-flex items-center gap-3 text-sm font-semibold text-ink-soft transition-colors hover:text-ink">
+          <span class="slashes text-base text-ink"><i></i><i></i><i></i></span>
+          +39 340 842 7538
+        </a>
+      </div>
+
+      <!-- RIGHT: fasi come lista editoriale -->
+      <ol class="border-t border-hairline">
+        {steps.map((s) => (
+          <li class="group flex items-start gap-6 border-b border-hairline py-7 md:py-8" data-reveal>
+            <span class="font-display text-3xl font-bold tabular-nums text-ink/15 transition-colors group-hover:text-ink md:text-4xl">{s.n}</span>
+            <div class="pt-1">
+              <h3 class="mb-2 text-xl font-bold md:text-2xl">{s.t}</h3>
+              <p class="max-w-md text-ink-soft">{s.d}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ========================== PILASTRI ========================== -->
+  <section class="container-site py-24 md:py-32">
+    <p class="label mb-12" data-index="[04]" data-reveal>Perché Startruck</p>
+    <div class="grid gap-x-10 gap-y-12 md:grid-cols-2">
+      {pillars.map((p) => (
+        <div class="flex gap-6 border-t border-hairline pt-7" data-reveal>
+          <span class="slashes mt-1 text-ink text-xl shrink-0"><i></i><i></i><i></i></span>
+          <div>
+            <h3 class="display-3 mb-3">{p.t}</h3>
+            <p class="max-w-md text-ink-soft">{p.d}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ============================ CTA ============================ -->
+  <section class="relative overflow-hidden bg-ink py-28 text-white md:py-36">
+    <div class="pointer-events-none absolute -left-16 -bottom-20 text-white/5" aria-hidden="true">
+      <span class="slashes text-[26rem] leading-none"><i></i><i></i><i></i></span>
+    </div>
+    <div class="container-site relative">
+      <p class="label !text-white/45 mb-8" data-index="[05]" data-reveal>Parliamone</p>
+      <h2 class="display-2 max-w-4xl" data-reveal data-delay=".06s">
+        Il tuo bene più prezioso merita un allestimento all’altezza.
+      </h2>
+      <div class="mt-10 flex flex-wrap items-center gap-5" data-reveal data-delay=".14s">
+        <a href="/contatti" class="inline-flex items-center justify-center rounded-md bg-white px-6 py-3.5 font-display text-sm font-semibold text-ink transition-colors hover:bg-white/85">
+          Richiedi un preventivo
+        </a>
+        <a href="tel:+393408427538" class="font-display text-lg font-semibold text-white/80 hover:text-white">+39 340 842 7538</a>
+      </div>
+    </div>
+  </section>
+</Base>
