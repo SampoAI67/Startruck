@@ -28,6 +28,11 @@ VIdeo AI Startruck/
 !public/og-*.webp
 !public/og-*.jpg
 
+# Keep the site's own background/showcase clips (small, needed for the live build)
+!public/hero.mp4
+!public/line-privacy.mp4
+!public/line-typeh.mp4
+
 # --- OS / editor cruft ---
 Thumbs.db
 desktop.ini
