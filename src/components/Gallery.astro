@@ -1,0 +1,64 @@
+---
+import { base } from '../lib/base';
+
+interface Props {
+  images: string[];
+  captions?: string[];
+}
+const { images, captions = [] } = Astro.props;
+
+// Con 6 immagini la prima diventa un riquadro 2×2: la griglia a 3 colonne si
+// chiude esatta, senza buchi in fondo.
+const feature = images.length === 6;
+---
+<div class:list={['gal', feature && 'has-feature']}>
+  {images.map((src, i) => (
+    <figure class="gal-item" data-reveal data-delay={`${((i % 3) * 0.08).toFixed(2)}s`}>
+      <div class="gal-frame">
+        <img src={base(src)} alt={captions[i] ?? ''} loading="lazy" decoding="async" width="1600" height="1067" />
+      </div>
+      {captions[i] && <figcaption>{captions[i]}</figcaption>}
+    </figure>
+  ))}
+</div>
+
+<style>
+  .gal { display: grid; gap: clamp(0.75rem, 1.5vw, 1.25rem); grid-template-columns: 1fr; }
+  @media (min-width: 640px)  { .gal { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .gal { grid-template-columns: repeat(3, 1fr); } }
+  /* Riquadro d'apertura 2×2 (solo a 3 colonne): l'immagine riempie la cella
+     invece di imporre il proprio formato, così le righe restano allineate. */
+  @media (min-width: 1024px) {
+    .has-feature .gal-item:first-child {
+      grid-column: span 2;
+      grid-row: span 2;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;                /* senza, il flex non lascia rimpicciolire il frame */
+    }
+    .has-feature .gal-item:first-child .gal-frame { flex: 1; min-height: 0; }
+    .has-feature .gal-item:first-child img { aspect-ratio: auto; height: 100%; }
+  }
+
+  .gal-frame { overflow: hidden; border-radius: var(--radius-md); background: var(--color-surface); }
+  .gal-frame img {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.01);
+    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s;
+    filter: grayscale(0.15);
+  }
+  .gal-item:hover .gal-frame img { transform: scale(1.06); filter: grayscale(0); }
+
+  figcaption {
+    margin-top: 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+  @media (prefers-reduced-motion: reduce) { .gal-frame img { transition: none; } }
+</style>

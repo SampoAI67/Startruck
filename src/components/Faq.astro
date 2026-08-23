@@ -1,0 +1,127 @@
+---
+interface Props {
+  items?: { q: string; a: string }[];
+  tone?: 'light' | 'dark';
+}
+
+const defaults = [
+  {
+    q: 'Su quali veicoli potete montare un allestimento?',
+    a: 'Lavoriamo sui principali telai in commercio: Iveco, Mercedes, MAN, Volkswagen, Renault, Peugeot, Citroën, Fiat, Nissan, Ford e Maxus. Se il tuo mezzo non è in elenco scrivici: nella maggior parte dei casi troviamo comunque la soluzione.',
+  },
+  {
+    q: 'Serve la patente C per guidarlo?',
+    a: 'No. Le Mans è progettato attorno al limite delle 3,5 tonnellate: struttura interamente in alluminio, peso contenuto e carico utile fino a 1,5 tonnellate. Si guida con la patente B.',
+  },
+  {
+    q: 'Quanto tempo serve per la consegna?',
+    a: 'Dipende dall’allestimento e dalla disponibilità del telaio. Dopo il sopralluogo ti diamo una finestra di consegna precisa e la manteniamo: preferiamo dire una data vera piuttosto che una comoda.',
+  },
+  {
+    q: 'Posso portare il mio veicolo o lo procurate voi?',
+    a: 'Entrambe le cose. Puoi portarci il tuo telaio oppure ce ne occupiamo noi, seguendo l’ordine e la pratica dal primo all’ultimo passaggio.',
+  },
+  {
+    q: 'L’allestimento è omologato?',
+    a: 'Sì. Ogni mezzo esce dalla nostra officina con la pratica di omologazione completa e i documenti pronti per la circolazione.',
+  },
+  {
+    q: 'Fate assistenza dopo la consegna?',
+    a: 'Sì, e non è un servizio a parte: chi ha costruito il tuo allestimento è la stessa persona che risponde al telefono se un anno dopo hai bisogno di un ricambio o di una regolazione.',
+  },
+];
+
+const { items = defaults, tone = 'light' } = Astro.props;
+---
+<ul class="faq" data-tone={tone}>
+  {items.map((it, i) => (
+    <li class="faq-item rule" data-reveal data-delay={`${(i * 0.04).toFixed(2)}s`}>
+      <details name="faq">
+        <summary>
+          <span class="faq-q">{it.q}</span>
+          <span class="faq-icon" aria-hidden="true"><i></i><i></i></span>
+        </summary>
+        <div class="faq-panel"><div class="faq-inner"><p>{it.a}</p></div></div>
+      </details>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .faq { border-top: 1px solid; border-color: inherit; }
+  .faq-item { border-bottom: 1px solid; }
+  /* le hairline seguono il tono della sezione ospite */
+  .faq[data-tone='light'] .faq-item { border-color: var(--color-hairline); }
+  .faq[data-tone='dark'] .faq-item { border-color: rgba(255, 255, 255, 0.16); }
+  .faq[data-tone='light'] { border-top-color: var(--color-hairline); }
+  .faq[data-tone='dark'] { border-top-color: rgba(255, 255, 255, 0.16); }
+
+  details { --dur: 0.5s; }
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  .faq-q {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+    letter-spacing: -0.015em;
+    transition: opacity 0.25s;
+  }
+  summary:hover .faq-q { opacity: 0.6; }
+
+  /* "+" che diventa "−" */
+  .faq-icon { position: relative; width: 15px; height: 15px; flex: none; }
+  .faq-icon i {
+    position: absolute;
+    inset: 50% 0 auto 0;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .faq-icon i:nth-child(2) { transform: rotate(90deg); }
+  details[open] .faq-icon i:nth-child(2) { transform: rotate(0deg); }
+
+  /* apertura fluida senza JS: grid-template-rows 0fr → 1fr */
+  .faq-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--dur) cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  details[open] .faq-panel { grid-template-rows: 1fr; }
+  .faq-inner { overflow: hidden; }
+  .faq-inner p {
+    max-width: 62ch;
+    padding-bottom: 1.6rem;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+  }
+  details[open] .faq-inner p { opacity: 1; transform: none; }
+  .faq[data-tone='light'] .faq-inner p { color: var(--color-ink-soft); }
+  .faq[data-tone='dark'] .faq-inner p { color: rgba(255, 255, 255, 0.72); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-panel, .faq-icon i, .faq-inner p { transition: none; }
+  }
+</style>
+
+<script>
+  // `details[name]` (accordion esclusivo) non è supportato ovunque: fallback JS.
+  if (!('name' in document.createElement('details'))) {
+    document.querySelectorAll<HTMLElement>('.faq').forEach((faq) => {
+      const all = Array.from(faq.querySelectorAll('details'));
+      all.forEach((d) =>
+        d.addEventListener('toggle', () => {
+          if (d.open) all.forEach((o) => o !== d && (o.open = false));
+        })
+      );
+    });
+  }
+</script>

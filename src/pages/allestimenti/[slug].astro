@@ -1,0 +1,174 @@
+---
+import Base from '../../layouts/Base.astro';
+import Section from '../../components/Section.astro';
+import VideoBanner from '../../components/VideoBanner.astro';
+import Marquee from '../../components/Marquee.astro';
+import StatRow from '../../components/StatRow.astro';
+import SpecTabs from '../../components/SpecTabs.astro';
+import Gallery from '../../components/Gallery.astro';
+import ClientLogos from '../../components/ClientLogos.astro';
+import Faq from '../../components/Faq.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import { base } from '../../lib/base';
+import { lines } from '../../data/lines';
+
+export const getStaticPaths = () => lines.map((line) => ({ params: { slug: line.slug }, props: { line } }));
+
+const { line } = Astro.props;
+const others = lines.filter((l) => l.slug !== line.slug);
+---
+<Base
+  heroOverlay
+  title={`${line.name} — ${line.tagline} | Startruck Italia`}
+  description={line.intro}
+>
+  <!-- ============================== 01 · HERO (nero) ============================== -->
+  <VideoBanner
+    video={line.hero.video}
+    videoMobile={line.hero.videoMobile}
+    poster={line.hero.poster}
+    eyebrow={line.tagline}
+    index="[ 01 ]"
+    title={line.name}
+    text={line.intro}
+    as="h1"
+    scrollCue
+  />
+
+  <!-- dotazione che scorre: fa da cerniera fra il nero e il bianco -->
+  <Marquee items={line.equipment} tone="light" speed={42} />
+
+  <!-- ========================= 02 · IDENTITÀ + NUMERI (bianco) ===================== -->
+  <Section tone="light" label="L'allestimento" index="[ 02 ]">
+    <div class="grid gap-x-16 gap-y-10 lg:grid-cols-[1.1fr_1fr]">
+      <h2 class="display-2 font-bold" data-reveal>
+        <span class="mask-line"><span>Costruito attorno</span></span>
+        <span class="mask-line"><span style="--d:.08s">alle tue auto,</span></span>
+        <span class="mask-line"><span style="--d:.16s" class="text-ink/45">non al catalogo.</span></span>
+      </h2>
+      <p class="text-soft text-lg lg:pt-3" data-reveal data-delay=".2s">{line.description}</p>
+    </div>
+
+    <div class="mt-16 md:mt-20">
+      <StatRow stats={line.stats} />
+    </div>
+  </Section>
+
+  <!-- ===================== 03 · IL MEZZO DA VICINO (nero) ========================= -->
+  <VideoBanner
+    video={line.detail.video}
+    poster={line.detail.poster}
+    eyebrow="Il mezzo da vicino"
+    index="[ 03 ]"
+    title={`Ogni dettaglio\nè una decisione.`}
+    text="Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada."
+    height="tall"
+    cta={{ label: 'Guarda la dotazione', href: '#dotazione' }}
+  />
+
+  <!-- ======================== 04 · DOTAZIONE / OPTIONALS (nero) ==================== -->
+  <Section tone="dark" id="dotazione" label="Cosa c'è a bordo" index="[ 04 ]">
+    <SpecTabs
+      dotazione={line.dotazione}
+      optionals={line.optionals}
+      image={line.gallery[2]}
+    />
+  </Section>
+
+  <!-- ============================ 05 · I PROGETTI (bianco) ======================== -->
+  <Section tone="light" label="Più iconici" index="[ 05 ]">
+    <h2 class="display-2 mb-14 font-bold" data-reveal>I progetti</h2>
+    <Gallery images={line.gallery} captions={line.captions} />
+  </Section>
+
+  <!-- =========================== 06 · CLIENTI (grigio) ============================ -->
+  <Section tone="surface" pad="tight">
+    <ClientLogos title={`Chi ha scelto ${line.name}`} tone="surface" />
+  </Section>
+
+  <!-- ============================== 07 · FAQ (bianco) ============================= -->
+  <Section tone="light" label="Domande frequenti" index="[ 06 ]">
+    <div class="grid gap-x-16 gap-y-8 lg:grid-cols-[0.8fr_1.2fr]">
+      <div class="lg:sticky lg:top-28 lg:self-start">
+        <h2 class="display-3 mb-4 font-bold" data-reveal>Abbiamo già risposto</h2>
+        <p class="text-soft max-w-sm" data-reveal data-delay=".08s">
+          Le domande che ci fanno più spesso. Se non trovi la tua, chiamaci: rispondiamo noi,
+          non un centralino.
+        </p>
+      </div>
+      <Faq items={line.faq} tone="light" />
+    </div>
+  </Section>
+
+  <!-- ========================= 08 · ALTRE LINEE (grigio) ========================== -->
+  <Section tone="surface" label="Le altre linee" index="[ 07 ]">
+    <div class="grid gap-6 md:grid-cols-2">
+      {others.map((o) => (
+        <a class="ol" href={base(`allestimenti/${o.slug}`)} data-reveal>
+          <img src={base(o.hero.poster)} alt="" width="1600" height="900" loading="lazy" decoding="async" />
+          <span class="ol-scrim"></span>
+          <span class="ol-body">
+            <span class="ol-tag">{o.tagline}</span>
+            <span class="ol-name">{o.name}</span>
+          </span>
+          <span class="ol-go" aria-hidden="true">→</span>
+        </a>
+      ))}
+    </div>
+  </Section>
+
+  <!-- ============================= 09 · CONTATTI (nero) ========================== -->
+  <Section tone="dark" id="contatti">
+    <ContactForm />
+  </Section>
+</Base>
+
+<style>
+  .ol {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    aspect-ratio: 16 / 9;
+    color: #fff;
+  }
+  .ol img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .ol:hover img { transform: scale(1.05); }
+  .ol-scrim {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,.1) 65%);
+  }
+  .ol-body {
+    position: absolute;
+    left: clamp(1.25rem, 3vw, 2rem);
+    bottom: clamp(1.25rem, 3vw, 2rem);
+    display: flex; flex-direction: column; gap: 0.3rem;
+  }
+  .ol-tag {
+    font-size: 0.66rem; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+  }
+  .ol-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .ol-go {
+    position: absolute;
+    right: clamp(1.25rem, 3vw, 2rem);
+    bottom: clamp(1.25rem, 3vw, 2rem);
+    font-size: 1.5rem;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .ol:hover .ol-go { transform: translateX(7px); }
+  @media (prefers-reduced-motion: reduce) {
+    .ol img, .ol-go { transition: none; }
+  }
+</style>

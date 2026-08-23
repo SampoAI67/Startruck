@@ -1,0 +1,226 @@
+---
+// Il sito è statico: senza endpoint configurato il form non finge di inviare,
+// apre il client di posta già compilato. Impostando PUBLIC_FORM_ENDPOINT
+// (Formspree, Web3Forms, ecc.) invia in POST senza toccare il markup.
+const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? '';
+const mailTo = 'Startruck@outlook.it';
+---
+<div class="cf">
+  <form class="cf-form" data-endpoint={endpoint} data-mailto={mailTo} novalidate>
+    <h2 class="cf-formtitle">Richiedi un preventivo</h2>
+
+    <div class="cf-field">
+      <label for="cf-name">Nome completo</label>
+      <input id="cf-name" name="name" type="text" placeholder="Nome e cognome" required autocomplete="name" />
+    </div>
+
+    <div class="cf-row">
+      <div class="cf-field">
+        <label for="cf-email">Email</label>
+        <input id="cf-email" name="email" type="email" placeholder="nome@esempio.it" required autocomplete="email" />
+      </div>
+      <div class="cf-field">
+        <label for="cf-phone">Telefono</label>
+        <input id="cf-phone" name="phone" type="tel" placeholder="+39 ___ ___ ____" autocomplete="tel" />
+      </div>
+    </div>
+
+    <div class="cf-field">
+      <label for="cf-msg">Messaggio</label>
+      <textarea id="cf-msg" name="message" rows="4" placeholder="Che mezzo hai e cosa devi trasportare?" required></textarea>
+    </div>
+
+    <button class="cf-submit" type="submit">
+      <span>Invia</span>
+      <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+        <line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" />
+      </svg>
+    </button>
+
+    <p class="cf-status" role="status" aria-live="polite"></p>
+  </form>
+
+  <div class="cf-aside">
+    <p class="label mb-6" data-index="[ ✱ ]">Parliamone</p>
+    <h2 class="cf-kicker" data-reveal>Se hai in mente un progetto</h2>
+    <p class="cf-shout" data-reveal data-delay=".08s">CONTATTACI</p>
+
+    <ul class="cf-contacts">
+      <li><a href="tel:+393408427538">+39 340 842 7538</a></li>
+      <li><a href={`mailto:${mailTo}`}>{mailTo}</a></li>
+      <li class="cf-addr">Str. Boschi — 46045 Pozzolo sul Mincio (MN)</li>
+    </ul>
+  </div>
+</div>
+
+<style>
+  .cf {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: start;
+  }
+  @media (min-width: 900px) { .cf { grid-template-columns: 1fr 1fr; } }
+
+  .cf-formtitle {
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    opacity: 0.55;
+  }
+
+  .cf-field { margin-bottom: 1.5rem; }
+  .cf-row { display: grid; gap: 1.5rem; }
+  @media (min-width: 560px) { .cf-row { grid-template-columns: 1fr 1fr; } }
+
+  label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 0.6rem;
+  }
+
+  input, textarea {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1.5px solid currentColor;
+    border-color: color-mix(in srgb, currentColor 28%, transparent);
+    padding: 0.7rem 0;
+    font-family: inherit;
+    font-size: 1rem;
+    color: inherit;
+    border-radius: 0;                 /* iOS arrotonda gli input di default */
+    transition: border-color 0.3s;
+  }
+  input::placeholder, textarea::placeholder { color: currentColor; opacity: 0.32; }
+  input:focus, textarea:focus { outline: none; border-color: currentColor; }
+  textarea { resize: vertical; min-height: 3.5rem; }
+
+  .cf-field.is-invalid input,
+  .cf-field.is-invalid textarea { border-color: var(--color-error); }
+  .tone-dark .cf-field.is-invalid input,
+  .tone-dark .cf-field.is-invalid textarea { border-color: #ff8a9b; }
+
+  .cf-submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-top: 0.6rem;
+    padding: 0.95rem 1.6rem;
+    border: 1.5px solid currentColor;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: inherit;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s, gap 0.25s;
+  }
+  .cf-submit svg { width: 24px; height: 12px; transition: transform 0.3s; }
+  .cf-submit:hover { gap: 1.3rem; }
+  .cf-submit:hover svg { transform: translateX(4px); }
+  .tone-dark .cf-submit:hover { background: #fff; color: var(--color-ink); }
+  .tone-light .cf-submit:hover,
+  .tone-surface .cf-submit:hover { background: var(--color-ink); color: #fff; }
+  .cf-submit[disabled] { opacity: 0.5; cursor: progress; }
+
+  .cf-status { margin-top: 1rem; font-size: 0.88rem; min-height: 1.3em; opacity: 0.75; }
+
+  .cf-kicker {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.15rem, 2.4vw, 1.9rem);
+    letter-spacing: -0.02em;
+    opacity: 0.7;
+  }
+  .cf-shout {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.6rem, 8vw, 6rem);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    margin: 0.2em 0 1.2em;
+  }
+
+  .cf-contacts { display: grid; gap: 0.7rem; font-size: 0.95rem; }
+  .cf-contacts a { transition: opacity 0.2s; }
+  .cf-contacts a:hover { opacity: 0.6; }
+  .cf-addr { opacity: 0.6; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('.cf-form').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('.cf-status')!;
+    const submit = form.querySelector<HTMLButtonElement>('.cf-submit')!;
+    const endpoint = form.dataset.endpoint;
+
+    const markInvalid = () => {
+      let first: HTMLElement | null = null;
+      form.querySelectorAll<HTMLInputElement>('input, textarea').forEach((el) => {
+        const ok = el.checkValidity();
+        el.closest('.cf-field')?.classList.toggle('is-invalid', !ok);
+        if (!ok && !first) first = el;
+      });
+      return first;
+    };
+
+    form.addEventListener('input', (e) => {
+      const el = e.target as HTMLInputElement;
+      if (el.checkValidity()) el.closest('.cf-field')?.classList.remove('is-invalid');
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const invalid = markInvalid();
+      if (invalid) {
+        status.textContent = 'Controlla i campi evidenziati.';
+        (invalid as HTMLElement).focus();
+        return;
+      }
+
+      const data = new FormData(form);
+      const get = (k: string) => String(data.get(k) ?? '');
+
+      // Nessun endpoint: apriamo la mail precompilata invece di fingere l'invio.
+      if (!endpoint) {
+        const body = [
+          `Nome: ${get('name')}`,
+          `Email: ${get('email')}`,
+          `Telefono: ${get('phone') || '—'}`,
+          '',
+          get('message'),
+        ].join('\n');
+        location.href =
+          `mailto:${form.dataset.mailto}` +
+          `?subject=${encodeURIComponent('Richiesta preventivo — ' + get('name'))}` +
+          `&body=${encodeURIComponent(body)}`;
+        status.textContent = 'Ti apriamo il client di posta con il messaggio già pronto.';
+        return;
+      }
+
+      submit.disabled = true;
+      status.textContent = 'Invio in corso…';
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        status.textContent = 'Grazie: ti rispondiamo entro un giorno lavorativo.';
+      } catch {
+        status.textContent = `Invio non riuscito. Scrivici a ${form.dataset.mailto}.`;
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  });
+</script>

@@ -1,0 +1,137 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import ContactForm from '../components/ContactForm.astro';
+import ClientLogos from '../components/ClientLogos.astro';
+import Faq from '../components/Faq.astro';
+import { base } from '../lib/base';
+
+const address = 'Str. Boschi, 46045 Pozzolo sul Mincio MN';
+const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('Startruck Italia, ' + address)}`;
+---
+<Base
+  title="Contattaci | Startruck Italia"
+  description="Scrivici o vieni a trovarci a Pozzolo sul Mincio (MN): ritiro, consegna e produzione avvengono nel nostro capannone."
+>
+  <!-- ============================= 01 · IL FORM (nero) =========================== -->
+  <Section tone="dark" pad="loose" id="scrivici" class="pt-40 md:pt-48">
+    <p class="label mb-8" data-index="[ 01 ]" data-reveal>Contatti</p>
+    <h1 class="ct-title" data-reveal>
+      <span class="mask-line"><span>Parliamo del</span></span>
+      <span class="mask-line"><span style="--d:.09s">tuo progetto.</span></span>
+    </h1>
+    <p class="mt-7 mb-16 max-w-xl text-soft text-lg md:mb-20" data-reveal data-delay=".2s">
+      Raccontaci che mezzo hai e cosa devi trasportare: ti rispondiamo con una proposta
+      concreta, non con un listino.
+    </p>
+
+    <ContactForm />
+  </Section>
+
+  <!-- ========================== 02 · DOVE TROVARCI (bianco) ====================== -->
+  <Section tone="light" label="Dove trovarci" index="[ 02 ]">
+    <div class="grid gap-x-16 gap-y-12 lg:grid-cols-[1fr_1.1fr] lg:items-center">
+      <div>
+        <h2 class="display-2 mb-6 font-bold" data-reveal>
+          <span class="mask-line"><span>Vieni a vedere</span></span>
+          <span class="mask-line"><span style="--d:.08s">come nascono.</span></span>
+        </h2>
+        <p class="text-soft mb-10 max-w-md" data-reveal data-delay=".14s">
+          Ritiro, consegna e produzione avvengono nel nostro capannone. Non esitare a passare:
+          vedere un allestimento mentre viene costruito racconta più di qualsiasi preventivo.
+        </p>
+
+        <dl class="dt" data-reveal data-delay=".2s">
+          <div>
+            <dt>Indirizzo</dt>
+            <dd>Str. Boschi<br />46045 Pozzolo sul Mincio (MN)</dd>
+          </div>
+          <div>
+            <dt>Telefono</dt>
+            <dd><a href="tel:+393408427538">+39 340 842 7538</a></dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd><a href="mailto:Startruck@outlook.it">Startruck@outlook.it</a></dd>
+          </div>
+          <div>
+            <dt>Orari</dt>
+            <dd>Lun — Ven, 8:00 / 18:00<br /><span class="text-soft">Sabato su appuntamento</span></dd>
+          </div>
+        </dl>
+
+        <a class="dt-cta" href={mapsUrl} target="_blank" rel="noopener noreferrer" data-reveal data-delay=".26s">
+          Apri in Google Maps
+          <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" />
+          </svg>
+        </a>
+      </div>
+
+      <figure class="dt-photo" data-reveal data-delay=".1s">
+        <img src={base('img/lemans-03.webp')} alt="Un allestimento Startruck davanti al capannone di Pozzolo sul Mincio" width="1600" height="1200" loading="lazy" decoding="async" />
+      </figure>
+    </div>
+  </Section>
+
+  <!-- ============================ 03 · CLIENTI (grigio) ========================== -->
+  <Section tone="surface" pad="tight">
+    <ClientLogos tone="surface" />
+  </Section>
+
+  <!-- ============================== 04 · FAQ (bianco) ============================ -->
+  <Section tone="light" label="Domande frequenti" index="[ 03 ]">
+    <div class="grid gap-x-16 gap-y-8 lg:grid-cols-[0.8fr_1.2fr]">
+      <div class="lg:sticky lg:top-28 lg:self-start">
+        <h2 class="display-3 mb-4 font-bold" data-reveal>Abbiamo già risposto</h2>
+        <p class="text-soft max-w-sm" data-reveal data-delay=".08s">
+          Se non trovi quello che cerchi, chiamaci: risponde chi costruisce i mezzi.
+        </p>
+      </div>
+      <Faq tone="light" />
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .ct-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.4rem, 7vw, 5.4rem);
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+  }
+
+  .dt { display: grid; gap: 1.75rem; }
+  @media (min-width: 520px) { .dt { grid-template-columns: 1fr 1fr; } }
+  .dt dt {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 0.5rem;
+  }
+  .dt dd { font-size: 1rem; line-height: 1.55; }
+  .dt a { border-bottom: 1px solid var(--color-hairline); transition: border-color 0.25s; }
+  .dt a:hover { border-color: var(--color-ink); }
+
+  .dt-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 2.5rem;
+    padding: 0.9rem 1.5rem;
+    border: 1.5px solid var(--color-ink);
+    border-radius: var(--radius-md);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: background 0.25s, color 0.25s, gap 0.25s;
+  }
+  .dt-cta svg { width: 22px; height: 11px; }
+  .dt-cta:hover { background: var(--color-ink); color: #fff; gap: 1.1rem; }
+
+  .dt-photo { overflow: hidden; border-radius: var(--radius-lg); }
+  .dt-photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+</style>

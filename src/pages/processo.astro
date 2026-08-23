@@ -1,0 +1,158 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import VideoBanner from '../components/VideoBanner.astro';
+import Marquee from '../components/Marquee.astro';
+import Faq from '../components/Faq.astro';
+import ContactForm from '../components/ContactForm.astro';
+
+const steps = [
+  {
+    n: '01',
+    t: 'Consulenza',
+    d: 'Ci racconti le tue auto, le tue rotte, le tue esigenze. Ascoltiamo prima di disegnare: quasi sempre il vincolo vero non è quello che sembra all’inizio.',
+    detail: ['Sopralluogo o call iniziale', 'Analisi del parco auto da trasportare', 'Verifica del telaio e dei limiti di massa'],
+  },
+  {
+    n: '02',
+    t: 'Progettazione',
+    d: 'Disegniamo l’allestimento su misura: layout, materiali, finiture, optional. Vedi il progetto prima che venga tagliato un solo profilo.',
+    detail: ['Disegno tecnico dedicato', 'Scelta materiali e finiture', 'Preventivo dettagliato, voce per voce'],
+  },
+  {
+    n: '03',
+    t: 'Costruzione',
+    d: 'Lo costruiamo a mano nella nostra officina di Pozzolo sul Mincio. Nessuna linea di montaggio: le stesse persone seguono il mezzo dall’inizio alla fine.',
+    detail: ['Struttura in alluminio su misura', 'Montaggio impianti e accessori', 'Controllo qualità su ogni mezzo'],
+  },
+  {
+    n: '04',
+    t: 'Consegna',
+    d: 'Te lo consegniamo pronto, collaudato e omologato. Poi restiamo al tuo fianco: chi l’ha costruito è chi risponde al telefono un anno dopo.',
+    detail: ['Pratica di omologazione completa', 'Consegna e istruzioni d’uso', 'Assistenza e ricambi nel tempo'],
+  },
+];
+---
+<Base
+  title="Il processo — dalla consulenza alla consegna | Startruck Italia"
+  description="Quattro fasi e un solo interlocutore: consulenza, progettazione, costruzione a mano e consegna omologata."
+>
+  <!-- ============================= 01 · APERTURA (nero) ========================== -->
+  <Section tone="dark" pad="loose" class="pt-40 md:pt-48">
+    <p class="label mb-8" data-index="[ 01 ]" data-reveal>Come lavoriamo</p>
+    <h1 class="pr-title" data-reveal>
+      <span class="mask-line"><span>Dal tuo garage</span></span>
+      <span class="mask-line"><span style="--d:.09s">alla nostra officina,</span></span>
+      <span class="mask-line"><span style="--d:.18s" class="text-white/45">e ritorno.</span></span>
+    </h1>
+    <p class="mt-8 max-w-xl text-soft text-lg" data-reveal data-delay=".26s">
+      Quattro fasi, un solo interlocutore. Dalla prima telefonata alla consegna sei sempre
+      seguito dalle stesse persone — e lo resti anche dopo.
+    </p>
+  </Section>
+
+  <Marquee items={['Consulenza', 'Progettazione', 'Costruzione', 'Collaudo', 'Omologazione', 'Consegna', 'Assistenza']} tone="dark" speed={40} />
+
+  <!-- ============================== 02 · LE FASI (bianco) ======================== -->
+  <Section tone="light">
+    <ol class="ps">
+      {steps.map((s) => (
+        <li class="ps-step rule" data-reveal>
+          <div class="ps-head">
+            <span class="ps-n">{s.n}</span>
+            <h2 class="ps-t">{s.t}</h2>
+          </div>
+          <div class="ps-content">
+            <p class="ps-d text-soft">{s.d}</p>
+            <ul class="ps-list">
+              {s.detail.map((d) => (
+                <li><span class="slashes" aria-hidden="true"><i></i><i></i><i></i></span>{d}</li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </Section>
+
+  <!-- =========================== 03 · IN OFFICINA (nero) ========================= -->
+  <VideoBanner
+    video="video/lemans-detail.mp4"
+    poster="img/lemans-detail.webp"
+    eyebrow="In officina"
+    index="[ 03 ]"
+    title={`Fatto a mano\nnon è uno slogan.`}
+    text="Ogni allestimento passa dalle stesse mani, dal primo taglio del profilo al collaudo finale."
+    height="tall"
+    align="end"
+  />
+
+  <!-- =============================== 04 · FAQ (bianco) =========================== -->
+  <Section tone="light" label="Domande frequenti" index="[ 04 ]">
+    <div class="grid gap-x-16 gap-y-8 lg:grid-cols-[0.8fr_1.2fr]">
+      <div class="lg:sticky lg:top-28 lg:self-start">
+        <h2 class="display-3 mb-4 font-bold" data-reveal>Prima che ce lo chiedi</h2>
+        <p class="text-soft max-w-sm" data-reveal data-delay=".08s">
+          Tempi, patenti, omologazioni: le cose che tutti vogliono sapere prima di iniziare.
+        </p>
+      </div>
+      <Faq tone="light" />
+    </div>
+  </Section>
+
+  <!-- ============================= 05 · CONTATTI (nero) ========================== -->
+  <Section tone="dark">
+    <ContactForm />
+  </Section>
+</Base>
+
+<style>
+  .pr-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.4rem, 7vw, 5.4rem);
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+  }
+
+  .ps { border-top: 1px solid; border-color: var(--color-hairline); }
+  .ps-step {
+    display: grid;
+    gap: 1.5rem 3rem;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid;
+  }
+  @media (min-width: 900px) {
+    .ps-step { grid-template-columns: 22rem minmax(0, 1fr); padding: 3.25rem 0; }
+  }
+
+  .ps-head { display: flex; align-items: baseline; gap: 1.25rem; }
+  .ps-n {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    color: var(--color-ink);
+    opacity: 0.16;
+    font-variant-numeric: tabular-nums;
+    transition: opacity 0.4s;
+  }
+  .ps-step:hover .ps-n { opacity: 1; }
+  .ps-t {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    letter-spacing: -0.03em;
+  }
+
+  .ps-content { display: grid; gap: 1.75rem; }
+  @media (min-width: 1100px) { .ps-content { grid-template-columns: 1.2fr 1fr; gap: 3rem; } }
+  .ps-d { max-width: 46ch; }
+  .ps-list { display: grid; gap: 0.75rem; align-content: start; }
+  .ps-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-size: 0.92rem;
+  }
+  .ps-list .slashes { font-size: 0.7rem; color: var(--color-ink); flex: none; }
+</style>

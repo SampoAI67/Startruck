@@ -1,0 +1,60 @@
+---
+import Base from './Base.astro';
+import Section from '../components/Section.astro';
+
+interface Props {
+  title: string;
+  updated: string;
+  intro?: string;
+}
+const { title, updated, intro } = Astro.props;
+---
+<Base title={`${title} | Startruck Italia`} description={intro}>
+  <Section tone="dark" pad="loose" class="pt-40 md:pt-48">
+    <p class="label mb-7" data-index="[ § ]" data-reveal>Informazioni legali</p>
+    <h1 class="lg-title" data-reveal>
+      <span class="mask-line"><span>{title}</span></span>
+    </h1>
+    <p class="mt-6 text-soft text-sm" data-reveal data-delay=".14s">
+      Ultimo aggiornamento: {updated}
+    </p>
+  </Section>
+
+  <Section tone="light">
+    <article class="prose"><slot /></article>
+  </Section>
+</Base>
+
+<style>
+  .lg-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.2rem, 6vw, 4.2rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+
+  .prose { max-width: 72ch; }
+  .prose :global(h2) {
+    font-size: clamp(1.15rem, 2vw, 1.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 2.75rem 0 0.9rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--color-hairline);
+  }
+  .prose :global(h2:first-child) { margin-top: 0; padding-top: 0; border-top: 0; }
+  .prose :global(p) { color: var(--color-ink-soft); margin-bottom: 1rem; }
+  .prose :global(ul) { color: var(--color-ink-soft); margin: 0 0 1rem 1.1rem; list-style: disc; }
+  .prose :global(li) { margin-bottom: 0.4rem; }
+  .prose :global(a) { border-bottom: 1px solid var(--color-hairline); }
+  .prose :global(a:hover) { border-color: var(--color-ink); }
+  /* I dati che il cliente deve ancora fornire restano visibilmente incompleti */
+  .prose :global(mark) {
+    background: #fff3cd;
+    color: #6b5200;
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    font-size: 0.92em;
+  }
+</style>

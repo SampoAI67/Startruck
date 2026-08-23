@@ -23,15 +23,14 @@ VIdeo AI Startruck/
 # Keep lightweight vector + source assets (SVG is allowed by default)
 !*.svg
 
-# Keep optimized, web-ready site assets in public/ (posters, og image, ecc.)
-!public/poster-*.webp
+# Gli asset web-ready generati da scripts/prepare-media.mjs SONO versionati:
+# servono al build di GitHub Pages e sono già compressi (video < 2,5 MB l'uno).
+# I sorgenti pesanti (OneDrive) restano fuori.
+!public/img/*.webp
+!public/logos/*.webp
+!public/video/*.mp4
 !public/og-*.webp
 !public/og-*.jpg
-
-# Keep the site's own background/showcase clips (small, needed for the live build)
-!public/hero.mp4
-!public/line-privacy.mp4
-!public/line-typeh.mp4
 
 # --- OS / editor cruft ---
 Thumbs.db

@@ -26,9 +26,8 @@ const nav = [
     </nav>
 
     <div class="flex items-center gap-5">
-      <div class="lang" aria-label="Lingua">
-        <span>IT</span><span class="sep">/</span><a href={base('en')}>EN</a>
-      </div>
+      {/* Selettore lingua: torna quando esisteranno le pagine EN — meglio
+          nessun controllo che un link a una 404. */}
       <a href={base('contatti')} class="hs-cta">Richiedi preventivo</a>
     </div>
   </div>

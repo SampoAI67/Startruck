@@ -1,0 +1,140 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import StatRow from '../components/StatRow.astro';
+import Gallery from '../components/Gallery.astro';
+import ClientLogos from '../components/ClientLogos.astro';
+import ContactForm from '../components/ContactForm.astro';
+import Marquee from '../components/Marquee.astro';
+
+const values = [
+  { t: 'Su misura', d: 'Ogni allestimento nasce attorno alle tue auto. Niente standard: solo la tua misura.' },
+  { t: 'Artigianalità', d: 'Mani italiane, alluminio aeronautico, finiture da atelier. Il dettaglio è la firma.' },
+  { t: 'Discrezione', d: 'Trasporta senza esporre. Riservatezza e sicurezza costruite nel mezzo, non aggiunte.' },
+  { t: 'Affidabilità', d: 'Provata sul campo, su migliaia di chilometri. Quando la consegna non ammette errori.' },
+];
+
+const stats = [
+  { value: '1', label: 'Officina', note: 'Tutto nasce a Pozzolo sul Mincio, in provincia di Mantova.' },
+  { value: '3', label: 'Linee', note: 'Le Mans, Privacy e Type H: tre risposte a tre esigenze diverse.' },
+  { value: '11', label: 'Marchi', note: 'I telai che alletiamo, dai più diffusi ai più specifici.' },
+  { value: '100%', label: 'Made in Italy', note: 'Progettazione e costruzione restano dentro casa.' },
+];
+
+const gallery = [
+  'img/lemans-02.webp', 'img/lemans-01.webp', 'img/privacy-01.webp',
+  'img/typeh-01.webp', 'img/lemans-06.webp', 'img/privacy-03.webp',
+];
+---
+<Base
+  title="Chi siamo — artigiani del trasporto veicoli | Startruck Italia"
+  description="Startruck Italia costruisce a mano allestimenti su misura per il trasporto di auto, a Pozzolo sul Mincio (MN)."
+>
+  <!-- ============================= 01 · APERTURA (nero) ========================== -->
+  <Section tone="dark" pad="loose" class="pt-40 md:pt-48">
+    <p class="label mb-8" data-index="[ 01 ]" data-reveal>Chi siamo</p>
+    <h1 class="cs-title" data-reveal>
+      <span class="mask-line"><span>Costruiamo mezzi</span></span>
+      <span class="mask-line"><span style="--d:.09s">per chi trasporta</span></span>
+      <span class="mask-line"><span style="--d:.18s" class="text-white/45">cose che contano.</span></span>
+    </h1>
+  </Section>
+
+  <!-- ============================= 02 · IL PERCHÉ (nero) ========================= -->
+  <Section tone="dark" pad="loose">
+    <p class="cs-manifesto">
+      {[
+        { t: 'Il resto del settore tratta il trasporto come una' },
+        { t: 'specifica tecnica.', cls: 'text-white/45' },
+        { t: 'Noi lo trattiamo come ciò che è davvero:' },
+        { t: 'la custodia di valore in movimento.', cls: 'font-semibold' },
+      ]
+        .flatMap((seg) => seg.t.split(' ').map((w) => ({ w, cls: seg.cls })))
+        .map((tok, i) => (
+          <Fragment>
+            <span class:list={['reveal-word', tok.cls]} data-reveal data-delay={`${(i * 0.03).toFixed(2)}s`}>{tok.w}</span>{' '}
+          </Fragment>
+        ))}
+    </p>
+  </Section>
+
+  <Marquee items={['Bisarche su misura', 'Alluminio aeronautico', 'Pozzolo sul Mincio', 'Made in Italy', 'Dal progetto alla consegna']} tone="light" speed={44} />
+
+  <!-- ============================ 03 · LA STORIA (bianco) ======================== -->
+  <Section tone="light" label="La nostra storia" index="[ 02 ]">
+    <div class="grid gap-x-16 gap-y-10 lg:grid-cols-[1.05fr_1fr]">
+      <h2 class="display-2 font-bold" data-reveal>
+        <span class="mask-line"><span>Una officina,</span></span>
+        <span class="mask-line"><span style="--d:.08s">non una catena</span></span>
+        <span class="mask-line"><span style="--d:.16s" class="text-ink/45">di montaggio.</span></span>
+      </h2>
+      <div class="text-soft grid gap-5 text-lg lg:pt-2" data-reveal data-delay=".2s">
+        <p>
+          Startruck nasce a Pozzolo sul Mincio da un'idea semplice: chi trasporta un'auto di valore
+          merita un mezzo costruito con la stessa cura di quell'auto.
+        </p>
+        <p>
+          Non produciamo in serie. Ogni allestimento parte dalle misure delle vetture che dovrà
+          portare e viene costruito a mano, in alluminio, dalle stesse persone che l'hanno disegnato.
+        </p>
+        <p>
+          È per questo che quando ci chiami un anno dopo la consegna sai già chi ti risponde:
+          non un centralino, ma chi quel mezzo l'ha costruito.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-16 md:mt-20">
+      <StatRow stats={stats} />
+    </div>
+  </Section>
+
+  <!-- ============================= 04 · I VALORI (grigio) ======================== -->
+  <Section tone="surface" label="Perché Startruck" index="[ 03 ]">
+    <div class="grid gap-x-10 gap-y-12 md:grid-cols-2">
+      {values.map((p) => (
+        <div class="flex gap-6 border-t pt-7 rule" data-reveal>
+          <span class="slashes mt-1 shrink-0 text-xl" aria-hidden="true"><i></i><i></i><i></i></span>
+          <div>
+            <h3 class="display-3 mb-3 font-bold">{p.t}</h3>
+            <p class="text-soft max-w-md">{p.d}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <!-- ============================= 05 · IL LAVORO (bianco) ======================= -->
+  <Section tone="light" label="Il lavoro" index="[ 04 ]">
+    <h2 class="display-2 mb-14 font-bold" data-reveal>Quello che esce dall'officina</h2>
+    <Gallery images={gallery} />
+  </Section>
+
+  <!-- ============================== 06 · CLIENTI (grigio) ======================== -->
+  <Section tone="surface" pad="tight">
+    <ClientLogos tone="surface" />
+  </Section>
+
+  <!-- =============================== 07 · CONTATTI (nero) ======================== -->
+  <Section tone="dark">
+    <ContactForm />
+  </Section>
+</Base>
+
+<style>
+  .cs-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.4rem, 7vw, 5.4rem);
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+  }
+  .cs-manifesto {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(1.7rem, 4.4vw, 3.6rem);
+    line-height: 1.14;
+    letter-spacing: -0.02em;
+    max-width: 22ch;
+  }
+</style>

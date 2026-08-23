@@ -1,0 +1,234 @@
+---
+import { base } from '../lib/base';
+
+// Il blocco "Dotazione / Optionals" del progetto Wix: due elenchi che si
+// scambiano, con la voce aperta che mostra il dettaglio a fianco.
+export interface SpecItem {
+  title: string;
+  spec?: string;
+  desc: string;
+  img?: string;
+}
+interface Props {
+  dotazione: SpecItem[];
+  optionals: SpecItem[];
+  image?: string;
+}
+const { dotazione, optionals, image } = Astro.props;
+
+const groups = [
+  { id: 'dotazione', label: 'Dotazione', items: dotazione },
+  { id: 'optionals', label: 'Optionals', items: optionals },
+];
+---
+<div class="st">
+  <div class="st-head">
+    {groups.map((g, i) => (
+      <button class:list={['st-tab', i === 0 && 'is-active']} type="button" data-tab={g.id} aria-selected={i === 0}>
+        <span class="st-tablabel">{g.label}</span>
+        <span class="st-count">{String(g.items.length).padStart(2, '0')}</span>
+      </button>
+    ))}
+  </div>
+
+  <div class="st-body">
+    <div class="st-lists">
+      {groups.map((g, gi) => (
+        <ul class:list={['st-list', gi === 0 && 'is-active']} data-panel={g.id}>
+          {g.items.map((it, i) => (
+            <li class="st-item">
+              <button class:list={['st-row', gi === 0 && i === 0 && 'is-open']} type="button" data-idx={i}>
+                <span class="st-num">{String(i + 1).padStart(2, '0')}</span>
+                <span class="st-title">{it.title}</span>
+                <span class="st-plus" aria-hidden="true"><i></i><i></i></span>
+              </button>
+              <div class="st-panel">
+                <div class="st-inner">
+                  {it.spec && <p class="st-spec">{it.spec}</p>}
+                  <p class="st-desc">{it.desc}</p>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
+
+    {image && (
+      <figure class="st-figure" data-reveal>
+        <img src={base(image)} alt="" width="1600" height="900" loading="lazy" decoding="async" />
+        <figcaption class="st-hint"><span class="st-dot"></span>Click</figcaption>
+      </figure>
+    )}
+  </div>
+</div>
+
+<style>
+  .st-head { display: flex; gap: 2.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.16); }
+  .st-tab {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+    padding: 0 0 1.1rem;
+    background: none;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    position: relative;
+  }
+  .st-tablabel {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 3.4vw, 2.4rem);
+    letter-spacing: -0.03em;
+    opacity: 0.38;
+    transition: opacity 0.3s;
+  }
+  .st-count { font-size: 0.68rem; letter-spacing: 0.12em; opacity: 0.3; padding-top: 0.35em; }
+  .st-tab.is-active .st-tablabel { opacity: 1; }
+  .st-tab::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .st-tab.is-active::after { transform: scaleX(1); }
+
+  .st-body { display: grid; gap: clamp(2rem, 5vw, 4rem); margin-top: clamp(2rem, 4vw, 3.25rem); }
+  @media (min-width: 960px) { .st-body { grid-template-columns: 1fr 1fr; align-items: start; } }
+
+  /* le due liste occupano la stessa cella: si scambiano in dissolvenza */
+  .st-lists { display: grid; }
+  .st-list {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.45s ease, transform 0.45s ease, visibility 0.45s;
+  }
+  .st-list.is-active { opacity: 1; visibility: visible; transform: none; }
+
+  .st-item { border-bottom: 1px solid rgba(255, 255, 255, 0.14); }
+  .st-row {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    width: 100%;
+    padding: 1.1rem 0;
+    background: none;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    text-align: left;
+  }
+  .st-num { font-size: 0.68rem; letter-spacing: 0.1em; opacity: 0.35; font-variant-numeric: tabular-nums; }
+  .st-title {
+    flex: 1;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(0.98rem, 1.5vw, 1.15rem);
+    transition: opacity 0.25s;
+  }
+  .st-row:hover .st-title { opacity: 0.62; }
+
+  .st-plus { position: relative; width: 13px; height: 13px; flex: none; opacity: 0.6; }
+  .st-plus i {
+    position: absolute;
+    inset: 50% 0 auto 0;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .st-plus i:nth-child(2) { transform: rotate(90deg); }
+  .st-row.is-open .st-plus i:nth-child(2) { transform: rotate(0); }
+
+  .st-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .st-row.is-open + .st-panel { grid-template-rows: 1fr; }
+  .st-inner { overflow: hidden; }
+  .st-spec {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+    padding-left: 2.1rem;
+  }
+  .st-desc {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    opacity: 0.68;
+    max-width: 46ch;
+    padding: 0 0 1.3rem 2.1rem;
+  }
+
+  .st-figure { position: relative; overflow: hidden; border-radius: var(--radius-lg); }
+  @media (min-width: 960px) { .st-figure { position: sticky; top: 7rem; } }
+  .st-figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .st-hint {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    color: #fff;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .st-dot {
+    width: 6px; height: 6px;
+    border-radius: 999px;
+    background: currentColor;
+    animation: st-pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes st-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.6); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .st-list, .st-panel, .st-plus i, .st-tab::after { transition: none; }
+    .st-dot { animation: none; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.st').forEach((root) => {
+    const tabs = Array.from(root.querySelectorAll<HTMLElement>('.st-tab'));
+    const lists = Array.from(root.querySelectorAll<HTMLElement>('.st-list'));
+
+    tabs.forEach((tab) =>
+      tab.addEventListener('click', () => {
+        const id = tab.dataset.tab;
+        tabs.forEach((t) => {
+          const on = t === tab;
+          t.classList.toggle('is-active', on);
+          t.setAttribute('aria-selected', String(on));
+        });
+        lists.forEach((l) => l.classList.toggle('is-active', l.dataset.panel === id));
+      })
+    );
+
+    // Una voce aperta per volta, per lista.
+    lists.forEach((list) => {
+      const rows = Array.from(list.querySelectorAll<HTMLElement>('.st-row'));
+      rows.forEach((row) =>
+        row.addEventListener('click', () => {
+          const open = row.classList.contains('is-open');
+          rows.forEach((r) => r.classList.remove('is-open'));
+          row.classList.toggle('is-open', !open);
+        })
+      );
+    });
+  });
+</script>

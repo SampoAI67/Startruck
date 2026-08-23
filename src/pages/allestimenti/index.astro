@@ -1,0 +1,155 @@
+---
+import Base from '../../layouts/Base.astro';
+import Section from '../../components/Section.astro';
+import Marquee from '../../components/Marquee.astro';
+import ClientLogos from '../../components/ClientLogos.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import { base } from '../../lib/base';
+import { lines, brandNames } from '../../data/lines';
+---
+<Base
+  title="Allestimenti — Le Mans, Privacy, Type H | Startruck Italia"
+  description="Tre linee di allestimento per il trasporto di auto: Le Mans racing-grade, Privacy confidenziale, Type H vintage. Costruite a mano su misura."
+>
+  <!-- ============================ 01 · APERTURA (nero) =========================== -->
+  <Section tone="dark" pad="loose" class="pt-40 md:pt-48">
+    <p class="label mb-8" data-index="[ 01 ]" data-reveal>Gli allestimenti</p>
+    <h1 class="ai-title" data-reveal>
+      <span class="mask-line"><span>Tre linee.</span></span>
+      <span class="mask-line"><span style="--d:.09s">Un solo modo</span></span>
+      <span class="mask-line"><span style="--d:.18s" class="text-white/45">di costruirle.</span></span>
+    </h1>
+    <p class="mt-8 max-w-xl text-soft text-lg" data-reveal data-delay=".26s">
+      Cambia la destinazione d'uso, non lo standard: alluminio, misure prese sulle tue auto
+      e finiture fatte a mano nella stessa officina.
+    </p>
+  </Section>
+
+  <Marquee items={brandNames} tone="dark" speed={46} />
+
+  <!-- ============================ 02 · LE LINEE (bianco) ========================= -->
+  <Section tone="light" pad="none" class="pt-24 md:pt-32">
+    <ol class="al">
+      {lines.map((l, i) => (
+        <li class="al-row rule" data-reveal>
+          <a href={base(`allestimenti/${l.slug}`)} class="al-link">
+            <span class="al-n">{String(i + 1).padStart(2, '0')}</span>
+
+            <span class="al-body">
+              <span class="al-tag">{l.tagline}</span>
+              <span class="al-name">{l.name}</span>
+              <span class="al-desc text-soft">{l.intro}</span>
+            </span>
+
+            <span class="al-thumb">
+              <img src={base(l.hero.poster)} alt="" width="1600" height="900" loading="lazy" decoding="async" />
+            </span>
+
+            <span class="al-go" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </Section>
+
+  <!-- =========================== 03 · CLIENTI (grigio) =========================== -->
+  <Section tone="surface" pad="tight" class="mt-24 md:mt-32">
+    <ClientLogos tone="surface" />
+  </Section>
+
+  <!-- ============================= 04 · CONTATTI (nero) ========================== -->
+  <Section tone="dark">
+    <ContactForm />
+  </Section>
+</Base>
+
+<style>
+  .ai-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.6rem, 8vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+  }
+
+  .al { border-top: 1px solid; border-color: var(--color-hairline); }
+  .al-row { border-bottom: 1px solid; }
+  .al-link {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    padding: 2rem 0;
+    transition: opacity 0.3s;
+  }
+  @media (min-width: 900px) {
+    .al-link {
+      grid-template-columns: 4rem minmax(0, 1fr) 15rem 3rem;
+      gap: 2rem;
+      padding: 2.5rem 0;
+    }
+  }
+
+  .al-n {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+    align-self: start;
+    padding-top: 0.5rem;
+  }
+
+  .al-body { display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+  .al-tag {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .al-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 5.5vw, 3.6rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .al-desc { max-width: 44ch; font-size: 0.98rem; }
+  @media (min-width: 900px) {
+    .al-link:hover .al-name { transform: translateX(12px); }
+  }
+
+  .al-thumb {
+    display: none;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background: var(--color-ink);
+  }
+  @media (min-width: 900px) { .al-thumb { display: block; } }
+  .al-thumb img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    /* la miniatura resta smorzata finché non passi sulla riga */
+    opacity: 0.55;
+    transform: scale(1.04);
+    transition: opacity 0.5s, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .al-link:hover .al-thumb img { opacity: 1; transform: scale(1); }
+
+  .al-go {
+    display: none;
+    font-size: 1.4rem;
+    color: var(--color-muted);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s;
+  }
+  @media (min-width: 900px) { .al-go { display: block; justify-self: end; } }
+  .al-link:hover .al-go { transform: translateX(8px); color: var(--color-ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .al-name, .al-thumb img, .al-go { transition: none; }
+  }
+</style>

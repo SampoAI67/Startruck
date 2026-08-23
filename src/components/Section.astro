@@ -1,0 +1,40 @@
+---
+// Blocco di pagina. Porta il "tono" (bianco / grigio / nero) che dà al sito
+// il suo ritmo alternato, così le pagine si compongono senza rifare i colori
+// a mano ogni volta.
+interface Props {
+  tone?: 'light' | 'surface' | 'dark';
+  label?: string;
+  index?: string;
+  id?: string;
+  pad?: 'normal' | 'tight' | 'loose' | 'none';
+  full?: boolean;          // salta il container: per sezioni a tutta larghezza
+  class?: string;
+}
+const {
+  tone = 'light',
+  label,
+  index,
+  id,
+  pad = 'normal',
+  full = false,
+  class: cls = '',
+} = Astro.props;
+
+const pads = {
+  none: '',
+  tight: 'py-14 md:py-20',
+  normal: 'py-24 md:py-32',
+  loose: 'py-28 md:py-40',
+};
+---
+<section id={id} class={`tone-${tone} ${pads[pad]} ${cls}`}>
+  {full ? (
+    <slot />
+  ) : (
+    <div class="container-site">
+      {label && <p class="label mb-10" data-index={index} data-reveal>{label}</p>}
+      <slot />
+    </div>
+  )}
+</section>

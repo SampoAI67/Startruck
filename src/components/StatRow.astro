@@ -1,0 +1,96 @@
+---
+interface Props {
+  stats: { value: string; label: string; note?: string }[];
+}
+const { stats } = Astro.props;
+---
+<ul class="sr">
+  {stats.map((s, i) => (
+    <li class="sr-item rule" data-reveal data-delay={`${(i * 0.08).toFixed(2)}s`}>
+      {/* data-count: se il valore contiene un numero, viene animato allo scroll */}
+      <span class="sr-value" data-count={s.value}>{s.value}</span>
+      <span class="sr-label">{s.label}</span>
+      {s.note && <span class="sr-note text-soft">{s.note}</span>}
+    </li>
+  ))}
+</ul>
+
+<style>
+  .sr { display: grid; gap: 0; grid-template-columns: 1fr; }
+  @media (min-width: 640px)  { .sr { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .sr { grid-template-columns: repeat(4, 1fr); } }
+
+  .sr-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding: 1.75rem 0;
+    border-top: 1px solid;
+  }
+  @media (min-width: 640px) {
+    .sr-item { padding-inline-end: 2rem; }
+  }
+
+  .sr-value {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    font-variant-numeric: tabular-nums;
+  }
+  .sr-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.55;
+  }
+  .sr-note { font-size: 0.9rem; max-width: 26ch; }
+</style>
+
+<script>
+  // Conta fino al valore finale preservando prefissi/suffissi ("1,5 t", "11+").
+  const nodes = document.querySelectorAll<HTMLElement>('.sr-value[data-count]');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (nodes.length && !reduce) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          const el = e.target as HTMLElement;
+          io.unobserve(el);
+
+          const raw = el.dataset.count ?? '';
+          const m = raw.match(/([\d.,]+)/);
+          if (!m) continue;
+
+          const numText = m[1];
+          const decimals = (numText.split(',')[1] ?? '').length;
+          const target = parseFloat(numText.replace(/\./g, '').replace(',', '.'));
+          if (!isFinite(target)) continue;
+
+          const [pre, post] = raw.split(numText);
+          const DUR = 1100;
+          const t0 = performance.now();
+
+          const tick = (now: number) => {
+            const p = Math.min((now - t0) / DUR, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            const v = (target * eased).toLocaleString('it-IT', {
+              minimumFractionDigits: decimals,
+              maximumFractionDigits: decimals,
+            });
+            el.textContent = `${pre}${v}${post}`;
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          el.textContent = `${pre}${(0).toLocaleString('it-IT', { minimumFractionDigits: decimals })}${post}`;
+          requestAnimationFrame(tick);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    nodes.forEach((n) => io.observe(n));
+  }
+</script>

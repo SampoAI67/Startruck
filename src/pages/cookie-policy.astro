@@ -1,0 +1,44 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { base } from '../lib/base';
+---
+<Legal
+  title="Cookie Policy"
+  updated="23 agosto 2026"
+  intro="Uso dei cookie sul sito di Startruck Italia."
+>
+  <p>
+    <strong>Nota per il cliente:</strong> questo testo descrive il sito così com'è oggi —
+    senza analytics, senza pixel e senza contenuti incorporati. Se in futuro vengono
+    aggiunti Google Analytics, il pixel di Meta o una mappa incorporata, il documento va
+    aggiornato e servirà un banner di consenso.
+  </p>
+
+  <h2>Cookie tecnici</h2>
+  <p>
+    Questo sito è statico e non installa cookie di profilazione né di analisi. Il fornitore
+    di hosting può utilizzare cookie o log tecnici indispensabili a erogare la pagina e a
+    garantirne la sicurezza: per questi non è richiesto il consenso preventivo.
+  </p>
+
+  <h2>Cookie di terze parti</h2>
+  <p>
+    Non sono presenti contenuti incorporati da terze parti. Il collegamento a Google Maps
+    nella pagina Contatti è un semplice link: si apre in una nuova scheda e nessun dato
+    viene trasmesso a Google finché non lo apri volontariamente.
+  </p>
+
+  <h2>Come gestire i cookie</h2>
+  <p>
+    Puoi eliminare o bloccare i cookie dalle impostazioni del tuo browser. Trattandosi di
+    soli cookie tecnici, il blocco potrebbe compromettere la corretta visualizzazione della
+    pagina ma non limita alcuna funzione del sito.
+  </p>
+
+  <h2>Contatti</h2>
+  <p>
+    Per qualsiasi chiarimento scrivi a
+    <a href="mailto:Startruck@outlook.it">Startruck@outlook.it</a>. Il trattamento dei dati
+    personali è descritto nella <a href={base('privacy-policy')}>Privacy Policy</a>.
+  </p>
+</Legal>

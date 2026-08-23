@@ -1,0 +1,66 @@
+---
+import { base } from '../lib/base';
+
+interface Props {
+  title?: string;
+  tone?: 'light' | 'surface' | 'dark';
+}
+const { title = 'Chi ha scelto Startruck', tone = 'light' } = Astro.props;
+
+// I loghi sono PNG scuri su trasparenza: su fondo nero vanno invertiti.
+const brands = [
+  { file: 'iveco', name: 'Iveco' },
+  { file: 'mercedes', name: 'Mercedes-Benz' },
+  { file: 'man', name: 'MAN' },
+  { file: 'ww', name: 'Volkswagen' },
+  { file: 'renault', name: 'Renault' },
+  { file: 'peugeot', name: 'Peugeot' },
+  { file: 'citroen', name: 'Citroën' },
+  { file: 'fiat', name: 'Fiat' },
+  { file: 'ford', name: 'Ford' },
+];
+---
+<div class="cl" data-tone={tone}>
+  <h2 class="cl-title" data-reveal>{title}</h2>
+  <ul class="cl-grid">
+    {brands.map((b, i) => (
+      <li data-reveal data-delay={`${(i * 0.05).toFixed(2)}s`}>
+        <img src={base(`logos/${b.file}.webp`)} alt={b.name} width="160" height="80" loading="lazy" decoding="async" />
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .cl-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    text-align: center;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+    opacity: 0.65;
+  }
+  .cl-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: center;
+    justify-items: center;
+  }
+  @media (min-width: 700px)  { .cl-grid { grid-template-columns: repeat(5, 1fr); } }
+  @media (min-width: 1100px) { .cl-grid { grid-template-columns: repeat(9, 1fr); } }
+
+  /* I file sorgente sono loghi BIANCHI su trasparenza: restano com'è sul nero,
+     vanno invertiti sui fondi chiari. */
+  .cl-grid img {
+    width: auto;
+    height: clamp(30px, 4vw, 44px);
+    object-fit: contain;
+    opacity: 0.55;
+    filter: invert(1);
+    transition: opacity 0.35s;
+  }
+  .cl-grid li:hover img { opacity: 1; }
+  .cl[data-tone='dark'] .cl-grid img { filter: none; opacity: 0.6; }
+</style>

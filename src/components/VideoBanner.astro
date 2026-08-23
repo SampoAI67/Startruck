@@ -1,0 +1,203 @@
+---
+import { base } from '../lib/base';
+
+interface Props {
+  video: string;
+  videoMobile?: string;
+  poster: string;
+  eyebrow?: string;
+  index?: string;
+  title: string;
+  text?: string;
+  cta?: { label: string; href: string };
+  height?: 'full' | 'tall' | 'mid';
+  align?: 'end' | 'center';
+  scrollCue?: boolean;
+  as?: 'h1' | 'h2';        // una sola h1 per pagina: i banner interni sono h2
+}
+const {
+  video,
+  videoMobile,
+  poster,
+  eyebrow,
+  index,
+  title,
+  text,
+  cta,
+  height = 'full',
+  align = 'end',
+  scrollCue = false,
+  as: Heading = 'h2',
+} = Astro.props;
+
+const heights = {
+  full: 'h-[100svh] min-h-[600px]',
+  tall: 'h-[86svh] min-h-[520px]',
+  mid: 'h-[62svh] min-h-[420px]',
+};
+---
+<section class={`vb tone-dark ${heights[height]}`} data-align={align}>
+  <div class="vb-media" data-parallax>
+    <video
+      class="vb-video"
+      poster={base(poster)}
+      autoplay muted loop playsinline preload="metadata"
+      aria-hidden="true"
+    >
+      {videoMobile && <source src={base(videoMobile)} media="(max-width: 760px)" type="video/mp4" />}
+      <source src={base(video)} type="video/mp4" />
+    </video>
+  </div>
+
+  <div class="vb-scrim"></div>
+
+  <div class="container-site vb-content">
+    {eyebrow && <p class="label mb-6" data-index={index} data-reveal>{eyebrow}</p>}
+
+    <Heading class="vb-title" data-reveal>
+      {title.split('\n').map((line, i) => (
+        <span class="mask-line"><span style={`--d:${(i * 0.09).toFixed(2)}s`}>{line}</span></span>
+      ))}
+    </Heading>
+
+    {text && <p class="vb-text" data-reveal data-delay=".18s">{text}</p>}
+
+    {cta && (
+      <div data-reveal data-delay=".26s">
+        <a class="vb-cta" href={cta.href}>
+          {cta.label}
+          <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" />
+          </svg>
+        </a>
+      </div>
+    )}
+  </div>
+
+  {scrollCue && <div class="vb-cue" aria-hidden="true"><span>SCROLL</span><i></i></div>}
+</section>
+
+<style>
+  .vb { position: relative; width: 100%; overflow: hidden; }
+  .vb-media { position: absolute; inset: -8% 0; will-change: transform; }
+  .vb-video { width: 100%; height: 100%; object-fit: cover; animation: kenburns 26s ease-out forwards; }
+  .vb-scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.2) 52%, rgba(0,0,0,.5) 100%),
+      linear-gradient(to right, rgba(0,0,0,.62) 0%, rgba(0,0,0,0) 60%);
+  }
+
+  .vb-content {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-block: clamp(6rem, 12vh, 9rem);
+  }
+  .vb[data-align='end'] .vb-content { justify-content: flex-end; }
+  .vb[data-align='center'] .vb-content { justify-content: center; }
+
+  .vb-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.6rem, 8vw, 6.5rem);
+    line-height: 0.94;
+    letter-spacing: -0.035em;
+    max-width: 16ch;
+  }
+  .vb-text {
+    margin-top: 1.6rem;
+    max-width: 46ch;
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
+    color: rgba(255, 255, 255, 0.78);
+  }
+  .vb-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2.2rem;
+    padding: 0.95rem 1.6rem;
+    border-radius: var(--radius-md);
+    background: #fff;
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.88rem;
+    transition: gap 0.25s, background 0.2s;
+  }
+  .vb-cta svg { width: 24px; height: 12px; }
+  .vb-cta:hover { gap: 1.15rem; background: rgba(255, 255, 255, 0.86); }
+
+  .vb-cue {
+    position: absolute;
+    left: 50%;
+    bottom: 1.75rem;
+    translate: -50% 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    color: rgba(255, 255, 255, 0.55);
+  }
+  .vb-cue i {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(255,255,255,.7), transparent);
+    animation: cue 2.2s ease-in-out infinite;
+    transform-origin: top;
+  }
+  @keyframes cue {
+    0%   { transform: scaleY(0); opacity: 0; }
+    35%  { transform: scaleY(1); opacity: 1; }
+    100% { transform: scaleY(1) translateY(40px); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vb-video { animation: none; }
+    .vb-cue i { animation: none; }
+  }
+</style>
+
+<script>
+  // Parallasse: lo sfondo scorre più lento del contenuto. Solo transform,
+  // aggiornato dentro rAF, così resta sul compositor.
+  const layers = document.querySelectorAll<HTMLElement>('[data-parallax]');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (layers.length && !reduce) {
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const vh = innerHeight;
+      layers.forEach((l) => {
+        const r = l.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;      // fuori schermo: niente lavoro
+        const progress = (r.top + r.height / 2 - vh / 2) / vh;
+        l.style.transform = `translate3d(0, ${(progress * 7).toFixed(2)}%, 0)`;
+      });
+    };
+    addEventListener('scroll', () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    addEventListener('resize', update, { passive: true });
+    update();
+  }
+
+  // I video di sfondo si fermano quando non sono visibili: batteria e CPU.
+  const vids = document.querySelectorAll<HTMLVideoElement>('.vb-video');
+  if (vids.length) {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) v.play?.().catch(() => {});
+        else v.pause?.();
+      }),
+      { threshold: 0.1 }
+    );
+    vids.forEach((v) => io.observe(v));
+  }
+</script>

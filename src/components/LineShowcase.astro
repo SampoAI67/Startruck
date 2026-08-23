@@ -1,11 +1,30 @@
 ---
 import { base } from '../lib/base';
+import { lines as data } from '../data/lines';
 
-const lines = [
-  { n: '01', name: 'Le Mans', slug: 'le-mans', tag: 'Performance & racing', bar: 'Racing-grade', accent: 'var(--color-line-lemans)', video: base('hero.mp4'), poster: base('poster-lemans.webp'), desc: 'Per chi vive la pista. Allestimento racing-grade, ancoraggi rapidi, protezione totale.' },
-  { n: '02', name: 'Type H', slug: 'type-h', tag: 'Versatile su misura', bar: 'Su misura', accent: 'var(--color-line-typeh)', video: base('line-typeh.mp4'), poster: base('poster-typeh.webp'), desc: 'Il cavallo di battaglia configurabile. Si adatta a ogni auto, ogni esigenza, ogni rotta.' },
-  { n: '03', name: 'Privacy', slug: 'privacy', tag: 'Trasporto confidenziale', bar: 'Confidenziale', accent: 'var(--color-line-privacy)', video: base('line-privacy.mp4'), poster: base('poster-privacy.webp'), desc: 'Discrezione assoluta. Nessuno vede cosa trasporti — solo tu sai cosa c’è dentro.' },
-];
+// Un'unica fonte per nomi, video e claim: le schede qui e le pagine di
+// dettaglio non possono più divergere.
+const bars: Record<string, string> = {
+  'le-mans': 'Racing-grade',
+  'type-h': 'Vintage',
+  privacy: 'Confidenziale',
+};
+const order = ['le-mans', 'type-h', 'privacy'];
+
+const lines = order.map((slug, i) => {
+  const l = data.find((x) => x.slug === slug)!;
+  return {
+    n: String(i + 1).padStart(2, '0'),
+    name: l.name,
+    slug: l.slug,
+    tag: l.tagline,
+    bar: bars[l.slug],
+    accent: l.accentVar,
+    video: base(l.hero.video),
+    poster: base(l.hero.poster),
+    desc: l.intro,
+  };
+});
 const total = String(lines.length).padStart(2, '0');
 ---
 <section class="ls" id="ls" aria-roledescription="carosello" aria-label="Allestimenti">

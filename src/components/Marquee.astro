@@ -1,0 +1,44 @@
+---
+interface Props {
+  items: string[];
+  speed?: number;          // secondi per giro
+  reverse?: boolean;
+  tone?: 'light' | 'surface' | 'dark';
+  bordered?: boolean;
+}
+const { items, speed = 38, reverse = false, tone = 'light', bordered = true } = Astro.props;
+---
+<div class={`mq tone-${tone} ${bordered ? 'mq-bordered' : ''}`}>
+  <div class="marquee-track" data-reverse={reverse ? '' : undefined} style={`animation-duration:${speed}s`}>
+    {/* due copie identiche: la traccia scorre del 50% e riparte senza salto */}
+    {[0, 1].map(() => (
+      <span class="mq-seq" aria-hidden="false">
+        {items.map((w) => (
+          <span class="mq-cell">
+            <span class="mq-word">{w}</span>
+            <span class="slashes mq-sep" aria-hidden="true"><i></i><i></i><i></i></span>
+          </span>
+        ))}
+      </span>
+    ))}
+  </div>
+</div>
+
+<style>
+  .mq { overflow: hidden; padding-block: 1rem; }
+  .mq-bordered { border-block: 1px solid; }
+  .mq.tone-light, .mq.tone-surface { border-color: var(--color-hairline); }
+  .mq.tone-dark { border-color: rgba(255, 255, 255, 0.16); }
+
+  .mq-seq, .mq-cell { display: inline-flex; align-items: center; }
+  .mq-word {
+    padding-inline: 1.75rem;
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .mq-sep { font-size: 0.9rem; opacity: 0.35; }
+</style>
