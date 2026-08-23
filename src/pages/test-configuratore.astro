@@ -74,7 +74,14 @@ const items: Hotspot[] = [
   </Section>
 
   <Section tone="dark" pad="none" class="pb-24 md:pb-32">
-    <Turntable dir="turntable/lemans" frames={36} arc={360} items={items} calibrate />
+    <Turntable
+      dir="turntable/lemans"
+      frames={36}
+      arc={360}
+      items={items}
+      hiFrames={[16, 21, 30]}
+      calibrate
+    />
   </Section>
 
   <!-- Note tecniche: restano su questa pagina, non nel sito vero -->
@@ -83,10 +90,15 @@ const items: Hotspot[] = [
       <div>
         <h2 class="display-3 mb-4 font-bold">Cosa stiamo guardando</h2>
         <p class="text-soft mb-4">
-          36 fotogrammi estratti da <code>orbit-lemans-360.mp4</code>: un
-          <strong>giro completo di 360°</strong>, uno scatto ogni 10°. Pesano
-          <strong>1 MB in tutto</strong> a risoluzione nativa 1280×720, e girano su
-          qualsiasi telefono senza WebGL né modelli 3D.
+          36 fotogrammi estratti da <code>orbit-lemans-360-4k.mp4</code>: un
+          <strong>giro completo di 360°</strong>, uno scatto ogni 10°. La sequenza di
+          rotazione pesa <strong>1,4 MB</strong> a 1600 px, e gira su qualsiasi telefono
+          senza WebGL né modelli 3D.
+        </p>
+        <p class="text-soft mb-4">
+          Solo i tre fotogrammi su cui gli accessori zoomano esistono anche a
+          <strong>3200 px</strong> (0,3 MB in tutto): si caricano al momento dello zoom,
+          così da vicino il dettaglio resta nitido senza appesantire il resto.
         </p>
         <p class="text-soft">
           Il giro è chiuso: si può ruotare all'infinito in entrambi i versi, e quando
@@ -98,7 +110,7 @@ const items: Hotspot[] = [
         <h2 class="display-3 mb-4 font-bold">Cosa resta da sistemare</h2>
         <ul class="tc-list text-soft">
           <li>Il mezzo <strong>respira leggermente</strong> nell'inquadratura (la distanza dalla camera non è costante). Su una piattaforma rotante sparirebbe del tutto.</li>
-          <li>A <strong>zoom 4×</strong> si arriva al limite del dettaglio dei 1280 px: per i pezzi piccoli servirebbe un girato in 4K.</li>
+          <li>Il 4K è <strong>ricostruito da un upscaler</strong>, non ripreso: il dettaglio a forte ingrandimento è plausibile, non necessariamente fedele.</li>
           <li>I <strong>fari LED</strong> nel girato sono spenti: va confermato col cliente che il pezzo inquadrato sia quello giusto.</li>
           <li>Sul pianale c'è <strong>una sola cinghia</strong> appoggiata, non il set completo.</li>
         </ul>

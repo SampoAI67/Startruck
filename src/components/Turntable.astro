@@ -20,12 +20,17 @@ interface Props {
   frames: number;
   items: Hotspot[];
   arc?: number;           // gradi coperti dalla sequenza (360 = giro chiuso)
+  hiFrames?: number[];    // fotogrammi disponibili anche in <dir>/hi/ per lo zoom
   calibrate?: boolean;    // modalità taratura: click = coordinate normalizzate
 }
-const { dir, frames, items, arc = 360, calibrate = false } = Astro.props;
+const { dir, frames, items, arc = 360, hiFrames = [], calibrate = false } = Astro.props;
 
 const urls = Array.from({ length: frames }, (_, i) =>
   base(`${dir}/${String(i + 1).padStart(2, '0')}.webp`)
+);
+// La rotazione gira sui file leggeri; solo lo zoom carica la versione grande.
+const hiUrls = Object.fromEntries(
+  hiFrames.map((n) => [n, base(`${dir}/hi/${String(n).padStart(2, '0')}.webp`)])
 );
 ---
 <div
@@ -33,6 +38,7 @@ const urls = Array.from({ length: frames }, (_, i) =>
   data-frames={frames}
   data-arc={arc}
   data-urls={JSON.stringify(urls)}
+  data-hi={JSON.stringify(hiUrls)}
   data-items={JSON.stringify(items)}
   data-calibrate={calibrate ? '' : undefined}
 >
@@ -117,11 +123,11 @@ const urls = Array.from({ length: frames }, (_, i) =>
     user-select: none;
     -webkit-user-drag: none;
     transform-origin: center;
-    transition: transform 1.05s cubic-bezier(0.22, 1, 0.36, 1), filter 0.8s ease;
+    transition: transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: transform;
   }
-  /* da vicino il girato del tramonto è troppo chiuso: si schiarisce sullo zoom */
-  .tt-viewport.is-zoomed .tt-img { filter: brightness(1.62) contrast(1.04) saturate(1.05); }
+  /* Nessuna correzione di luminosità: il girato diurno è già esposto bene e
+     schiarirlo bruciava i bianchi della carrozzeria. */
 
   /* ---------------------------------------------------------- indicatori -- */
   /* I marker devono subire lo stesso zoom dell'immagine, altrimenti il pallino
@@ -281,6 +287,7 @@ const urls = Array.from({ length: frames }, (_, i) =>
 
   document.querySelectorAll<HTMLElement>('.tt').forEach((root) => {
     const urls: string[] = JSON.parse(root.dataset.urls!);
+    const hiUrls: Record<string, string> = JSON.parse(root.dataset.hi ?? '{}');
     const items: Hotspot[] = JSON.parse(root.dataset.items!);
     const total = urls.length;
 
@@ -424,6 +431,15 @@ const urls = Array.from({ length: frames }, (_, i) =>
       root.style.setProperty('--tt-s', String(s));
       viewport.classList.add('is-zoomed');
       markers.forEach((m) => m.classList.toggle('is-shown', m.dataset.for === h.id));
+
+      // Da vicino serve il fotogramma grande: si carica ora, e si sostituisce
+      // solo quando è pronto per non far lampeggiare il riquadro.
+      const hi = hiUrls[String(h.frame)];
+      if (hi) {
+        const pre = new Image();
+        pre.onload = () => { if (active === h) img.src = hi; };
+        pre.src = hi;
+      }
     };
 
     const clearZoom = () => {
@@ -432,6 +448,7 @@ const urls = Array.from({ length: frames }, (_, i) =>
       root.style.setProperty('--tt-s', '1');
       viewport.classList.remove('is-zoomed');
       markers.forEach((m) => m.classList.remove('is-shown'));
+      show(frame);                    // torna al file leggero della sequenza
     };
 
     const select = (h: Hotspot) => {

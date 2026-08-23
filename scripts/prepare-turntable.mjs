@@ -24,13 +24,17 @@ const num = (k, d) => Number(opt(k, d));
 // Preset noti, così il comando quotidiano resta corto.
 const presets = {
   lemans: {
-    src: 'Raw Hero video/orbit-lemans-360.mp4',
+    src: 'Raw Hero video/orbit-lemans-360-4k.mp4',
     out: 'public/turntable/lemans',
     start: 0,
     duration: 10.0,      // giro completo di 360°
     frames: 36,          // un fotogramma ogni 10°
-    width: 1280,         // risoluzione nativa: serve per reggere lo zoom 3x
-    eq: null,            // girato diurno: nessuna correzione
+    width: 1600,         // sequenza di rotazione: leggera, si carica tutta
+    // Solo i fotogrammi su cui gli hotspot zoomano vengono esportati anche in
+    // alta risoluzione: sono 3, e caricarli tutti a 3200px non avrebbe senso.
+    hires: [16, 21, 30],
+    hiresWidth: 3200,
+    eq: null,            // girato diurno esposto bene: nessuna correzione
   },
 };
 
@@ -40,8 +44,11 @@ const OUT = opt('out', p.out);
 const START = num('start', p.start ?? 0);
 const DURATION = num('duration', p.duration);
 const FRAMES = num('frames', p.frames ?? 36);
-const WIDTH = num('width', p.width ?? 1280);
+const WIDTH = num('width', p.width ?? 1600);
 const EQ = opt('eq', p.eq);
+const HIRES = (opt('hires', (p.hires ?? []).join(',')) || '')
+  .split(',').map(Number).filter(Boolean);
+const HIRES_WIDTH = num('hires-width', p.hiresWidth ?? 3200);
 
 if (!SRC || !OUT || !DURATION) {
   console.error('Servono almeno --src, --out e --duration (o un --preset valido).');
@@ -90,3 +97,32 @@ await rm(TMP, { recursive: true, force: true });
 const { width, height } = await sharp(path.join(OUT, '01.webp')).metadata();
 console.log(`${files.length} fotogrammi ${width}×${height} → ${OUT}`);
 console.log(`peso totale ${(total / 1024 / 1024).toFixed(2)} MB (${Math.round(total / files.length / 1024)} KB l'uno)`);
+
+/* ------------------------------------------------------------- alta risoluzione */
+if (HIRES.length) {
+  const HI = path.join(OUT, 'hi');
+  const HTMP = path.join(HI, '_tmp');
+  await mkdir(HTMP, { recursive: true });
+  let hiTotal = 0;
+
+  for (const n of HIRES) {
+    // istante esatto del fotogramma n della sequenza
+    const t = START + ((n - 1) / FRAMES) * DURATION;
+    const raw = path.join(HTMP, `${n}.png`);
+    await run('ffmpeg', [
+      '-y', '-ss', t.toFixed(4), '-i', SRC, '-frames:v', '1',
+      '-vf', [flag('wm') && 'crop=iw:floor(ih*0.88/2)*2:0:0', `scale=${HIRES_WIDTH}:-2:flags=lanczos`, EQ]
+        .filter(Boolean).join(','),
+      raw,
+    ]);
+    const info = await sharp(raw)
+      .webp({ quality: 76 })
+      .toFile(path.join(HI, `${String(n).padStart(2, '0')}.webp`));
+    hiTotal += info.size;
+  }
+
+  await rm(HTMP, { recursive: true, force: true });
+  const hm = await sharp(path.join(HI, `${String(HIRES[0]).padStart(2, '0')}.webp`)).metadata();
+  console.log(`${HIRES.length} fotogrammi ad alta risoluzione ${hm.width}×${hm.height} → ${HI}`);
+  console.log(`peso ${(hiTotal / 1024 / 1024).toFixed(2)} MB (caricati solo allo zoom)`);
+}
