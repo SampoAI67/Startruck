@@ -1,0 +1,478 @@
+---
+import { base } from '../lib/base';
+
+// Configuratore "Tier 2": niente WebGL, solo una sequenza di fotogrammi reali.
+// Trascinando si ruota; scegliendo un accessorio la sequenza gira da sola fino
+// all'angolo migliore e poi zooma sul punto giusto.
+export interface Hotspot {
+  id: string;
+  title: string;
+  spec?: string;
+  desc: string;
+  frame: number;                    // 1..frames — l'angolo che mostra meglio il pezzo
+  focus: { x: number; y: number };  // 0..1 sul fotogramma
+  zoom?: number;
+  note?: string;                    // avvertenza: pezzo non montato / in ombra
+}
+
+interface Props {
+  dir: string;            // es. "turntable/lemans"
+  frames: number;
+  items: Hotspot[];
+  calibrate?: boolean;    // modalità taratura: click = coordinate normalizzate
+}
+const { dir, frames, items, calibrate = false } = Astro.props;
+
+const urls = Array.from({ length: frames }, (_, i) =>
+  base(`${dir}/${String(i + 1).padStart(2, '0')}.webp`)
+);
+---
+<div
+  class="tt"
+  data-frames={frames}
+  data-urls={JSON.stringify(urls)}
+  data-items={JSON.stringify(items)}
+  data-calibrate={calibrate ? '' : undefined}
+>
+  <div class="tt-stage" role="group" aria-label="Vista a 180 gradi dell'allestimento">
+    <div class="tt-viewport">
+      <img class="tt-img" src={urls[0]} alt="" width="1000" height="563" draggable="false" />
+
+      <div class="tt-markers" aria-hidden="true">
+        {items.map((it) => (
+          <button
+            class="tt-marker"
+            type="button"
+            data-for={it.id}
+            style={`left:${(it.focus.x * 100).toFixed(2)}%;top:${(it.focus.y * 100).toFixed(2)}%`}
+            tabindex="-1"
+          >
+            <span class="tt-ping"></span>
+            <span class="tt-dot"></span>
+          </button>
+        ))}
+      </div>
+
+      <div class="tt-loading"><span class="tt-bar"><i></i></span><span class="tt-pct">0%</span></div>
+      {calibrate && <p class="tt-cal">taratura: clicca sul mezzo per leggere le coordinate</p>}
+    </div>
+
+    <div class="tt-bottom">
+      <p class="tt-hint">
+        <svg viewBox="0 0 40 12" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+          <path d="M8 1 L2 6 L8 11" /><path d="M32 1 L38 6 L32 11" /><line x1="2" y1="6" x2="38" y2="6" stroke-dasharray="2 3" />
+        </svg>
+        Trascina per ruotare
+      </p>
+      <p class="tt-angle"><span data-angle>0</span>°</p>
+    </div>
+  </div>
+
+  <div class="tt-panel">
+    <p class="label mb-6" data-index="[ ✦ ]">Scegli un accessorio</p>
+    <ul class="tt-list">
+      {items.map((it, i) => (
+        <li>
+          <button class:list={['tt-row', i === 0 && 'is-active']} type="button" data-item={it.id}>
+            <span class="tt-n">{String(i + 1).padStart(2, '0')}</span>
+            <span class="tt-name">{it.title}</span>
+            <span class="tt-caret" aria-hidden="true">→</span>
+          </button>
+        </li>
+      ))}
+    </ul>
+
+    <div class="tt-detail" aria-live="polite">
+      <h3 data-detail-title></h3>
+      <p class="tt-spec" data-detail-spec></p>
+      <p class="tt-desc" data-detail-desc></p>
+      <p class="tt-note" data-detail-note hidden></p>
+      <button class="tt-reset" type="button" hidden>Torna alla vista intera</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .tt { display: grid; gap: clamp(1.5rem, 4vw, 3rem); }
+  @media (min-width: 1000px) { .tt { grid-template-columns: 1.35fr 1fr; align-items: start; } }
+
+  /* ------------------------------------------------------------- palco --- */
+  .tt-viewport {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: #0d0d0d;
+    aspect-ratio: 1000 / 563;
+    cursor: grab;
+    touch-action: pan-y;                 /* lo scroll verticale resta al browser */
+  }
+  .tt-viewport.is-dragging { cursor: grabbing; }
+
+  .tt-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    transform-origin: center;
+    transition: transform 1.05s cubic-bezier(0.22, 1, 0.36, 1), filter 0.8s ease;
+    will-change: transform;
+  }
+  /* da vicino il girato del tramonto è troppo chiuso: si schiarisce sullo zoom */
+  .tt-viewport.is-zoomed .tt-img { filter: brightness(1.62) contrast(1.04) saturate(1.05); }
+
+  /* ---------------------------------------------------------- indicatori -- */
+  /* I marker devono subire lo stesso zoom dell'immagine, altrimenti il pallino
+     resta indietro rispetto al pezzo che indica. */
+  .tt-markers {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    transform-origin: center;
+    transition: transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .tt-marker {
+    position: absolute;
+    translate: -50% -50%;
+    /* controscala: il pallino non deve ingrandirsi con lo zoom */
+    scale: calc(1 / var(--tt-s, 1));
+    width: 26px; height: 26px;
+    display: grid; place-items: center;
+    background: none; border: 0; padding: 0;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+  }
+  .tt-marker.is-shown { opacity: 1; }
+  .tt-dot {
+    width: 9px; height: 9px;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.45);
+  }
+  .tt-ping {
+    position: absolute;
+    inset: 0;
+    border: 1.5px solid rgba(255, 255, 255, 0.85);
+    border-radius: 999px;
+    animation: tt-ping 2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+  @keyframes tt-ping {
+    0%   { transform: scale(0.35); opacity: 0; }
+    35%  { opacity: 1; }
+    100% { transform: scale(1); opacity: 0; }
+  }
+
+  /* ------------------------------------------------------------ caricamento */
+  .tt-loading {
+    position: absolute;
+    inset: auto 0 0 0;
+    display: flex; align-items: center; gap: 0.8rem;
+    padding: 1rem 1.25rem;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition: opacity 0.5s;
+  }
+  .tt-loading.is-done { opacity: 0; pointer-events: none; }
+  .tt-bar { flex: 1; height: 1.5px; background: rgba(255, 255, 255, 0.2); overflow: hidden; }
+  .tt-bar i { display: block; height: 100%; width: 0; background: #fff; transition: width 0.2s linear; }
+
+  .tt-cal {
+    position: absolute; top: 0.85rem; left: 0.85rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff; font-size: 0.62rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+  }
+
+  .tt-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; margin-top: 0.9rem;
+    font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .tt-hint { display: inline-flex; align-items: center; gap: 0.7rem; }
+  .tt-hint svg { width: 40px; height: 12px; }
+  .tt-angle { font-variant-numeric: tabular-nums; }
+
+  /* ------------------------------------------------------------ pannello -- */
+  .tt-list { border-top: 1px solid rgba(255, 255, 255, 0.15); }
+  .tt-list li { border-bottom: 1px solid rgba(255, 255, 255, 0.15); }
+  .tt-row {
+    display: flex; align-items: center; gap: 1rem;
+    width: 100%; padding: 0.95rem 0;
+    background: none; border: 0; color: inherit;
+    text-align: left; cursor: pointer;
+  }
+  .tt-n { font-size: 0.66rem; opacity: 0.35; font-variant-numeric: tabular-nums; }
+  .tt-name {
+    flex: 1;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+    opacity: 0.62;
+    transition: opacity 0.25s;
+  }
+  .tt-row:hover .tt-name, .tt-row.is-active .tt-name { opacity: 1; }
+  .tt-caret { opacity: 0; transform: translateX(-6px); transition: opacity 0.3s, transform 0.3s; }
+  .tt-row.is-active .tt-caret { opacity: 0.7; transform: none; }
+
+  .tt-detail { margin-top: 1.75rem; min-height: 8rem; }
+  .tt-detail h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.25rem, 2.2vw, 1.7rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .tt-spec { font-weight: 600; font-size: 0.92rem; margin-bottom: 0.5rem; }
+  .tt-spec:empty { display: none; }
+  .tt-desc { font-size: 0.94rem; line-height: 1.6; opacity: 0.7; max-width: 46ch; }
+
+  /* Avvertenza visibile: distingue ciò che si vede davvero nel girato
+     da ciò che su questo esemplare non c'è. */
+  .tt-note {
+    display: flex; gap: 0.55rem;
+    margin-top: 0.9rem;
+    padding: 0.6rem 0.8rem;
+    border-left: 2px solid #e8c33a;
+    background: rgba(232, 195, 58, 0.08);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.72);
+    max-width: 46ch;
+  }
+  .tt-note::before { content: '!'; font-weight: 700; color: #e8c33a; }
+
+  .tt-reset {
+    margin-top: 1.4rem;
+    padding: 0.6rem 1.1rem;
+    background: none;
+    border: 1.5px solid currentColor;
+    border-radius: var(--radius-md);
+    color: inherit;
+    font-family: var(--font-display);
+    font-size: 0.76rem;
+    font-weight: 600;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.25s, background 0.25s, color 0.25s;
+  }
+  .tt-reset:hover { opacity: 1; background: #fff; color: var(--color-ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tt-img { transition: none; }
+    .tt-ping { animation: none; }
+  }
+</style>
+
+<script>
+  type Hotspot = {
+    id: string; title: string; spec?: string; desc: string;
+    frame: number; focus: { x: number; y: number }; zoom?: number;
+  };
+
+  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll<HTMLElement>('.tt').forEach((root) => {
+    const urls: string[] = JSON.parse(root.dataset.urls!);
+    const items: Hotspot[] = JSON.parse(root.dataset.items!);
+    const total = urls.length;
+
+    const viewport = root.querySelector<HTMLElement>('.tt-viewport')!;
+    const img = root.querySelector<HTMLImageElement>('.tt-img')!;
+    const angleOut = root.querySelector<HTMLElement>('[data-angle]')!;
+    const loading = root.querySelector<HTMLElement>('.tt-loading')!;
+    const bar = root.querySelector<HTMLElement>('.tt-bar i')!;
+    const pct = root.querySelector<HTMLElement>('.tt-pct')!;
+    const rows = Array.from(root.querySelectorAll<HTMLElement>('.tt-row'));
+    const markers = Array.from(root.querySelectorAll<HTMLElement>('.tt-marker'));
+    const reset = root.querySelector<HTMLButtonElement>('.tt-reset')!;
+    const dTitle = root.querySelector<HTMLElement>('[data-detail-title]')!;
+    const dSpec = root.querySelector<HTMLElement>('[data-detail-spec]')!;
+    const dDesc = root.querySelector<HTMLElement>('[data-detail-desc]')!;
+    const dNote = root.querySelector<HTMLElement>('[data-detail-note]')!;
+
+    const fillDetail = (h: Hotspot) => {
+      dTitle.textContent = h.title;
+      dSpec.textContent = h.spec ?? '';
+      dDesc.textContent = h.desc;
+      dNote.textContent = h.note ?? '';
+      dNote.hidden = !h.note;
+    };
+
+    let frame = 0;            // 0-based
+    let ready = false;
+    let spin: number | null = null;
+    let anim: number | null = null;
+    let active: Hotspot | null = null;
+
+    /* ---------------------------------------------------------- preload -- */
+    // 370 KB in tutto: si caricano tutti, così il trascinamento non scatta.
+    let done = 0;
+    const cache: HTMLImageElement[] = [];
+    urls.forEach((u, i) => {
+      const im = new Image();
+      im.onload = im.onerror = () => {
+        done++;
+        const p = Math.round((done / total) * 100);
+        bar.style.width = `${p}%`;
+        pct.textContent = `${p}%`;
+        if (done === total) {
+          ready = true;
+          loading.classList.add('is-done');
+          if (!reduce) startSpin();
+        }
+      };
+      im.src = u;
+      cache[i] = im;
+    });
+
+    const show = (i: number) => {
+      frame = ((i % total) + total) % total;
+      img.src = urls[frame];
+      // l'arco reale copre ~180°, non un giro intero
+      angleOut.textContent = String(Math.round((frame / (total - 1)) * 180));
+    };
+
+    /* ------------------------------------------------- rotazione d'attesa - */
+    const startSpin = () => {
+      stopSpin();
+      let last = performance.now();
+      let acc = 0;
+      const step = (now: number) => {
+        acc += now - last;
+        last = now;
+        if (acc > 110) { acc = 0; show(frame + 1); }
+        spin = requestAnimationFrame(step);
+      };
+      spin = requestAnimationFrame(step);
+    };
+    const stopSpin = () => { if (spin) cancelAnimationFrame(spin); spin = null; };
+
+    /* ----------------------------------------------------- trascinamento -- */
+    let dragging = false, startX = 0, startFrame = 0, moved = 0;
+
+    viewport.addEventListener('pointerdown', (e) => {
+      if (!ready) return;
+      dragging = true; moved = 0;
+      startX = e.clientX; startFrame = frame;
+      stopSpin();
+      viewport.setPointerCapture(e.pointerId);
+      viewport.classList.add('is-dragging');
+    });
+
+    viewport.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      moved = Math.max(moved, Math.abs(dx));
+      // una larghezza intera = tutto l'arco
+      show(startFrame + Math.round((dx / viewport.clientWidth) * total));
+    });
+
+    const endDrag = (e: PointerEvent) => {
+      if (!dragging) return;
+      dragging = false;
+      viewport.classList.remove('is-dragging');
+      viewport.releasePointerCapture?.(e.pointerId);
+    };
+    viewport.addEventListener('pointerup', endDrag);
+    viewport.addEventListener('pointercancel', endDrag);
+
+    /* ------------------------------------------------- rotazione guidata -- */
+    const rotateTo = (target: number, then?: () => void) => {
+      if (anim) cancelAnimationFrame(anim);
+      const from = frame;
+      // percorso più breve lungo l'arco
+      const delta = target - from;
+      if (reduce) { show(target); then?.(); return; }
+
+      const dur = Math.min(140 + Math.abs(delta) * 42, 1150);
+      const t0 = performance.now();
+      const step = (now: number) => {
+        const p = Math.min((now - t0) / dur, 1);
+        show(Math.round(from + delta * easeOutCubic(p)));
+        if (p < 1) anim = requestAnimationFrame(step);
+        else { anim = null; then?.(); }
+      };
+      anim = requestAnimationFrame(step);
+    };
+
+    const markerLayer = root.querySelector<HTMLElement>('.tt-markers')!;
+
+    const zoomTo = (h: Hotspot) => {
+      const s = h.zoom ?? 2.4;
+      // trasla il punto d'interesse al centro, poi scala attorno al centro
+      const tx = (0.5 - h.focus.x) * 100;
+      const ty = (0.5 - h.focus.y) * 100;
+      const t = `scale(${s}) translate(${tx.toFixed(2)}%, ${ty.toFixed(2)}%)`;
+      img.style.transform = t;
+      markerLayer.style.transform = t;          // stesso movimento dell'immagine
+      root.style.setProperty('--tt-s', String(s));
+      viewport.classList.add('is-zoomed');
+      markers.forEach((m) => m.classList.toggle('is-shown', m.dataset.for === h.id));
+    };
+
+    const clearZoom = () => {
+      img.style.transform = '';
+      markerLayer.style.transform = '';
+      root.style.setProperty('--tt-s', '1');
+      viewport.classList.remove('is-zoomed');
+      markers.forEach((m) => m.classList.remove('is-shown'));
+    };
+
+    const select = (h: Hotspot) => {
+      active = h;
+      stopSpin();
+      rows.forEach((r) => r.classList.toggle('is-active', r.dataset.item === h.id));
+
+      fillDetail(h);
+      reset.hidden = false;
+
+      clearZoom();
+      rotateTo(h.frame - 1, () => zoomTo(h));
+    };
+
+    rows.forEach((r) =>
+      r.addEventListener('click', () => {
+        const h = items.find((x) => x.id === r.dataset.item);
+        if (h) select(h);
+      })
+    );
+
+    reset.addEventListener('click', () => {
+      active = null;
+      reset.hidden = true;
+      rows.forEach((r) => r.classList.remove('is-active'));
+      dTitle.textContent = '';
+      dSpec.textContent = '';
+      dDesc.textContent = '';
+      dNote.hidden = true;
+      clearZoom();
+    });
+
+    // trascinando si esce dallo zoom: si torna a guardare l'insieme
+    viewport.addEventListener('pointerdown', () => {
+      if (active) { clearZoom(); }
+    });
+
+    /* --------------------------------------------------------- taratura -- */
+    if (root.dataset.calibrate !== undefined) {
+      viewport.addEventListener('click', (e) => {
+        if (moved > 4) return;                  // era un trascinamento
+        const r = viewport.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width).toFixed(3);
+        const y = ((e.clientY - r.top) / r.height).toFixed(3);
+        const line = `frame ${frame + 1} · focus { x: ${x}, y: ${y} }`;
+        root.querySelector<HTMLElement>('.tt-cal')!.textContent = line;
+        console.log(line);
+      });
+    }
+
+    show(0);
+    if (items[0]) fillDetail(items[0]);
+  });
+</script>

@@ -28,6 +28,7 @@ VIdeo AI Startruck/
 # I sorgenti pesanti (OneDrive) restano fuori.
 !public/img/*.webp
 !public/logos/*.webp
+!public/turntable/**/*.webp
 !public/video/*.mp4
 !public/og-*.webp
 !public/og-*.jpg
