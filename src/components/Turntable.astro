@@ -19,9 +19,10 @@ interface Props {
   dir: string;            // es. "turntable/lemans"
   frames: number;
   items: Hotspot[];
+  arc?: number;           // gradi coperti dalla sequenza (360 = giro chiuso)
   calibrate?: boolean;    // modalità taratura: click = coordinate normalizzate
 }
-const { dir, frames, items, calibrate = false } = Astro.props;
+const { dir, frames, items, arc = 360, calibrate = false } = Astro.props;
 
 const urls = Array.from({ length: frames }, (_, i) =>
   base(`${dir}/${String(i + 1).padStart(2, '0')}.webp`)
@@ -30,6 +31,7 @@ const urls = Array.from({ length: frames }, (_, i) =>
 <div
   class="tt"
   data-frames={frames}
+  data-arc={arc}
   data-urls={JSON.stringify(urls)}
   data-items={JSON.stringify(items)}
   data-calibrate={calibrate ? '' : undefined}
@@ -331,11 +333,15 @@ const urls = Array.from({ length: frames }, (_, i) =>
       cache[i] = im;
     });
 
+    const arc = Number(root.dataset.arc ?? 360);
+    const closed = arc >= 360;               // giro chiuso: si può girare all'infinito
+
     const show = (i: number) => {
-      frame = ((i % total) + total) % total;
+      frame = closed
+        ? ((i % total) + total) % total
+        : Math.min(Math.max(i, 0), total - 1);   // arco parziale: niente salto agli estremi
       img.src = urls[frame];
-      // l'arco reale copre ~180°, non un giro intero
-      angleOut.textContent = String(Math.round((frame / (total - 1)) * 180));
+      angleOut.textContent = String(Math.round((frame / (closed ? total : total - 1)) * arc));
     };
 
     /* ------------------------------------------------- rotazione d'attesa - */
@@ -386,8 +392,12 @@ const urls = Array.from({ length: frames }, (_, i) =>
     const rotateTo = (target: number, then?: () => void) => {
       if (anim) cancelAnimationFrame(anim);
       const from = frame;
-      // percorso più breve lungo l'arco
-      const delta = target - from;
+      // su un giro chiuso conviene sempre il verso più corto: mai 300° per farne 60
+      let delta = target - from;
+      if (closed) {
+        delta = ((delta % total) + total) % total;
+        if (delta > total / 2) delta -= total;
+      }
       if (reduce) { show(target); then?.(); return; }
 
       const dur = Math.min(140 + Math.abs(delta) * 42, 1150);
