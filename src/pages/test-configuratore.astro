@@ -8,9 +8,11 @@ import type { Hotspot } from '../components/Turntable.astro';
 // Serve a decidere se il "clic su accessorio → rotazione + zoom" regge, prima
 // di portarlo dentro le pagine degli allestimenti.
 //
-// Fotogrammi: 36 estratti da Raw Hero video/orbit-lemans-360.mp4 — giro
-// COMPLETO di 360°, luce diurna, Iveco Daily allestito. Le coordinate sono
-// tarate sui fotogrammi 16 (3/4 posteriore), 21 (posteriore) e 30 (fiancata).
+// Fotogrammi: 72 estratti da Raw Hero video/orbit-lemans-360-4k.mp4 — giro
+// COMPLETO di 360° (uno ogni 5°), luce diurna, Iveco Daily allestito.
+// Le coordinate sono tarate sui fotogrammi 31 (3/4 posteriore), 41
+// (posteriore) e 59 (fiancata) — gli stessi angoli di quando la sequenza era
+// di 36 fotogrammi, raddoppiati con n' = 2n-1.
 // La modalità calibrazione resta attiva: cliccando si leggono le coordinate.
 const items: Hotspot[] = [
   {
@@ -18,44 +20,44 @@ const items: Hotspot[] = [
     title: 'Pianale',
     spec: 'Pianale 5.000 × 2.130 mm',
     desc: 'Alluminio estruso, superficie antiscivolo e punti di ancoraggio distribuiti su tutta la lunghezza.',
-    frame: 16, focus: { x: 0.34, y: 0.60 }, zoom: 2.0,
+    frame: 31, focus: { x: 0.34, y: 0.60 }, zoom: 2.0,
   },
   {
     id: 'rampe',
     title: 'Rampe a scomparsa',
     desc: 'Si sfilano da sotto il pianale e rientrano a filo: nessun ingombro esterno, nessun pezzo da caricare a parte.',
-    frame: 21, focus: { x: 0.565, y: 0.638 }, zoom: 3.0,
+    frame: 41, focus: { x: 0.565, y: 0.638 }, zoom: 3.0,
   },
   {
     id: 'verricello',
     title: 'Verricello traslabile',
     desc: 'Scorre lateralmente per allinearsi all’auto invece di costringere l’auto ad allinearsi a lui. Tiro sempre dritto.',
-    frame: 30, focus: { x: 0.385, y: 0.51 }, zoom: 3.2,
+    frame: 59, focus: { x: 0.385, y: 0.51 }, zoom: 3.2,
   },
   {
     id: 'fune',
     title: 'Fune sintetica',
     desc: 'Più leggera dell’acciaio e più sicura in caso di rottura: non frusta. Si maneggia a mani nude.',
-    frame: 21, focus: { x: 0.465, y: 0.50 }, zoom: 4.0,
+    frame: 41, focus: { x: 0.465, y: 0.50 }, zoom: 4.0,
   },
   {
     id: 'fari',
     title: 'Fari LED notturni',
     desc: 'Illuminano l’area di lavoro dietro al mezzo. Carico e scarico al buio senza torce né improvvisazione.',
-    frame: 21, focus: { x: 0.524, y: 0.466 }, zoom: 3.2,
+    frame: 41, focus: { x: 0.524, y: 0.466 }, zoom: 3.2,
     note: 'Nel girato sono spenti: si vedono i due corpi incassati nella paratia. Da confermare col cliente che sia questo il pezzo.',
   },
   {
     id: 'ingombro',
     title: 'Luci ingombro laterali LED',
     desc: 'Profilo del mezzo sempre leggibile agli altri, anche con poca luce e in manovra.',
-    frame: 16, focus: { x: 0.352, y: 0.688 }, zoom: 4.0,
+    frame: 31, focus: { x: 0.352, y: 0.688 }, zoom: 4.0,
   },
   {
     id: 'cinghie',
     title: 'Set 4 cinghie',
     desc: 'Quattro cinghie a cricchetto con ganci dedicati agli ancoraggi del pianale. Incluse, non un accessorio.',
-    frame: 21, focus: { x: 0.58, y: 0.527 }, zoom: 4.0,
+    frame: 41, focus: { x: 0.58, y: 0.527 }, zoom: 4.0,
     note: 'Sul pianale se ne vede una sola, appoggiata accanto al verricello.',
   },
 ];
@@ -76,10 +78,10 @@ const items: Hotspot[] = [
   <Section tone="dark" pad="none" class="pb-24 md:pb-32">
     <Turntable
       dir="turntable/lemans"
-      frames={36}
+      frames={72}
       arc={360}
       items={items}
-      hiFrames={[16, 21, 30]}
+      hiFrames={[31, 41, 59]}
       calibrate
     />
   </Section>
@@ -90,19 +92,20 @@ const items: Hotspot[] = [
       <div>
         <h2 class="display-3 mb-4 font-bold">Cosa stiamo guardando</h2>
         <p class="text-soft mb-4">
-          36 fotogrammi estratti da <code>orbit-lemans-360-4k.mp4</code>: un
-          <strong>giro completo di 360°</strong>, uno scatto ogni 10°. La sequenza di
-          rotazione pesa <strong>1,4 MB</strong> a 1600 px, e gira su qualsiasi telefono
-          senza WebGL né modelli 3D.
+          72 fotogrammi estratti da <code>orbit-lemans-360-4k.mp4</code>: un
+          <strong>giro completo di 360°</strong>, uno scatto ogni 5°. La sequenza pesa
+          <strong>2,2 MB</strong> a 1280 px e gira su qualsiasi telefono, senza WebGL
+          né modelli 3D.
         </p>
         <p class="text-soft mb-4">
-          Solo i tre fotogrammi su cui gli accessori zoomano esistono anche a
-          <strong>3200 px</strong> (0,3 MB in tutto): si caricano al momento dello zoom,
-          così da vicino il dettaglio resta nitido senza appesantire il resto.
+          La rotazione non salta da un fotogramma all'altro: la posizione è un numero
+          con la virgola e due livelli sovrapposti si <strong>dissolvono</strong> l'uno
+          nell'altro, così anche gli angoli intermedi hanno un'immagine.
         </p>
         <p class="text-soft">
-          Il giro è chiuso: si può ruotare all'infinito in entrambi i versi, e quando
-          scegli un accessorio la rotazione prende sempre la strada più corta.
+          Solo i tre fotogrammi su cui gli accessori zoomano esistono anche a
+          <strong>3200 px</strong> (0,3 MB in tutto), caricati al momento dello zoom:
+          la sequenza resta leggera perché non deve reggere i primi piani.
         </p>
       </div>
 

@@ -44,7 +44,13 @@ const hiUrls = Object.fromEntries(
 >
   <div class="tt-stage" role="group" aria-label="Vista a 180 gradi dell'allestimento">
     <div class="tt-viewport">
-      <img class="tt-img" src={urls[0]} alt="" width="1000" height="563" draggable="false" />
+      {/* Due livelli sovrapposti: la posizione è un numero con la virgola e il
+          livello sopra si dissolve, così fra un fotogramma e l'altro non si
+          vede lo scatto. */}
+      <div class="tt-plate">
+        <img class="tt-img tt-a" src={urls[0]} alt="" width="1280" height="720" draggable="false" />
+        <img class="tt-img tt-b" src={urls[1] ?? urls[0]} alt="" width="1280" height="720" draggable="false" />
+      </div>
 
       <div class="tt-markers" aria-hidden="true">
         {items.map((it) => (
@@ -116,16 +122,24 @@ const hiUrls = Object.fromEntries(
   }
   .tt-viewport.is-dragging { cursor: grabbing; }
 
+  /* Lo zoom muove il piatto, non i singoli livelli */
+  .tt-plate {
+    position: absolute;
+    inset: 0;
+    transform-origin: center;
+    transition: transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
   .tt-img {
+    position: absolute;
+    inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
     display: block;
     user-select: none;
     -webkit-user-drag: none;
-    transform-origin: center;
-    transition: transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: transform;
   }
+  .tt-b { opacity: 0; will-change: opacity; }
   /* Nessuna correzione di luminosità: il girato diurno è già esposto bene e
      schiarirlo bruciava i bianchi della carrozzeria. */
 
@@ -292,7 +306,9 @@ const hiUrls = Object.fromEntries(
     const total = urls.length;
 
     const viewport = root.querySelector<HTMLElement>('.tt-viewport')!;
-    const img = root.querySelector<HTMLImageElement>('.tt-img')!;
+    const plate = root.querySelector<HTMLElement>('.tt-plate')!;
+    const imgA = root.querySelector<HTMLImageElement>('.tt-a')!;
+    const imgB = root.querySelector<HTMLImageElement>('.tt-b')!;
     const angleOut = root.querySelector<HTMLElement>('[data-angle]')!;
     const loading = root.querySelector<HTMLElement>('.tt-loading')!;
     const bar = root.querySelector<HTMLElement>('.tt-bar i')!;
@@ -313,7 +329,8 @@ const hiUrls = Object.fromEntries(
       dNote.hidden = !h.note;
     };
 
-    let frame = 0;            // 0-based
+    let pos = 0;              // posizione angolare, con la virgola
+    let frame = 0;            // fotogramma intero più vicino (per gli hotspot)
     let ready = false;
     let spin: number | null = null;
     let anim: number | null = null;
@@ -343,23 +360,47 @@ const hiUrls = Object.fromEntries(
     const arc = Number(root.dataset.arc ?? 360);
     const closed = arc >= 360;               // giro chiuso: si può girare all'infinito
 
-    const show = (i: number) => {
-      frame = closed
-        ? ((i % total) + total) % total
-        : Math.min(Math.max(i, 0), total - 1);   // arco parziale: niente salto agli estremi
-      img.src = urls[frame];
-      angleOut.textContent = String(Math.round((frame / (closed ? total : total - 1)) * arc));
+    const wrap = (i: number) =>
+      closed ? ((i % total) + total) % total : Math.min(Math.max(i, 0), total - 1);
+
+    // Si ridisegna solo ciò che cambia: cambiare `src` a ogni rAF costerebbe
+    // una decodifica inutile, l'opacità invece resta sul compositor.
+    let srcA = -1;
+    let srcB = -1;
+
+    const render = (force = false) => {
+      const base = Math.floor(pos);
+      const t = pos - base;
+      const i0 = wrap(base);
+      const i1 = wrap(base + 1);
+
+      if (force || srcA !== i0) { imgA.src = urls[i0]; srcA = i0; }
+      if (force || srcB !== i1) { imgB.src = urls[i1]; srcB = i1; }
+      imgB.style.opacity = String(t);
+
+      frame = wrap(Math.round(pos));
+      angleOut.textContent = String(
+        Math.round((wrap(pos) / (closed ? total : total - 1)) * arc) % (closed ? 360 : arc + 1)
+      );
+    };
+
+    const setPos = (v: number) => {
+      pos = closed ? ((v % total) + total) % total : Math.min(Math.max(v, 0), total - 1);
+      render();
     };
 
     /* ------------------------------------------------- rotazione d'attesa - */
+    // Un giro completo in 10s, come il girato originale. Avanza in base al
+    // tempo trascorso, non a scatti fissi: se un frame salta non si nota.
+    const SPIN_TURNS_PER_SEC = 0.1;
+
     const startSpin = () => {
       stopSpin();
       let last = performance.now();
-      let acc = 0;
       const step = (now: number) => {
-        acc += now - last;
+        const dt = (now - last) / 1000;
         last = now;
-        if (acc > 110) { acc = 0; show(frame + 1); }
+        setPos(pos + total * SPIN_TURNS_PER_SEC * dt);
         spin = requestAnimationFrame(step);
       };
       spin = requestAnimationFrame(step);
@@ -367,12 +408,12 @@ const hiUrls = Object.fromEntries(
     const stopSpin = () => { if (spin) cancelAnimationFrame(spin); spin = null; };
 
     /* ----------------------------------------------------- trascinamento -- */
-    let dragging = false, startX = 0, startFrame = 0, moved = 0;
+    let dragging = false, startX = 0, startPos = 0, moved = 0;
 
     viewport.addEventListener('pointerdown', (e) => {
       if (!ready) return;
       dragging = true; moved = 0;
-      startX = e.clientX; startFrame = frame;
+      startX = e.clientX; startPos = pos;
       stopSpin();
       viewport.setPointerCapture(e.pointerId);
       viewport.classList.add('is-dragging');
@@ -382,15 +423,36 @@ const hiUrls = Object.fromEntries(
       if (!dragging) return;
       const dx = e.clientX - startX;
       moved = Math.max(moved, Math.abs(dx));
-      // una larghezza intera = tutto l'arco
-      show(startFrame + Math.round((dx / viewport.clientWidth) * total));
+      // una larghezza intera = tutto l'arco, senza arrotondare: il dito muove
+      // anche le frazioni di fotogramma
+      setPos(startPos + (dx / viewport.clientWidth) * total);
     });
+
+    // Da fermi la dissolvenza si vedrebbe come sdoppiamento: appena il dito
+    // lascia, ci si appoggia al fotogramma intero più vicino.
+    const settle = () => {
+      if (anim) cancelAnimationFrame(anim);
+      const from = pos;
+      const target = Math.round(pos);
+      if (Math.abs(target - from) < 0.01) { setPos(target); return; }
+      if (reduce) { setPos(target); return; }
+
+      const t0 = performance.now();
+      const step = (now: number) => {
+        const p = Math.min((now - t0) / 220, 1);
+        setPos(from + (target - from) * easeOutCubic(p));
+        if (p < 1) anim = requestAnimationFrame(step);
+        else { anim = null; setPos(target); }
+      };
+      anim = requestAnimationFrame(step);
+    };
 
     const endDrag = (e: PointerEvent) => {
       if (!dragging) return;
       dragging = false;
       viewport.classList.remove('is-dragging');
       viewport.releasePointerCapture?.(e.pointerId);
+      settle();
     };
     viewport.addEventListener('pointerup', endDrag);
     viewport.addEventListener('pointercancel', endDrag);
@@ -398,22 +460,28 @@ const hiUrls = Object.fromEntries(
     /* ------------------------------------------------- rotazione guidata -- */
     const rotateTo = (target: number, then?: () => void) => {
       if (anim) cancelAnimationFrame(anim);
-      const from = frame;
+      const from = pos;
       // su un giro chiuso conviene sempre il verso più corto: mai 300° per farne 60
       let delta = target - from;
       if (closed) {
         delta = ((delta % total) + total) % total;
         if (delta > total / 2) delta -= total;
       }
-      if (reduce) { show(target); then?.(); return; }
+      if (reduce) { setPos(target); then?.(); return; }
 
-      const dur = Math.min(140 + Math.abs(delta) * 42, 1150);
+      // il tempo dipende dai gradi percorsi, non dal numero di fotogrammi
+      const degrees = Math.abs(delta) * (arc / total);
+      const dur = Math.min(260 + degrees * 5.2, 1500);
       const t0 = performance.now();
       const step = (now: number) => {
         const p = Math.min((now - t0) / dur, 1);
-        show(Math.round(from + delta * easeOutCubic(p)));
+        setPos(from + delta * easeOutCubic(p));
         if (p < 1) anim = requestAnimationFrame(step);
-        else { anim = null; then?.(); }
+        else {
+          anim = null;
+          setPos(target);          // atterra esatto: lo zoom parte da un fotogramma pieno
+          then?.();
+        }
       };
       anim = requestAnimationFrame(step);
     };
@@ -426,7 +494,7 @@ const hiUrls = Object.fromEntries(
       const tx = (0.5 - h.focus.x) * 100;
       const ty = (0.5 - h.focus.y) * 100;
       const t = `scale(${s}) translate(${tx.toFixed(2)}%, ${ty.toFixed(2)}%)`;
-      img.style.transform = t;
+      plate.style.transform = t;
       markerLayer.style.transform = t;          // stesso movimento dell'immagine
       root.style.setProperty('--tt-s', String(s));
       viewport.classList.add('is-zoomed');
@@ -437,18 +505,23 @@ const hiUrls = Object.fromEntries(
       const hi = hiUrls[String(h.frame)];
       if (hi) {
         const pre = new Image();
-        pre.onload = () => { if (active === h) img.src = hi; };
+        pre.onload = () => {
+          if (active !== h) return;
+          imgA.src = hi;
+          srcA = -1;                 // il livello non contiene più il file leggero
+          imgB.style.opacity = '0';  // da fermi basta un livello solo
+        };
         pre.src = hi;
       }
     };
 
     const clearZoom = () => {
-      img.style.transform = '';
+      plate.style.transform = '';
       markerLayer.style.transform = '';
       root.style.setProperty('--tt-s', '1');
       viewport.classList.remove('is-zoomed');
       markers.forEach((m) => m.classList.remove('is-shown'));
-      show(frame);                    // torna al file leggero della sequenza
+      render(true);                   // torna ai file leggeri della sequenza
     };
 
     const select = (h: Hotspot) => {
@@ -499,7 +572,7 @@ const hiUrls = Object.fromEntries(
       });
     }
 
-    show(0);
+    setPos(0);
     if (items[0]) fillDetail(items[0]);
   });
 </script>

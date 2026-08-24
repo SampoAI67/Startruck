@@ -28,11 +28,11 @@ const presets = {
     out: 'public/turntable/lemans',
     start: 0,
     duration: 10.0,      // giro completo di 360°
-    frames: 36,          // un fotogramma ogni 10°
-    width: 1600,         // sequenza di rotazione: leggera, si carica tutta
-    // Solo i fotogrammi su cui gli hotspot zoomano vengono esportati anche in
-    // alta risoluzione: sono 3, e caricarli tutti a 3200px non avrebbe senso.
-    hires: [16, 21, 30],
+    frames: 72,          // un fotogramma ogni 5°: sotto i 10° lo scatto sparisce
+    // La sequenza di rotazione non deve essere nitida — i primi piani arrivano
+    // dai file `hi` — quindi la risoluzione si spende in angoli, non in pixel.
+    width: 1280,
+    hires: [31, 41, 59], // stessi angoli di prima (16/21/30 su 36 fotogrammi)
     hiresWidth: 3200,
     eq: null,            // girato diurno esposto bene: nessuna correzione
   },
