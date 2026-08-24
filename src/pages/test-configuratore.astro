@@ -8,56 +8,55 @@ import type { Hotspot } from '../components/Turntable.astro';
 // Serve a decidere se il "clic su accessorio → rotazione + zoom" regge, prima
 // di portarlo dentro le pagine degli allestimenti.
 //
-// Fotogrammi: 120 estratti da Raw Hero video/orbit-lemans-360-4k.mp4 — giro
-// COMPLETO di 360° (uno ogni 3°), luce diurna, Iveco Daily allestito.
-// Coordinate tarate sui fotogrammi 51 (3/4 posteriore), 68 (posteriore) e
-// 98 (fiancata). Nota: 120 non è multiplo di 72, quindi 68 e 98 cadono 1°
-// oltre l'angolo tarato in origine — verificato a schermo, gli hotspot
-// restano centrati. La modalità calibrazione è attiva per ritoccarli.
+// Rotazione: un unico MP4 (public/orbit/lemans/orbit.mp4) da 10 s che copre
+// 360°, generato da Raw Hero video/orbit-lemans-360-4k.mp4. Gli accessori
+// puntano ad ANGOLI, non a numeri di fotogramma: 150° (3/4 posteriore),
+// 201° (posteriore), 291° (fiancata).
+// La modalità calibrazione è attiva: cliccando si leggono angolo e coordinate.
 const items: Hotspot[] = [
   {
     id: 'pianale',
     title: 'Pianale',
     spec: 'Pianale 5.000 × 2.130 mm',
     desc: 'Alluminio estruso, superficie antiscivolo e punti di ancoraggio distribuiti su tutta la lunghezza.',
-    frame: 51, focus: { x: 0.34, y: 0.60 }, zoom: 2.0,
+    angle: 150, focus: { x: 0.34, y: 0.60 }, zoom: 2.0,
   },
   {
     id: 'rampe',
     title: 'Rampe a scomparsa',
     desc: 'Si sfilano da sotto il pianale e rientrano a filo: nessun ingombro esterno, nessun pezzo da caricare a parte.',
-    frame: 68, focus: { x: 0.565, y: 0.638 }, zoom: 3.0,
+    angle: 201, focus: { x: 0.565, y: 0.638 }, zoom: 3.0,
   },
   {
     id: 'verricello',
     title: 'Verricello traslabile',
     desc: 'Scorre lateralmente per allinearsi all’auto invece di costringere l’auto ad allinearsi a lui. Tiro sempre dritto.',
-    frame: 98, focus: { x: 0.385, y: 0.51 }, zoom: 3.2,
+    angle: 291, focus: { x: 0.385, y: 0.51 }, zoom: 3.2,
   },
   {
     id: 'fune',
     title: 'Fune sintetica',
     desc: 'Più leggera dell’acciaio e più sicura in caso di rottura: non frusta. Si maneggia a mani nude.',
-    frame: 68, focus: { x: 0.465, y: 0.50 }, zoom: 4.0,
+    angle: 201, focus: { x: 0.465, y: 0.50 }, zoom: 4.0,
   },
   {
     id: 'fari',
     title: 'Fari LED notturni',
     desc: 'Illuminano l’area di lavoro dietro al mezzo. Carico e scarico al buio senza torce né improvvisazione.',
-    frame: 68, focus: { x: 0.524, y: 0.466 }, zoom: 3.2,
+    angle: 201, focus: { x: 0.524, y: 0.466 }, zoom: 3.2,
     note: 'Nel girato sono spenti: si vedono i due corpi incassati nella paratia. Da confermare col cliente che sia questo il pezzo.',
   },
   {
     id: 'ingombro',
     title: 'Luci ingombro laterali LED',
     desc: 'Profilo del mezzo sempre leggibile agli altri, anche con poca luce e in manovra.',
-    frame: 51, focus: { x: 0.352, y: 0.688 }, zoom: 4.0,
+    angle: 150, focus: { x: 0.352, y: 0.688 }, zoom: 4.0,
   },
   {
     id: 'cinghie',
     title: 'Set 4 cinghie',
     desc: 'Quattro cinghie a cricchetto con ganci dedicati agli ancoraggi del pianale. Incluse, non un accessorio.',
-    frame: 68, focus: { x: 0.58, y: 0.527 }, zoom: 4.0,
+    angle: 201, focus: { x: 0.58, y: 0.527 }, zoom: 4.0,
     note: 'Sul pianale se ne vede una sola, appoggiata accanto al verricello.',
   },
 ];
@@ -77,11 +76,10 @@ const items: Hotspot[] = [
 
   <Section tone="dark" pad="none" class="pb-24 md:pb-32">
     <Turntable
-      dir="turntable/lemans"
-      frames={120}
-      arc={360}
+      dir="orbit/lemans"
+      duration={10}
       items={items}
-      hiFrames={[51, 68, 98]}
+      hiAngles={[150, 201, 291]}
       calibrate
     />
   </Section>
@@ -92,31 +90,28 @@ const items: Hotspot[] = [
       <div>
         <h2 class="display-3 mb-4 font-bold">Cosa stiamo guardando</h2>
         <p class="text-soft mb-4">
-          120 fotogrammi estratti da <code>orbit-lemans-360-4k.mp4</code>: un
-          <strong>giro completo di 360°</strong>, uno scatto ogni 3°. La sequenza pesa
-          <strong>3,6 MB</strong> a 1280 px e gira su qualsiasi telefono, senza WebGL
-          né modelli 3D.
+          Non è più una sequenza di immagini ma <strong>un solo video</strong> da
+          <strong>1,85 MB</strong>: lo decodifica il browser, quindi si ottengono
+          <strong>240 posizioni (1,5°)</strong> con metà del peso delle 120 immagini
+          di prima. Sempre senza WebGL né modelli 3D.
         </p>
         <p class="text-soft mb-4">
-          La rotazione non salta da un fotogramma all'altro: la posizione è un numero
-          con la virgola e due livelli sovrapposti si <strong>dissolvono</strong> l'uno
-          nell'altro, così anche gli angoli intermedi hanno un'immagine.
-        </p>
-        <p class="text-soft mb-4">
-          Il caricamento è in due tempi: prima un fotogramma ogni quattro — bastano per
-          iniziare a ruotare — poi tutti gli altri in sottofondo. Non si aspettano mai
-          3,6 MB prima di poter toccare qualcosa.
+          La rotazione d'attesa è semplice riproduzione: nessuna animazione scritta a
+          mano può essere più fluida. Trascinando si sposta il tempo del video, e i
+          salti vengono accodati uno per volta — assegnarli a raffica intaserebbe il
+          decoder, soprattutto su iPhone.
         </p>
         <p class="text-soft">
-          Solo i tre fotogrammi su cui gli accessori zoomano esistono anche a
-          <strong>3200 px</strong> (0,3 MB in tutto), caricati al momento dello zoom:
-          la sequenza resta leggera perché non deve reggere i primi piani.
+          Restano i <strong>fermo-immagine a 3200 px</strong> (0,3 MB, scaricati solo
+          al momento dello zoom): a 4× il video a 1280 px non reggerebbe, così il
+          primo piano resta nitido.
         </p>
       </div>
 
       <div>
         <h2 class="display-3 mb-4 font-bold">Cosa resta da sistemare</h2>
         <ul class="tc-list text-soft">
+          <li><strong>Da provare su un iPhone vero.</strong> La ricerca dentro un video è la parte meno prevedibile: su iOS può risultare meno reattiva che su desktop. È il rischio noto di questa soluzione.</li>
           <li>Il mezzo <strong>respira leggermente</strong> nell'inquadratura (la distanza dalla camera non è costante). Su una piattaforma rotante sparirebbe del tutto.</li>
           <li>Il 4K è <strong>ricostruito da un upscaler</strong>, non ripreso: il dettaglio a forte ingrandimento è plausibile, non necessariamente fedele.</li>
           <li>I <strong>fari LED</strong> nel girato sono spenti: va confermato col cliente che il pezzo inquadrato sia quello giusto.</li>

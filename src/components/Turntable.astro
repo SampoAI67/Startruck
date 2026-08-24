@@ -1,55 +1,59 @@
 ---
 import { base } from '../lib/base';
 
-// Configuratore "Tier 2": niente WebGL, solo una sequenza di fotogrammi reali.
-// Trascinando si ruota; scegliendo un accessorio la sequenza gira da sola fino
-// all'angolo migliore e poi zooma sul punto giusto.
+// Configuratore "Tier 2", modalità video.
+//
+// La rotazione è un unico MP4: il browser lo decodifica, quindi si hanno 240
+// posizioni (1,5°) con metà del peso di 120 immagini. La rotazione d'attesa è
+// riproduzione nativa — nessuna animazione fatta a mano può essere più fluida.
+// Per i primi piani si sovrappone un fermo-immagine a 3200 px, perché il video
+// a 1280 non regge un ingrandimento 4×.
 export interface Hotspot {
   id: string;
   title: string;
   spec?: string;
   desc: string;
-  frame: number;                    // 1..frames — l'angolo che mostra meglio il pezzo
+  angle: number;                    // 0–359, angolo che mostra meglio il pezzo
   focus: { x: number; y: number };  // 0..1 sul fotogramma
   zoom?: number;
-  note?: string;                    // avvertenza: pezzo non montato / in ombra
+  note?: string;
 }
 
 interface Props {
-  dir: string;            // es. "turntable/lemans"
-  frames: number;
+  dir: string;            // es. "orbit/lemans"
+  duration: number;       // durata del video, in secondi
   items: Hotspot[];
-  arc?: number;           // gradi coperti dalla sequenza (360 = giro chiuso)
-  hiFrames?: number[];    // fotogrammi disponibili anche in <dir>/hi/ per lo zoom
-  calibrate?: boolean;    // modalità taratura: click = coordinate normalizzate
+  hiAngles?: number[];    // angoli disponibili come fermo-immagine in <dir>/hi/
+  calibrate?: boolean;
 }
-const { dir, frames, items, arc = 360, hiFrames = [], calibrate = false } = Astro.props;
+const { dir, duration, items, hiAngles = [], calibrate = false } = Astro.props;
 
-const urls = Array.from({ length: frames }, (_, i) =>
-  base(`${dir}/${String(i + 1).padStart(2, '0')}.webp`)
-);
-// La rotazione gira sui file leggeri; solo lo zoom carica la versione grande.
-const hiUrls = Object.fromEntries(
-  hiFrames.map((n) => [n, base(`${dir}/hi/${String(n).padStart(2, '0')}.webp`)])
-);
+const videoUrl = base(`${dir}/orbit.mp4`);
+const posterUrl = base(`${dir}/poster.webp`);
+const hiUrls = Object.fromEntries(hiAngles.map((a) => [a, base(`${dir}/hi/${a}.webp`)]));
 ---
 <div
   class="tt"
-  data-frames={frames}
-  data-arc={arc}
-  data-urls={JSON.stringify(urls)}
-  data-hi={JSON.stringify(hiUrls)}
+  data-duration={duration}
   data-items={JSON.stringify(items)}
+  data-hi={JSON.stringify(hiUrls)}
   data-calibrate={calibrate ? '' : undefined}
 >
-  <div class="tt-stage" role="group" aria-label="Vista a 180 gradi dell'allestimento">
+  <div class="tt-stage" role="group" aria-label="Vista a 360 gradi dell'allestimento">
     <div class="tt-viewport">
-      {/* Due livelli sovrapposti: la posizione è un numero con la virgola e il
-          livello sopra si dissolve, così fra un fotogramma e l'altro non si
-          vede lo scatto. */}
       <div class="tt-plate">
-        <img class="tt-img tt-a" src={urls[0]} alt="" width="1280" height="720" draggable="false" />
-        <img class="tt-img tt-b" src={urls[1] ?? urls[0]} alt="" width="1280" height="720" draggable="false" />
+        <video
+          class="tt-video"
+          src={videoUrl}
+          poster={posterUrl}
+          muted
+          loop
+          playsinline
+          preload="auto"
+          aria-hidden="true"
+        ></video>
+        {/* fermo-immagine grande, sovrapposto solo durante lo zoom */}
+        <img class="tt-still" alt="" decoding="async" />
       </div>
 
       <div class="tt-markers" aria-hidden="true">
@@ -116,13 +120,12 @@ const hiUrls = Object.fromEntries(
     overflow: hidden;
     border-radius: var(--radius-lg);
     background: #0d0d0d;
-    aspect-ratio: 1000 / 563;
+    aspect-ratio: 16 / 9;
     cursor: grab;
     touch-action: pan-y;                 /* lo scroll verticale resta al browser */
   }
   .tt-viewport.is-dragging { cursor: grabbing; }
 
-  /* Lo zoom muove il piatto, non i singoli livelli */
   .tt-plate {
     position: absolute;
     inset: 0;
@@ -130,7 +133,7 @@ const hiUrls = Object.fromEntries(
     transition: transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: transform;
   }
-  .tt-img {
+  .tt-video, .tt-still {
     position: absolute;
     inset: 0;
     width: 100%; height: 100%;
@@ -139,13 +142,11 @@ const hiUrls = Object.fromEntries(
     user-select: none;
     -webkit-user-drag: none;
   }
-  .tt-b { opacity: 0; will-change: opacity; }
-  /* Nessuna correzione di luminosità: il girato diurno è già esposto bene e
-     schiarirlo bruciava i bianchi della carrozzeria. */
+  /* Il fermo-immagine copre il video solo da fermi, per avere il dettaglio */
+  .tt-still { opacity: 0; transition: opacity 0.35s ease; }
+  .tt-still.is-shown { opacity: 1; }
 
   /* ---------------------------------------------------------- indicatori -- */
-  /* I marker devono subire lo stesso zoom dell'immagine, altrimenti il pallino
-     resta indietro rispetto al pezzo che indica. */
   .tt-markers {
     position: absolute;
     inset: 0;
@@ -156,8 +157,7 @@ const hiUrls = Object.fromEntries(
   .tt-marker {
     position: absolute;
     translate: -50% -50%;
-    /* controscala: il pallino non deve ingrandirsi con lo zoom */
-    scale: calc(1 / var(--tt-s, 1));
+    scale: calc(1 / var(--tt-s, 1));     /* il pallino non cresce con lo zoom */
     width: 26px; height: 26px;
     display: grid; place-items: center;
     background: none; border: 0; padding: 0;
@@ -198,7 +198,7 @@ const hiUrls = Object.fromEntries(
   }
   .tt-loading.is-done { opacity: 0; pointer-events: none; }
   .tt-bar { flex: 1; height: 1.5px; background: rgba(255, 255, 255, 0.2); overflow: hidden; }
-  .tt-bar i { display: block; height: 100%; width: 0; background: #fff; transition: width 0.2s linear; }
+  .tt-bar i { display: block; height: 100%; width: 0; background: #fff; transition: width 0.25s linear; }
 
   .tt-cal {
     position: absolute; top: 0.85rem; left: 0.85rem;
@@ -253,8 +253,6 @@ const hiUrls = Object.fromEntries(
   .tt-spec:empty { display: none; }
   .tt-desc { font-size: 0.94rem; line-height: 1.6; opacity: 0.7; max-width: 46ch; }
 
-  /* Avvertenza visibile: distingue ciò che si vede davvero nel girato
-     da ciò che su questo esemplare non c'è. */
   .tt-note {
     display: flex; gap: 0.55rem;
     margin-top: 0.9rem;
@@ -285,7 +283,7 @@ const hiUrls = Object.fromEntries(
   .tt-reset:hover { opacity: 1; background: #fff; color: var(--color-ink); }
 
   @media (prefers-reduced-motion: reduce) {
-    .tt-img { transition: none; }
+    .tt-plate, .tt-markers, .tt-still { transition: none; }
     .tt-ping { animation: none; }
   }
 </style>
@@ -293,22 +291,23 @@ const hiUrls = Object.fromEntries(
 <script>
   type Hotspot = {
     id: string; title: string; spec?: string; desc: string;
-    frame: number; focus: { x: number; y: number }; zoom?: number;
+    angle: number; focus: { x: number; y: number }; zoom?: number; note?: string;
   };
 
   const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mod = (a: number, n: number) => ((a % n) + n) % n;
 
   document.querySelectorAll<HTMLElement>('.tt').forEach((root) => {
-    const urls: string[] = JSON.parse(root.dataset.urls!);
-    const hiUrls: Record<string, string> = JSON.parse(root.dataset.hi ?? '{}');
     const items: Hotspot[] = JSON.parse(root.dataset.items!);
-    const total = urls.length;
+    const hiUrls: Record<string, string> = JSON.parse(root.dataset.hi ?? '{}');
+    const duration = Number(root.dataset.duration ?? 10);
 
     const viewport = root.querySelector<HTMLElement>('.tt-viewport')!;
     const plate = root.querySelector<HTMLElement>('.tt-plate')!;
-    const imgA = root.querySelector<HTMLImageElement>('.tt-a')!;
-    const imgB = root.querySelector<HTMLImageElement>('.tt-b')!;
+    const video = root.querySelector<HTMLVideoElement>('.tt-video')!;
+    const still = root.querySelector<HTMLImageElement>('.tt-still')!;
+    const markerLayer = root.querySelector<HTMLElement>('.tt-markers')!;
     const angleOut = root.querySelector<HTMLElement>('[data-angle]')!;
     const loading = root.querySelector<HTMLElement>('.tt-loading')!;
     const bar = root.querySelector<HTMLElement>('.tt-bar i')!;
@@ -321,118 +320,60 @@ const hiUrls = Object.fromEntries(
     const dDesc = root.querySelector<HTMLElement>('[data-detail-desc]')!;
     const dNote = root.querySelector<HTMLElement>('[data-detail-note]')!;
 
-    const fillDetail = (h: Hotspot) => {
-      dTitle.textContent = h.title;
-      dSpec.textContent = h.spec ?? '';
-      dDesc.textContent = h.desc;
-      dNote.textContent = h.note ?? '';
-      dNote.hidden = !h.note;
-    };
-
-    let pos = 0;              // posizione angolare, con la virgola
-    let frame = 0;            // fotogramma intero più vicino (per gli hotspot)
     let ready = false;
-    let spin: number | null = null;
     let anim: number | null = null;
     let active: Hotspot | null = null;
 
-    /* ---------------------------------------------------------- preload -- */
-    // Caricamento in due tempi: prima un fotogramma ogni quattro, così si può
-    // già ruotare (a scatti più larghi), poi tutti gli altri per la fluidità
-    // piena. Con 120 fotogrammi aspettare l'intero pacchetto sarebbe lungo.
-    const STRIDE = 4;
-    const loaded = new Array<boolean>(total).fill(false);
-    let done = 0;
-    let coarseDone = 0;
+    const angleOf = (t: number) => mod((t / duration) * 360, 360);
+    const timeOf = (deg: number) => (mod(deg, 360) / 360) * duration;
 
-    // Finché mancano dei fotogrammi si mostra il più vicino disponibile:
-    // meglio un angolo leggermente diverso che un riquadro vuoto.
-    const nearestLoaded = (i: number) => {
-      if (loaded[i]) return i;
-      for (let d = 1; d <= total; d++) {
-        const a = wrap(i - d);
-        if (loaded[a]) return a;
-        const b = wrap(i + d);
-        if (loaded[b]) return b;
-      }
-      return i;
+    /* -------------------------------------------------------- ricerca -- */
+    // Assegnare currentTime a raffica intasa il decoder (soprattutto su iOS):
+    // si tiene solo l'ultima posizione richiesta e si cerca di nuovo appena la
+    // ricerca precedente è finita.
+    let wanted: number | null = null;
+    let seeking = false;
+
+    const flushSeek = () => {
+      if (seeking || wanted === null) return;
+      const t = wanted;
+      wanted = null;
+      seeking = true;
+      try { video.currentTime = t; } catch { seeking = false; }
     };
 
-    const coarse: number[] = [];
-    const rest: number[] = [];
-    urls.forEach((_, i) => (i % STRIDE === 0 ? coarse : rest).push(i));
+    video.addEventListener('seeked', () => {
+      seeking = false;
+      showAngle();
+      flushSeek();
+    });
 
-    const fetchOne = (i: number, onDone: () => void) => {
-      const im = new Image();
-      im.onload = im.onerror = () => { loaded[i] = true; onDone(); };
-      im.src = urls[i];
+    const seekTo = (t: number) => {
+      wanted = mod(t, duration);
+      flushSeek();
     };
 
-    const progress = () => {
-      const p = Math.round((done / total) * 100);
-      bar.style.width = `${p}%`;
-      pct.textContent = `${p}%`;
+    const showAngle = () => {
+      angleOut.textContent = String(Math.round(angleOf(video.currentTime)));
     };
-
-    const arc = Number(root.dataset.arc ?? 360);
-    const closed = arc >= 360;               // giro chiuso: si può girare all'infinito
-
-    const wrap = (i: number) =>
-      closed ? ((i % total) + total) % total : Math.min(Math.max(i, 0), total - 1);
-
-    // Si ridisegna solo ciò che cambia: cambiare `src` a ogni rAF costerebbe
-    // una decodifica inutile, l'opacità invece resta sul compositor.
-    let srcA = -1;
-    let srcB = -1;
-
-    const render = (force = false) => {
-      const base = Math.floor(pos);
-      const t = pos - base;
-      const i0 = nearestLoaded(wrap(base));
-      const i1 = nearestLoaded(wrap(base + 1));
-
-      if (force || srcA !== i0) { imgA.src = urls[i0]; srcA = i0; }
-      if (force || srcB !== i1) { imgB.src = urls[i1]; srcB = i1; }
-      // se i due livelli mostrano lo stesso fotogramma la dissolvenza non serve
-      imgB.style.opacity = i0 === i1 ? '0' : String(t);
-
-      frame = wrap(Math.round(pos));
-      angleOut.textContent = String(
-        Math.round((wrap(pos) / (closed ? total : total - 1)) * arc) % (closed ? 360 : arc + 1)
-      );
-    };
-
-    const setPos = (v: number) => {
-      pos = closed ? ((v % total) + total) % total : Math.min(Math.max(v, 0), total - 1);
-      render();
-    };
+    video.addEventListener('timeupdate', showAngle);
 
     /* ------------------------------------------------- rotazione d'attesa - */
-    // Un giro completo in 10s, come il girato originale. Avanza in base al
-    // tempo trascorso, non a scatti fissi: se un frame salta non si nota.
-    const SPIN_TURNS_PER_SEC = 0.1;
-
-    const startSpin = () => {
-      stopSpin();
-      let last = performance.now();
-      const step = (now: number) => {
-        const dt = (now - last) / 1000;
-        last = now;
-        setPos(pos + total * SPIN_TURNS_PER_SEC * dt);
-        spin = requestAnimationFrame(step);
-      };
-      spin = requestAnimationFrame(step);
-    };
-    const stopSpin = () => { if (spin) cancelAnimationFrame(spin); spin = null; };
+    // Riproduzione nativa: il modo più fluido possibile di girare.
+    const startSpin = () => { if (!reduce) video.play().catch(() => {}); };
+    const stopSpin = () => video.pause();
 
     /* ----------------------------------------------------- trascinamento -- */
-    let dragging = false, startX = 0, startPos = 0, moved = 0;
+    let dragging = false, startX = 0, startTime = 0, moved = 0;
 
     viewport.addEventListener('pointerdown', (e) => {
       if (!ready) return;
       dragging = true; moved = 0;
-      startX = e.clientX; startPos = pos;
+      startX = e.clientX;
+      startTime = video.currentTime;
       stopSpin();
+      if (anim) { cancelAnimationFrame(anim); anim = null; }   // il dito ha priorità
+      if (active) clearZoom(true);
       viewport.setPointerCapture(e.pointerId);
       viewport.classList.add('is-dragging');
     });
@@ -441,117 +382,106 @@ const hiUrls = Object.fromEntries(
       if (!dragging) return;
       const dx = e.clientX - startX;
       moved = Math.max(moved, Math.abs(dx));
-      // una larghezza intera = tutto l'arco, senza arrotondare: il dito muove
-      // anche le frazioni di fotogramma
-      setPos(startPos + (dx / viewport.clientWidth) * total);
+      // una larghezza intera = un giro completo
+      seekTo(startTime - (dx / viewport.clientWidth) * duration);
     });
-
-    // Da fermi la dissolvenza si vedrebbe come sdoppiamento: appena il dito
-    // lascia, ci si appoggia al fotogramma intero più vicino.
-    const settle = () => {
-      if (anim) cancelAnimationFrame(anim);
-      const from = pos;
-      const target = Math.round(pos);
-      if (Math.abs(target - from) < 0.01) { setPos(target); return; }
-      if (reduce) { setPos(target); return; }
-
-      const t0 = performance.now();
-      const step = (now: number) => {
-        const p = Math.min((now - t0) / 220, 1);
-        setPos(from + (target - from) * easeOutCubic(p));
-        if (p < 1) anim = requestAnimationFrame(step);
-        else { anim = null; setPos(target); }
-      };
-      anim = requestAnimationFrame(step);
-    };
 
     const endDrag = (e: PointerEvent) => {
       if (!dragging) return;
       dragging = false;
       viewport.classList.remove('is-dragging');
       viewport.releasePointerCapture?.(e.pointerId);
-      settle();
     };
     viewport.addEventListener('pointerup', endDrag);
     viewport.addEventListener('pointercancel', endDrag);
 
     /* ------------------------------------------------- rotazione guidata -- */
-    const rotateTo = (target: number, then?: () => void) => {
+    const rotateTo = (deg: number, then?: () => void) => {
       if (anim) cancelAnimationFrame(anim);
-      const from = pos;
-      // su un giro chiuso conviene sempre il verso più corto: mai 300° per farne 60
-      let delta = target - from;
-      if (closed) {
-        delta = ((delta % total) + total) % total;
-        if (delta > total / 2) delta -= total;
-      }
-      if (reduce) { setPos(target); then?.(); return; }
+      stopSpin();
 
-      // il tempo dipende dai gradi percorsi, non dal numero di fotogrammi
-      const degrees = Math.abs(delta) * (arc / total);
-      const dur = Math.min(260 + degrees * 5.2, 1500);
+      const from = video.currentTime;
+      const target = timeOf(deg);
+      // verso più corto lungo il giro
+      let delta = target - from;
+      if (delta > duration / 2) delta -= duration;
+      if (delta < -duration / 2) delta += duration;
+
+      if (reduce) { seekTo(target); then?.(); return; }
+
+      const dur = Math.min(280 + Math.abs(delta / duration) * 360 * 5.2, 1500);
       const t0 = performance.now();
       const step = (now: number) => {
         const p = Math.min((now - t0) / dur, 1);
-        setPos(from + delta * easeOutCubic(p));
+        seekTo(from + delta * easeOutCubic(p));
         if (p < 1) anim = requestAnimationFrame(step);
-        else {
-          anim = null;
-          setPos(target);          // atterra esatto: lo zoom parte da un fotogramma pieno
-          then?.();
-        }
+        else { anim = null; seekTo(target); then?.(); }
       };
       anim = requestAnimationFrame(step);
     };
 
-    const markerLayer = root.querySelector<HTMLElement>('.tt-markers')!;
-
+    /* ------------------------------------------------------------- zoom -- */
     const zoomTo = (h: Hotspot) => {
       const s = h.zoom ?? 2.4;
-      // trasla il punto d'interesse al centro, poi scala attorno al centro
       const tx = (0.5 - h.focus.x) * 100;
       const ty = (0.5 - h.focus.y) * 100;
       const t = `scale(${s}) translate(${tx.toFixed(2)}%, ${ty.toFixed(2)}%)`;
       plate.style.transform = t;
-      markerLayer.style.transform = t;          // stesso movimento dell'immagine
+      markerLayer.style.transform = t;
       root.style.setProperty('--tt-s', String(s));
-      viewport.classList.add('is-zoomed');
       markers.forEach((m) => m.classList.toggle('is-shown', m.dataset.for === h.id));
 
-      // Da vicino serve il fotogramma grande: si carica ora, e si sostituisce
-      // solo quando è pronto per non far lampeggiare il riquadro.
-      const hi = hiUrls[String(h.frame)];
+      // Il video a 1280 non regge 4×: si sovrappone il fermo-immagine grande,
+      // ma solo quando è arrivato, per non far lampeggiare il riquadro.
+      const hi = hiUrls[String(h.angle)];
       if (hi) {
         const pre = new Image();
         pre.onload = () => {
           if (active !== h) return;
-          imgA.src = hi;
-          srcA = -1;                 // il livello non contiene più il file leggero
-          imgB.style.opacity = '0';  // da fermi basta un livello solo
+          still.src = hi;
+          still.classList.add('is-shown');
         };
         pre.src = hi;
       }
     };
 
-    const clearZoom = () => {
+    // `instant`: uscendo dallo zoom perché l'utente ha afferrato il mezzo, la
+    // rientrata animata di un secondo darebbe una sensazione di ritardo — si
+    // torna alla vista intera di scatto, sotto il dito.
+    const clearZoom = (instant = false) => {
+      if (instant) {
+        plate.style.transition = 'none';
+        markerLayer.style.transition = 'none';
+        still.style.transition = 'none';
+      }
       plate.style.transform = '';
       markerLayer.style.transform = '';
       root.style.setProperty('--tt-s', '1');
-      viewport.classList.remove('is-zoomed');
+      still.classList.remove('is-shown');
       markers.forEach((m) => m.classList.remove('is-shown'));
-      render(true);                   // torna ai file leggeri della sequenza
+      if (instant) {
+        void plate.offsetWidth;                 // applica subito, poi riabilita
+        plate.style.transition = '';
+        markerLayer.style.transition = '';
+        still.style.transition = '';
+      }
+    };
+
+    const fillDetail = (h: Hotspot) => {
+      dTitle.textContent = h.title;
+      dSpec.textContent = h.spec ?? '';
+      dDesc.textContent = h.desc;
+      dNote.textContent = h.note ?? '';
+      dNote.hidden = !h.note;
     };
 
     const select = (h: Hotspot) => {
       active = h;
-      stopSpin();
       rows.forEach((r) => r.classList.toggle('is-active', r.dataset.item === h.id));
-
       fillDetail(h);
       reset.hidden = false;
-
       clearZoom();
-      rotateTo(h.frame - 1, () => zoomTo(h));
+      rotateTo(h.angle, () => zoomTo(h));
     };
 
     rows.forEach((r) =>
@@ -570,48 +500,50 @@ const hiUrls = Object.fromEntries(
       dDesc.textContent = '';
       dNote.hidden = true;
       clearZoom();
-    });
-
-    // trascinando si esce dallo zoom: si torna a guardare l'insieme
-    viewport.addEventListener('pointerdown', () => {
-      if (active) { clearZoom(); }
+      startSpin();
     });
 
     /* --------------------------------------------------------- taratura -- */
     if (root.dataset.calibrate !== undefined) {
       viewport.addEventListener('click', (e) => {
-        if (moved > 4) return;                  // era un trascinamento
+        if (moved > 4) return;
         const r = viewport.getBoundingClientRect();
         const x = ((e.clientX - r.left) / r.width).toFixed(3);
         const y = ((e.clientY - r.top) / r.height).toFixed(3);
-        const line = `frame ${frame + 1} · focus { x: ${x}, y: ${y} }`;
+        const line = `angolo ${Math.round(angleOf(video.currentTime))}° · focus { x: ${x}, y: ${y} }`;
         root.querySelector<HTMLElement>('.tt-cal')!.textContent = line;
         console.log(line);
       });
     }
 
-    setPos(0);
-    if (items[0]) fillDetail(items[0]);
+    /* ------------------------------------------------------ caricamento -- */
+    const setProgress = (p: number) => {
+      bar.style.width = `${Math.round(p * 100)}%`;
+      pct.textContent = `${Math.round(p * 100)}%`;
+    };
 
-    // Avvio del caricamento: sta in fondo perché i suoi callback usano render()
-    // e startSpin(), dichiarati sopra.
-    coarse.forEach((i) =>
-      fetchOne(i, () => {
-        done++; coarseDone++;
-        progress();
-        if (coarseDone === coarse.length) {
-          ready = true;                 // già usabile: il resto arriva dietro
-          render(true);
-          if (!reduce) startSpin();
-          rest.forEach((j) =>
-            fetchOne(j, () => {
-              done++;
-              progress();
-              if (done === total) loading.classList.add('is-done');
-            })
-          );
-        }
-      })
-    );
+    const trackBuffer = () => {
+      if (!video.duration) return;
+      const end = video.buffered.length ? video.buffered.end(video.buffered.length - 1) : 0;
+      setProgress(Math.min(end / video.duration, 1));
+    };
+    video.addEventListener('progress', trackBuffer);
+
+    const go = () => {
+      if (ready) return;
+      ready = true;
+      setProgress(1);
+      loading.classList.add('is-done');
+      showAngle();
+      startSpin();
+    };
+
+    // `canplaythrough` è il segnale giusto ma su alcuni browser non arriva mai
+    // se il video è in cache: `loadeddata` fa da rete di sicurezza.
+    video.addEventListener('canplaythrough', go);
+    video.addEventListener('loadeddata', () => setTimeout(go, 400));
+
+    if (items[0]) fillDetail(items[0]);
+    video.load();
   });
 </script>
