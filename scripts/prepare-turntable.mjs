@@ -28,11 +28,11 @@ const presets = {
     out: 'public/turntable/lemans',
     start: 0,
     duration: 10.0,      // giro completo di 360°
-    frames: 72,          // un fotogramma ogni 5°: sotto i 10° lo scatto sparisce
+    frames: 120,         // un fotogramma ogni 3°
     // La sequenza di rotazione non deve essere nitida — i primi piani arrivano
     // dai file `hi` — quindi la risoluzione si spende in angoli, non in pixel.
     width: 1280,
-    hires: [31, 41, 59], // stessi angoli di prima (16/21/30 su 36 fotogrammi)
+    hires: [51, 68, 98], // stessi angoli di sempre, riportati su 120 fotogrammi
     hiresWidth: 3200,
     eq: null,            // girato diurno esposto bene: nessuna correzione
   },

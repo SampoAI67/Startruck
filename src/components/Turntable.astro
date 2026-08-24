@@ -337,25 +337,42 @@ const hiUrls = Object.fromEntries(
     let active: Hotspot | null = null;
 
     /* ---------------------------------------------------------- preload -- */
-    // 370 KB in tutto: si caricano tutti, così il trascinamento non scatta.
+    // Caricamento in due tempi: prima un fotogramma ogni quattro, così si può
+    // già ruotare (a scatti più larghi), poi tutti gli altri per la fluidità
+    // piena. Con 120 fotogrammi aspettare l'intero pacchetto sarebbe lungo.
+    const STRIDE = 4;
+    const loaded = new Array<boolean>(total).fill(false);
     let done = 0;
-    const cache: HTMLImageElement[] = [];
-    urls.forEach((u, i) => {
+    let coarseDone = 0;
+
+    // Finché mancano dei fotogrammi si mostra il più vicino disponibile:
+    // meglio un angolo leggermente diverso che un riquadro vuoto.
+    const nearestLoaded = (i: number) => {
+      if (loaded[i]) return i;
+      for (let d = 1; d <= total; d++) {
+        const a = wrap(i - d);
+        if (loaded[a]) return a;
+        const b = wrap(i + d);
+        if (loaded[b]) return b;
+      }
+      return i;
+    };
+
+    const coarse: number[] = [];
+    const rest: number[] = [];
+    urls.forEach((_, i) => (i % STRIDE === 0 ? coarse : rest).push(i));
+
+    const fetchOne = (i: number, onDone: () => void) => {
       const im = new Image();
-      im.onload = im.onerror = () => {
-        done++;
-        const p = Math.round((done / total) * 100);
-        bar.style.width = `${p}%`;
-        pct.textContent = `${p}%`;
-        if (done === total) {
-          ready = true;
-          loading.classList.add('is-done');
-          if (!reduce) startSpin();
-        }
-      };
-      im.src = u;
-      cache[i] = im;
-    });
+      im.onload = im.onerror = () => { loaded[i] = true; onDone(); };
+      im.src = urls[i];
+    };
+
+    const progress = () => {
+      const p = Math.round((done / total) * 100);
+      bar.style.width = `${p}%`;
+      pct.textContent = `${p}%`;
+    };
 
     const arc = Number(root.dataset.arc ?? 360);
     const closed = arc >= 360;               // giro chiuso: si può girare all'infinito
@@ -371,12 +388,13 @@ const hiUrls = Object.fromEntries(
     const render = (force = false) => {
       const base = Math.floor(pos);
       const t = pos - base;
-      const i0 = wrap(base);
-      const i1 = wrap(base + 1);
+      const i0 = nearestLoaded(wrap(base));
+      const i1 = nearestLoaded(wrap(base + 1));
 
       if (force || srcA !== i0) { imgA.src = urls[i0]; srcA = i0; }
       if (force || srcB !== i1) { imgB.src = urls[i1]; srcB = i1; }
-      imgB.style.opacity = String(t);
+      // se i due livelli mostrano lo stesso fotogramma la dissolvenza non serve
+      imgB.style.opacity = i0 === i1 ? '0' : String(t);
 
       frame = wrap(Math.round(pos));
       angleOut.textContent = String(
@@ -574,5 +592,26 @@ const hiUrls = Object.fromEntries(
 
     setPos(0);
     if (items[0]) fillDetail(items[0]);
+
+    // Avvio del caricamento: sta in fondo perché i suoi callback usano render()
+    // e startSpin(), dichiarati sopra.
+    coarse.forEach((i) =>
+      fetchOne(i, () => {
+        done++; coarseDone++;
+        progress();
+        if (coarseDone === coarse.length) {
+          ready = true;                 // già usabile: il resto arriva dietro
+          render(true);
+          if (!reduce) startSpin();
+          rest.forEach((j) =>
+            fetchOne(j, () => {
+              done++;
+              progress();
+              if (done === total) loading.classList.add('is-done');
+            })
+          );
+        }
+      })
+    );
   });
 </script>
