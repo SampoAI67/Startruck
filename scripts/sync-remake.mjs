@@ -30,7 +30,7 @@ const FILES = [
   'poster-typeh.webp',
   'lavori.json',
 ];
-const DIRS = ['lavori', 'optionals'];      // optionals puo' non esserci ancora
+const DIRS = ['lavori', 'optionals', 'clienti'];      // optionals puo' non esserci ancora
 
 async function copyIfExists(from, to) {
   try {

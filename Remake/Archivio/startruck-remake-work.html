@@ -178,7 +178,7 @@
   .sec-desc{max-width:400px; color:var(--charcoal-dim); font-size:0.95rem; font-weight:300;}
 
   /* PERCHE LIST */
-  .manifesto{max-width:100%; margin-bottom:64px;}
+  .manifesto{max-width:100%;}
   .manifesto p{font-family:'Barlow'; font-size:clamp(1.6rem,3.3vw,3rem); font-weight:400; line-height:1.42; letter-spacing:-0.015em; text-transform:none;}
   /* Le tre righe sono spezzate a mano ma restano tutte a filo a sinistra.
      Lo scarto e' solo dell'occhiello: 3px piu' dentro del testo, quel tanto
@@ -190,12 +190,6 @@
   }
   .manifesto .m-dim{color:var(--charcoal-dim);}
   .manifesto .m-strong{font-weight:700;}
-  .why-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:0;}
-  .why-grid.cols-4{grid-template-columns:repeat(4,1fr);}
-  .why-card{border-top:1px solid var(--line); padding:32px 26px 0; margin-top:32px;}
-  .why-card .num{font-family:'JetBrains Mono'; color:var(--bronze); font-size:0.85rem; letter-spacing:0.05em; display:block; margin-bottom:14px;}
-  .why-card h3{font-size:1.3rem; margin-bottom:10px; font-weight:500;}
-  .why-card p{font-size:0.88rem; color:var(--charcoal-dim); font-weight:300; line-height:1.6;}
 
   /* PROCESSO */
   /* La traccia di pneumatico passa DIETRO le schede: sono opache, quindi
@@ -258,19 +252,28 @@
      coppie oltre la sesta si raggiungono trascinando. Il riquadro mantiene la
      misura che aveva a tre per riga, quindi sullo schermo ne entrano circa tre
      e le altre si scoprono tirando. */
+  /* La rotaia esce dalla colonna di testo e prende tutta la finestra: le due
+     righe corrono da un bordo all'altro e sfumano agli estremi, cosi' si vede
+     che continuano invece di finire tagliate di netto. */
   .work-rail{
-    margin-top:24px; overflow-x:auto; overscroll-behavior-x:contain;
+    margin-top:24px; width:100%; overflow-x:auto; overscroll-behavior-x:contain;
     cursor:grab; scrollbar-width:none; -ms-overflow-style:none;
     -webkit-overflow-scrolling:touch;
+    -webkit-mask-image:linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+            mask-image:linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
   }
   .work-rail::-webkit-scrollbar{display:none;}
   .work-rail.is-dragging{cursor:grabbing;}
   .work-rail.is-dragging .work-cell{pointer-events:none;}   /* trascinare non apre il post */
+  /* Ogni lavoro e' una terna di post scattati lo stesso giorno: le terne
+     stanno in fila sulla STESSA riga, cosi' il mezzo resta accanto ai suoi
+     scatti. Diciotto post = sei lavori = nove colonne su due righe. */
   .work-strip{
-    --cell:clamp(190px, 31vw, 371px);
-    display:grid; grid-auto-flow:column;
+    --cell:clamp(190px, 26vw, 330px);
+    --cols:9;
+    display:grid; grid-auto-flow:row;
+    grid-template-columns:repeat(var(--cols), var(--cell));
     grid-template-rows:repeat(2, var(--cell));
-    grid-auto-columns:var(--cell);
     gap:2px; background:var(--line); width:max-content;
   }
   .work-cell{position:relative; display:block; overflow:hidden; background:var(--bg-2);}
@@ -343,22 +346,33 @@
   .opt-card p{font-size:0.8rem; color:var(--charcoal-dim); font-weight:300;}
   .opt-card img{width:100%; height:120px; object-fit:cover; margin-bottom:14px;}
 
-  /* Sulla soglia le due categorie sono due lastre grandi, non due caselle di
-     un modulo: e' l'unica scelta della schermata. */
-  .cfg-gate{max-width:880px; margin:0 auto;}
-  .cfg-gate .step h3, .cfg-gate .step .step-sub{display:none;}
-  .cfg-gate .option-grid{gap:1px; background:var(--line); border:1px solid var(--line);}
-  .cfg-gate .opt-card{border:none; background:var(--white); padding:42px 34px 38px; min-height:230px; display:flex; flex-direction:column; justify-content:flex-end;}
-  .cfg-gate .opt-card:hover{background:var(--white); border:none;}
-  .cfg-gate .opt-card h4{font-size:1.75rem; margin-bottom:10px;}
-  .cfg-gate .opt-card p{font-size:0.9rem; max-width:32ch;}
-  .cfg-gate .opt-card::before{
-    content:"→"; position:absolute; top:26px; right:28px; font-size:1.1rem; color:var(--charcoal-dim);
-    transform:translateX(-6px); opacity:0; transition:transform .35s cubic-bezier(.22,1,.36,1), opacity .25s;
+  /* La soglia e' la scheda originale del cliente, intatta: intestazione scura
+     con la scala dei passi, il primo passo dentro, e "Continua" in fondo.
+     Cambia solo cosa fa quel pulsante: invece di girare la pagina successiva
+     dentro alla scheda, apre il palco a schermo pieno. */
+  .cfg-gate{
+    max-width:760px; margin:0 auto; background:var(--white); border:1px solid var(--line);
+    box-shadow:0 30px 70px -35px rgba(28,31,36,0.28);
   }
-  .cfg-gate .opt-card:hover::before{opacity:1; transform:translateX(0);}
-  .cfg-gate .opt-card.selected::after{display:none;}
-  .cfg-gate-note{text-align:center; margin-top:26px; font-family:'JetBrains Mono'; font-size:0.64rem; letter-spacing:0.09em; text-transform:uppercase; color:var(--charcoal-dim);}
+  .cfg-gate .ramp-gauge{padding:34px 40px 26px; border-bottom:1px solid var(--line); background:var(--ink); flex:none;}
+  .cfg-gate .ramp-top{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:20px; gap:16px;}
+  .cfg-gate .ramp-top .mono{font-size:0.7rem; letter-spacing:0.12em; color:#c7c6c2;}
+  .cfg-gate .ramp-top .step-label{color:#fdfcf9; font-family:'Barlow Condensed'; font-weight:600; text-transform:uppercase; letter-spacing:0.03em; font-size:1.05rem;}
+  .cfg-gate .ramp-track{height:1px; background:rgba(255,255,255,0.18); margin:0;}
+  .cfg-gate .ramp-fill{top:-4px; width:9px; height:9px; background:#c7c6c2; box-shadow:0 0 0 4px var(--ink), 0 0 0 5px #c7c6c2;}
+  .cfg-gate .ramp-ticks{margin:16px 0 0;}
+  .cfg-gate .ramp-ticks span{font-size:0.62rem; letter-spacing:0.04em; color:#8a8d92;}
+  .cfg-gate .ramp-ticks span.done{color:#c7c6c2;}
+  .cfg-gate .cfg-body{padding:46px 46px 36px;}
+  .cfg-gate .step h3{font-size:1.9rem; margin-bottom:8px; font-weight:700;}
+  .cfg-gate .step .step-sub{color:var(--charcoal-dim); font-size:0.9rem; margin-bottom:32px; font-weight:300;}
+  .cfg-gate .cfg-nav{display:flex; justify-content:flex-end; padding-top:26px;}
+  @media(max-width:860px){
+    .cfg-gate .ramp-gauge{padding:26px 22px 20px;}
+    .cfg-gate .ramp-ticks{display:none;}
+    .cfg-gate .cfg-body{padding:30px 22px 26px;}
+    .cfg-gate .step h3{font-size:1.45rem;}
+  }
 
   /* ---- 2. il palco a schermo pieno ------------------------------------- */
   /* Il blocco dello scroll e' il trucco classico col body fisso: si memorizza
@@ -558,6 +572,38 @@
     .cfg-gate .opt-card h4{font-size:1.35rem;}
   }
 
+
+  /* ===================== CLIENTI =========================================
+     Il carosello dei marchi ripreso dal sito del cliente, rifatto in CSS:
+     due file che scorrono in verso opposto, senza libreria. Il trucco e' la
+     lista scritta DUE volte e l'animazione che trasla di meta' esatta: quando
+     arriva in fondo e' gia' tornata al punto di partenza, e non si vede.
+     I marchi non sono nostri: restano nei loro colori, scalati ad altezza
+     uguale perche' una fila di loghi si legge per altezza, non per area. */
+  .clients{background:var(--white); border-block:1px solid var(--line); padding:64px 0; overflow:hidden;}
+  .clients-in{display:grid; grid-template-columns:minmax(220px, 300px) 1fr; gap:48px; align-items:center; max-width:1180px; margin:0 auto; padding:0 32px;}
+  .clients h2{font-size:clamp(1.4rem,2.3vw,1.9rem); line-height:1.15;}
+  .clients-rows{display:grid; gap:18px; min-width:0;
+    -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+            mask-image:linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);}
+  .cl-row{overflow:hidden;}
+  .cl-track{display:flex; align-items:center; gap:56px; width:max-content; animation:cl-left 34s linear infinite;}
+  .cl-row.rtl .cl-track{animation-name:cl-right;}
+  .cl-track img{height:52px; width:auto; flex:none; object-fit:contain;}
+  @keyframes cl-left{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+  @keyframes cl-right{from{transform:translateX(-50%);} to{transform:translateX(0);}}
+  .clients:hover .cl-track{animation-play-state:paused;}
+  @media(max-width:860px){
+    .clients{padding:48px 0;}
+    .clients-in{grid-template-columns:1fr; gap:26px; text-align:center;}
+    .cl-track{gap:38px;}
+    .cl-track img{height:42px;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .cl-track{animation:none;}
+    .cl-row{overflow-x:auto;}
+  }
+
   /* CONTATTI / FOOTER */
   .contact-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:60px; align-items:start;}
   .contact-item{margin-bottom:26px; border-top:1px solid var(--line); padding-top:20px;}
@@ -610,9 +656,8 @@
   @media(max-width:860px){
     .navlinks{display:none;}
     .navtoggle{display:block;}
-    .why-grid, .why-grid.cols-4, .process-grid{grid-template-columns:1fr;}
+    .process-grid{grid-template-columns:1fr;}
     .model-grid{flex-direction:column;}
-    .why-card{margin-top:0; padding-top:26px; padding-bottom:26px;}
     .option-grid, .option-grid.cols-3{grid-template-columns:1fr;}
     .form-grid{grid-template-columns:1fr;}
     .accessori-grid{grid-template-columns:1fr;}
@@ -682,12 +727,6 @@
     <div class="manifesto">
       <span class="sec-eyebrow">Il nostro perché</span>
       <p><span class="ml ml-1">Il resto del settore tratta il trasporto come una <span class="m-dim">specifica</span></span> <span class="ml ml-2"><span class="m-dim">tecnica.</span> Noi lo trattiamo come ciò</span> <span class="ml ml-3">che è davvero: <span class="m-strong">la custodia di valore in movimento.</span></span></p>
-    </div>
-    <div class="why-grid cols-4">
-      <div class="why-card"><span class="num">01</span><h3>Su misura</h3><p>Ogni allestimento nasce attorno alle tue auto. Niente standard: solo la tua misura.</p></div>
-      <div class="why-card"><span class="num">02</span><h3>Artigianalità</h3><p>Mani italiane, alluminio aeronautico, finiture da atelier. Il dettaglio è la firma.</p></div>
-      <div class="why-card"><span class="num">03</span><h3>Discrezione</h3><p>Trasporta senza esporre. Riservatezza e sicurezza costruite nel mezzo, non aggiunte.</p></div>
-      <div class="why-card"><span class="num">04</span><h3>Affidabilità</h3><p>Provata sul campo, su migliaia di chilometri. Quando la consegna non ammette errori.</p></div>
     </div>
   </div>
 </section>
@@ -777,8 +816,9 @@
         <h2>Ultimi lavori</h2>
       </div>
     </div>
-    <div class="work-rail" id="workRail">
-    <div class="work-strip" id="workStrip">
+  </div>
+  <div class="work-rail" id="workRail">
+    <div class="work-strip" id="workStrip" style="--cols:9">
         <a class="work-cell"><img src="lavori/lavoro-01.webp" alt="" loading="lazy" decoding="async"></a>
         <a class="work-cell"><img src="lavori/lavoro-02.webp" alt="" loading="lazy" decoding="async"></a>
         <a class="work-cell"><img src="lavori/lavoro-03.webp" alt="" loading="lazy" decoding="async"></a>
@@ -788,12 +828,68 @@
         <a class="work-cell"><img src="lavori/lavoro-07.webp" alt="" loading="lazy" decoding="async"></a>
         <a class="work-cell"><img src="lavori/lavoro-08.webp" alt="" loading="lazy" decoding="async"></a>
         <a class="work-cell"><img src="lavori/lavoro-09.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-10.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-11.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-12.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-13.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-14.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-15.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-16.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-17.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-18.webp" alt="" loading="lazy" decoding="async"></a>
     </div>
-    </div>
+  </div>
+  <div class="wrap">
     <p class="work-hint">Trascina per vedere gli altri</p>
     <p class="work-more">
       Per vederne altri, <a href="https://www.instagram.com/startruckitalia/" target="_blank" rel="noopener">@startruckitalia</a> su Instagram
     </p>
+  </div>
+</section>
+
+
+<!-- CLIENTI -->
+<section class="clients" id="clienti">
+  <div class="clients-in">
+    <h2>Chi ha scelto<br>Startruck Italia</h2>
+    <div class="clients-rows">
+      <div class="cl-row"><div class="cl-track">
+        <img src="clienti/ercolani.webp" alt="Ercolani" loading="lazy" decoding="async">
+        <img src="clienti/tomasi.webp" alt="Tomasi Auto" loading="lazy" decoding="async">
+        <img src="clienti/san-matteo.webp" alt="San Matteo Garage" loading="lazy" decoding="async">
+        <img src="clienti/novarent.webp" alt="Novarent" loading="lazy" decoding="async">
+        <img src="clienti/motor-team.webp" alt="Motor Team" loading="lazy" decoding="async">
+        <img src="clienti/kimera.webp" alt="Kimera Automobili" loading="lazy" decoding="async">
+        <img src="clienti/ftm-group.webp" alt="FTM Group" loading="lazy" decoding="async">
+        <img src="clienti/basic.webp" alt="Basic" loading="lazy" decoding="async">
+        <img src="clienti/ercolani.webp" aria-hidden="true" alt="Ercolani" loading="lazy" decoding="async">
+        <img src="clienti/tomasi.webp" aria-hidden="true" alt="Tomasi Auto" loading="lazy" decoding="async">
+        <img src="clienti/san-matteo.webp" aria-hidden="true" alt="San Matteo Garage" loading="lazy" decoding="async">
+        <img src="clienti/novarent.webp" aria-hidden="true" alt="Novarent" loading="lazy" decoding="async">
+        <img src="clienti/motor-team.webp" aria-hidden="true" alt="Motor Team" loading="lazy" decoding="async">
+        <img src="clienti/kimera.webp" aria-hidden="true" alt="Kimera Automobili" loading="lazy" decoding="async">
+        <img src="clienti/ftm-group.webp" aria-hidden="true" alt="FTM Group" loading="lazy" decoding="async">
+        <img src="clienti/basic.webp" aria-hidden="true" alt="Basic" loading="lazy" decoding="async">
+      </div></div>
+      <div class="cl-row rtl"><div class="cl-track">
+        <img src="clienti/basic.webp" alt="Basic" loading="lazy" decoding="async">
+        <img src="clienti/ftm-group.webp" alt="FTM Group" loading="lazy" decoding="async">
+        <img src="clienti/kimera.webp" alt="Kimera Automobili" loading="lazy" decoding="async">
+        <img src="clienti/motor-team.webp" alt="Motor Team" loading="lazy" decoding="async">
+        <img src="clienti/novarent.webp" alt="Novarent" loading="lazy" decoding="async">
+        <img src="clienti/san-matteo.webp" alt="San Matteo Garage" loading="lazy" decoding="async">
+        <img src="clienti/tomasi.webp" alt="Tomasi Auto" loading="lazy" decoding="async">
+        <img src="clienti/ercolani.webp" alt="Ercolani" loading="lazy" decoding="async">
+        <img src="clienti/basic.webp" aria-hidden="true" alt="Basic" loading="lazy" decoding="async">
+        <img src="clienti/ftm-group.webp" aria-hidden="true" alt="FTM Group" loading="lazy" decoding="async">
+        <img src="clienti/kimera.webp" aria-hidden="true" alt="Kimera Automobili" loading="lazy" decoding="async">
+        <img src="clienti/motor-team.webp" aria-hidden="true" alt="Motor Team" loading="lazy" decoding="async">
+        <img src="clienti/novarent.webp" aria-hidden="true" alt="Novarent" loading="lazy" decoding="async">
+        <img src="clienti/san-matteo.webp" aria-hidden="true" alt="San Matteo Garage" loading="lazy" decoding="async">
+        <img src="clienti/tomasi.webp" aria-hidden="true" alt="Tomasi Auto" loading="lazy" decoding="async">
+        <img src="clienti/ercolani.webp" aria-hidden="true" alt="Ercolani" loading="lazy" decoding="async">
+      </div></div>
+    </div>
   </div>
 </section>
 
@@ -805,10 +901,25 @@
     <div class="cfg-head">
       <span class="sec-eyebrow">Richiedi un preventivo</span>
       <h2>Configura il tuo allestimento</h2>
-      <p>Si parte dalla categoria del mezzo. Da lì il configuratore prende tutto lo schermo: cinque passaggi, nessun account.</p>
+      <p>5 passaggi. Alla fine invii la richiesta direttamente al nostro team — nessun account necessario.</p>
     </div>
 
     <div class="cfg-gate" id="cfgGate">
+      <div class="ramp-gauge">
+        <div class="ramp-top">
+          <span class="mono">STEP 1 / 5</span>
+          <span class="step-label">Categoria veicolo</span>
+        </div>
+        <div class="ramp-track"><div class="ramp-fill" style="left:0%"></div></div>
+        <div class="ramp-ticks">
+          <span class="done">Categoria</span>
+          <span>Autocarro</span>
+          <span>Allestimento</span>
+          <span>Accessori</span>
+          <span>Contatti</span>
+        </div>
+      </div>
+      <div class="cfg-body" id="cfgGateBody">
       <div class="step active" data-step="1">
         <h3>Categoria del veicolo</h3>
         <p class="step-sub">In base al peso complessivo cambia la patente necessaria per la guida.</p>
@@ -823,7 +934,10 @@
           </div>
         </div>
       </div>
-      <p class="cfg-gate-note">Scegli una categoria per entrare nel configuratore</p>
+      <div class="cfg-nav">
+        <button class="btn-next" id="gateNext" type="button" disabled>Continua →</button>
+      </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1245,6 +1359,7 @@
   const rampFill = document.getElementById('rampFill');
   const btnNext = document.getElementById('btnNext');
   const btnBack = document.getElementById('btnBack');
+  const gateNext = document.getElementById('gateNext');
   const labels = {1:'Categoria veicolo',2:'Autocarro base',3:'Allestimento',4:'Accessori',5:'I tuoi dati',6:'Riepilogo'};
 
   function selectCard(group, value, el){
@@ -1253,13 +1368,6 @@
     state[group] = value;
     validateStep();
     refresh();
-    // La categoria e' la soglia: sceglierla dalla pagina fa entrare nel palco.
-    // Scegliendola di nuovo da dentro (passo 1) non si salta avanti da soli.
-    if(group === 'categoria' && !CFG.isOpen()){
-      CFG.enter();
-      current = 2;
-      showStep(2);
-    }
   }
 
   document.querySelectorAll('.opt-card').forEach(card=>{
@@ -1294,6 +1402,8 @@
     if(current===4) ok = true;
     if(current===5) ok = state.nome.trim() && state.telefono.trim() && state.email.trim();
     btnNext.disabled = !ok;
+    // Il pulsante della soglia guarda solo la categoria: e' l'unica scelta li'.
+    if(gateNext) gateNext.disabled = !state.categoria;
   }
 
   function buildSummary(){
@@ -1627,8 +1737,8 @@
      La griglia e' gia' nel documento: se il JSON non arriva (file aperto in
      locale, rete assente, scraper a vuoto) resta quella, non un buco. Quando
      invece arriva, la sostituisce con i post piu' recenti.
-     Il conteggio viene troncato a multiplo di 2: la griglia scorre per
-     colonne di due, e un numero dispari lascerebbe l'ultima casella vuota. */
+     Il conteggio viene troncato a multiplo di 6: la rotaia e' alta due righe
+     e ogni lavoro e' una terna, quindi servono due righe di terne intere. */
   (function () {
     var strip = document.getElementById('workStrip');
     if (!strip || !window.fetch) return;
@@ -1636,7 +1746,9 @@
       .then(function (r) { if (!r.ok) throw 0; return r.json(); })
       .then(function (data) {
         var posts = (data && data.posts) || [];
-        posts = posts.slice(0, Math.floor(posts.length / 2) * 2);   // colonne intere
+        // sei per volta: due righe di terne complete, nessuna terna spezzata
+        posts = posts.slice(0, Math.floor(posts.length / 6) * 6);
+        strip.style.setProperty('--cols', String(posts.length / 2));
         if (!posts.length) return;
         strip.innerHTML = posts.map(function (q) {
           var tag = q.permalink ? 'a href="' + q.permalink + '" target="_blank" rel="noopener"' : 'a';
@@ -1941,8 +2053,9 @@
     var stage = document.getElementById('cfgStage');
     var gate = document.getElementById('cfgGate');
     var panel = document.getElementById('cfgPanel');
-    var note = document.querySelector('.cfg-gate-note');
     var step1 = document.querySelector('.step[data-step="1"]');
+    // da dove viene, per rimetterlo al suo posto e non in fondo alla scheda
+    var casa = step1.parentNode, dopo = step1.nextSibling;
     var savedY = 0, open = false;
 
     /* lo scroll della pagina e' "smooth": rimetterlo a mano lo farebbe volare */
@@ -1968,8 +2081,7 @@
     function leave() {
       if (!open) return;
       open = false;
-      gate.appendChild(step1);
-      if (note) gate.appendChild(note);        // la nota resta in fondo alla soglia
+      casa.insertBefore(step1, dopo);          // torna sopra al pulsante, non sotto
       document.body.classList.remove('cfg-locked');
       document.body.style.top = '';
       jumpTo(savedY);
@@ -1979,6 +2091,14 @@
   })();
 
   document.getElementById('btnExit').addEventListener('click', CFG.leave);
+
+  // "Continua" della soglia: da qui in poi si e' dentro al palco bloccato.
+  if (gateNext) gateNext.addEventListener('click', function () {
+    if (!state.categoria) return;
+    CFG.enter();
+    current = 2;
+    showStep(2);
+  });
 
   /* ===== Fototessere degli optional ======================================
      Il nome del file si ricava dall'etichetta: minuscolo, senza accenti,
