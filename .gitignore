@@ -60,6 +60,7 @@ dist/
 # *.png qui sopra altrimenti li scartano in silenzio.
 !Remake/Archivio/lavori/*.webp
 !Remake/Archivio/optionals/*.webp
+!Remake/Archivio/clienti/*.webp
 !Remake/Archivio/poster-*.webp
 !Remake/Archivio/tread.png
 !Remake/Archivio/logo.png
