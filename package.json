@@ -9,7 +9,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "lavori": "node scripts/build-lavori.mjs --apify --limit 9",
-    "lavori:local": "node scripts/build-lavori.mjs --local public/img --limit 9"
+    "lavori:local": "node scripts/build-lavori.mjs --local public/img --limit 9",
+    "prebuild": "node scripts/sync-remake.mjs",
+    "remake": "node scripts/sync-remake.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",

@@ -69,3 +69,7 @@ dist/
 
 # Archivio compresso: e la stessa roba della cartella, 16 MB in piu per nulla
 *.zip
+
+# Copia pubblicata del prototipo: la genera scripts/sync-remake.mjs a ogni
+# build. La sorgente e Remake/Archivio, questa non va versionata.
+public/remake/
