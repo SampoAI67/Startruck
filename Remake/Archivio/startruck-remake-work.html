@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Startruck Italia — Allestimenti per il Trasporto Veicoli</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#e4e3e0;
+    --bg-2:#d6d5d1;
+    --ink:#1c1f24;
+    --ink-soft:#2c2f34;
+    --charcoal-dim:#6f6f68;
+    --bronze:#3d3f42;
+    --bronze-deep:#1c1d1f;
+    --bronze-pale:#d3d2ce;
+    --white:#fffdf8;
+    --line:rgba(28,31,36,0.13);
+    --line-soft:rgba(28,31,36,0.08);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Barlow', sans-serif;
+    font-weight:300;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Archivo Black', sans-serif;
+    font-weight:400;
+    line-height:1.05;
+    letter-spacing:-0.005em;
+    text-transform:uppercase;
+    color:var(--ink);
+  }
+  h3, h4{font-family:'Barlow Condensed'; font-weight:700; text-transform:uppercase; letter-spacing:0.01em;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  button{font-family:inherit; cursor:pointer;}
+  :focus-visible{outline:1px solid var(--bronze); outline-offset:4px;}
+  [hidden]{display:none !important;}
+
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+
+  /* NAV */
+  /* Tre stati della barra:
+     - sull'hero e' trasparente e il video le passa sotto (l'hero e' tirato su
+       di 85px con un margine negativo: la barra resta sticky, non fixed, cosi'
+       le altre viste con briciole di pane non ci finiscono sotto);
+     - superato l'hero diventa piena e a colori invertiti rispetto alla pagina;
+     - scorrendo in giu' si ritira, risalendo torna. */
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:transparent;
+    border-bottom:1px solid transparent;
+    transition:transform .45s cubic-bezier(.22,1,.36,1), background .35s ease,
+               border-color .35s ease, backdrop-filter .35s ease;
+  }
+  header.site .logo-img img{filter:invert(1);}          /* il marchio e' nero pieno */
+  header.site .navlinks a{color:rgba(253,252,249,0.72);}
+  header.site .navlinks a:hover{color:#fdfcf9;}
+  header.site .navcta{color:#fdfcf9; border-color:rgba(253,252,249,0.55);}
+  header.site .navcta:hover{background:#fdfcf9; color:var(--ink); border-color:#fdfcf9;}
+  header.site .navtoggle{color:#fdfcf9;}
+  body.nav-solid header.site{
+    background:rgba(28,31,36,0.92);
+    backdrop-filter:blur(10px);
+    border-bottom-color:rgba(255,255,255,0.14);
+  }
+  body.nav-hidden header.site{transform:translateY(-100%);}
+  nav.wrap{display:flex; align-items:center; justify-content:space-between; height:84px;}
+  .logo-img{display:flex; align-items:center;}
+  .logo-img img{height:34px; width:auto; display:block;}
+  .navlinks{display:flex; gap:40px; align-items:center;}
+  .navlinks a{
+    font-size:0.78rem; text-transform:uppercase; letter-spacing:0.12em; font-weight:400;
+    color:var(--charcoal-dim); position:relative; padding:6px 0;
+    transition:color .2s;
+  }
+  .navlinks a:hover{color:var(--ink);}
+  .navcta{
+    border:1px solid var(--ink); color:var(--ink); padding:11px 24px;
+    font-size:0.76rem; font-weight:400; text-transform:uppercase; letter-spacing:0.1em;
+    transition:background .2s, color .2s, border-color .2s;
+  }
+  .navcta:hover{background:var(--ink); color:var(--white);}
+  .navtoggle{display:none; background:none; border:none; color:var(--ink); font-size:1.6rem;}
+  header.site{transition:transform .45s cubic-bezier(.22,1,.36,1);}
+
+  /* BREADCRUMB */
+  .breadcrumb{padding:22px 0; font-family:'JetBrains Mono'; font-size:0.72rem; letter-spacing:0.06em; color:var(--charcoal-dim); text-transform:uppercase;}
+  .breadcrumb a:hover{color:var(--ink);}
+  .breadcrumb span{color:var(--ink);}
+
+  /* HERO */
+  .hero{position:relative; min-height:725px; display:flex; align-items:center; padding:195px 0 110px; margin-top:-85px; overflow:hidden; background:#111;}
+  .hero-video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;}
+  .hero-overlay{position:absolute; inset:0; background:linear-gradient(100deg, rgba(20,22,26,0.62) 28%, rgba(20,22,26,0.2)); z-index:1;}
+  .hero-inner{position:relative; z-index:2; max-width:520px;}
+  .eyebrow{
+    display:flex; align-items:center; gap:14px;
+    font-family:'JetBrains Mono'; font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase;
+    color:#c7c6c2; margin-bottom:28px;
+  }
+  .eyebrow::before{content:""; width:34px; height:1px; background:#c7c6c2;}
+  .hero h1{font-size:clamp(2.1rem, 4.2vw, 3.2rem); color:#fdfcf9;}
+  .hero h1 em{font-style:normal; color:#c7c6c2;}
+  .hero p{margin-top:20px; font-size:1rem; color:#d6d3ca; max-width:400px; font-weight:300;}
+  .hero-ctas{display:flex; gap:20px; margin-top:42px; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--bronze); color:#fdfcf9; padding:17px 34px;
+    font-family:'Barlow'; font-weight:500; text-transform:uppercase; font-size:0.8rem; letter-spacing:0.1em;
+    border:1px solid var(--bronze); transition:background .2s, color .2s; display:inline-block;
+  }
+  .btn-primary:hover{background:transparent; color:#c7c6c2; border-color:#c7c6c2;}
+  .btn-ghost{
+    border:1px solid rgba(255,255,255,0.35); color:#fdfcf9; padding:17px 30px;
+    font-family:'Barlow'; font-weight:500; text-transform:uppercase; font-size:0.8rem; letter-spacing:0.1em;
+    background:transparent; transition:border-color .2s;
+  }
+  .btn-ghost:hover{border-color:#fdfcf9;}
+
+  /* MODEL HERO (pagine dettaglio) */
+  .model-hero{position:relative; min-height:605px; display:flex; align-items:flex-end; padding:155px 0 70px; margin-top:-85px; overflow:hidden; background:#111;}
+  .model-hero-inner{position:relative; z-index:2; max-width:700px;}
+  .model-tag-lg{display:inline-block; font-family:'JetBrains Mono'; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:#c7c6c2; border:1px solid rgba(255,255,255,0.4); padding:6px 14px; margin-bottom:20px;}
+  .model-hero h1{font-size:clamp(2.6rem,6vw,4.6rem); color:#fdfcf9;}
+  .model-hero p{margin-top:20px; font-size:1.05rem; color:#d6d3ca; max-width:480px; font-weight:300;}
+
+  /* TICKER */
+  .ticker-band{background:var(--white); overflow:hidden; border-block:1px solid var(--line);}
+  .ticker-track{display:flex; white-space:nowrap; animation:ticker 32s linear infinite;}
+  .ticker-track span{display:inline-flex; align-items:center; font-family:'JetBrains Mono'; font-size:0.74rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink); padding:16px 28px; gap:28px;}
+  /* le tre barre sono il segno del marchio, non un trattino qualsiasi */
+  .ticker-track span::after{content:"///"; font-family:'Archivo Black'; font-size:0.78rem; letter-spacing:-0.04em; color:var(--charcoal-dim); margin-left:28px;}
+  @keyframes ticker{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+  @media(prefers-reduced-motion:reduce){.ticker-track{animation:none; overflow-x:auto;}}
+
+  /* SECTIONS */
+  .section{padding:110px 0;}
+  .section.alt{background:var(--bg-2);}
+  .sec-head{display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:64px; flex-wrap:wrap;}
+  .sec-eyebrow{font-family:'JetBrains Mono'; font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--bronze-deep); margin-bottom:14px; display:block;}
+  .sec-head h2{font-size:clamp(2rem,3.4vw,2.8rem);}
+  .sec-desc{max-width:400px; color:var(--charcoal-dim); font-size:0.95rem; font-weight:300;}
+
+  /* PERCHE LIST */
+  .manifesto{max-width:100%; margin-bottom:64px;}
+  .manifesto p{font-family:'Barlow'; font-size:clamp(1.6rem,3.3vw,3rem); font-weight:400; line-height:1.42; letter-spacing:-0.015em; text-transform:none;}
+  /* Le tre righe sono spezzate a mano ma restano tutte a filo a sinistra.
+     Lo scarto e' solo dell'occhiello: 3px piu' dentro del testo, quel tanto
+     che basta perche il bordo non sia a piombo perfetto. */
+  .manifesto .ml{display:block;}
+  .manifesto .sec-eyebrow{margin-left:3px;}
+  @media(max-width:860px){
+    .manifesto .ml{display:inline;}
+  }
+  .manifesto .m-dim{color:var(--charcoal-dim);}
+  .manifesto .m-strong{font-weight:700;}
+  .why-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:0;}
+  .why-grid.cols-4{grid-template-columns:repeat(4,1fr);}
+  .why-card{border-top:1px solid var(--line); padding:32px 26px 0; margin-top:32px;}
+  .why-card .num{font-family:'JetBrains Mono'; color:var(--bronze); font-size:0.85rem; letter-spacing:0.05em; display:block; margin-bottom:14px;}
+  .why-card h3{font-size:1.3rem; margin-bottom:10px; font-weight:500;}
+  .why-card p{font-size:0.88rem; color:var(--charcoal-dim); font-weight:300; line-height:1.6;}
+
+  /* PROCESSO */
+  /* La traccia di pneumatico passa DIETRO le schede: sono opache, quindi
+     mascherano da sole la parte centrale dell'onda e restano visibili solo
+     gli archi sopra e sotto, come un percorso che attraversa le quattro fasi. */
+  .route-wrap{position:relative;}
+  /* Il tracciato esce di ~124px sopra e sotto le schede: la sezione gli fa
+     spazio, altrimenti l'ansa alta finisce sul paragrafo e quella bassa viene
+     tagliata dal bordo della sezione. */
+  .route-clip{overflow:hidden; padding-bottom:160px;}
+  .route-clip .sec-head{margin-bottom:155px;}
+  .route-src{position:absolute; width:0; height:0; overflow:hidden; pointer-events:none;}
+  .route-canvas{position:absolute; left:-150px; z-index:0; pointer-events:none;}
+  /* Il colore dei solchi fra le schede e un velo semitrasparente: sopra la
+     traccia lascerebbe passare il nero. Si appoggia su un fondo pieno, cosi'
+     la tinta del filetto resta identica ma i 2px fra le schede sono opachi. */
+  .route-wrap .process-grid{position:relative; z-index:1; background-color:var(--bg-2); background-image:linear-gradient(var(--line), var(--line));}
+  @media(max-width:860px){ .route-canvas{display:none;} }
+  .process-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:2px; background:var(--line); margin-top:8px;}
+  .process-item{background:var(--white); padding:34px 28px;}
+  .process-item .pnum{font-family:'Archivo Black'; font-size:2.2rem; -webkit-text-stroke:1px var(--bronze-deep); color:transparent; display:block; margin-bottom:18px;}
+  .process-item h3{font-size:1.15rem; margin-bottom:10px;}
+  .process-item p{font-size:0.86rem; color:var(--charcoal-dim); font-weight:300; line-height:1.6;}
+
+  /* MODELLI */
+  /* Tre card a tutta sezione: 33% ciascuna, 45% quella sotto il puntatore.
+     L'espansione anima flex-grow (1 -> 1.35 / 0.825) invece della larghezza:
+     nessun calcolo sui gap e nessun reflow del testo a scatti. */
+  .model-grid{display:flex; gap:2px; background:var(--line); border-block:1px solid var(--line);}
+  .model-card{
+    flex:1 1 0; min-width:0;
+    background:var(--white); display:flex; flex-direction:column; overflow:hidden;
+    transition:flex-grow .66s cubic-bezier(.22,1,.36,1);
+  }
+  @media(hover:hover) and (min-width:861px){
+    .model-grid:hover .model-card{flex-grow:.825;}
+    .model-grid .model-card:hover{flex-grow:1.35;}
+  }
+  .model-img{height:clamp(300px, 42vh, 460px); overflow:hidden; position:relative; background:var(--bg-2);}
+  .model-img img, .model-img video{width:100%; height:100%; object-fit:cover; transition:transform .9s cubic-bezier(.22,1,.36,1);}
+  .model-card:hover .model-img img, .model-card:hover .model-img video{transform:scale(1.04);}
+  .model-body{transition:padding .66s cubic-bezier(.22,1,.36,1);}
+  .model-tag{position:absolute; top:16px; left:16px; color:#fdfcf9; font-family:'JetBrains Mono'; font-size:0.66rem; padding:5px 12px; letter-spacing:0.1em; text-transform:uppercase; border:1px solid rgba(253,252,249,0.6); background:rgba(20,22,26,0.35);}
+  .model-body{padding:30px 30px 34px; flex:1; display:flex; flex-direction:column;}
+  .model-body h3{font-size:1.7rem; margin-bottom:10px; font-weight:500;}
+  .model-body p{font-size:0.9rem; color:var(--charcoal-dim); flex:1; font-weight:300; line-height:1.6;}
+  .model-link{margin-top:22px; font-family:'JetBrains Mono'; font-size:0.72rem; color:var(--bronze-deep); letter-spacing:0.08em;}
+
+  /* LAVORI STRIP */
+  /* Tre colonne, non quattro: ogni lavoro e' una coppia di post e con tre
+     per riga le coppie restano vicine invece di spezzarsi a fine riga.
+     Il conteggio e' sempre multiplo di 3, cosi' non resta una riga monca. */
+  .work-strip{display:grid; grid-template-columns:repeat(3,1fr); gap:2px; margin-top:24px; background:var(--line);}
+  .work-cell{position:relative; display:block; aspect-ratio:1/1; overflow:hidden; background:var(--bg-2);}
+  .work-cell img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .8s cubic-bezier(.22,1,.36,1);}
+  .work-cell:hover img{transform:scale(1.04);}
+  .work-cell[href]{cursor:pointer;}
+  .work-cell .work-cap{
+    position:absolute; inset:auto 0 0 0; padding:38px 16px 14px;
+    background:linear-gradient(transparent, rgba(20,22,26,.72));
+    color:#fdfcf9; font-size:0.78rem; font-weight:300; line-height:1.35;
+    opacity:0; transition:opacity .3s ease;
+  }
+  .work-cell:hover .work-cap{opacity:1;}
+  @media(max-width:560px){ .work-strip{grid-template-columns:repeat(2,1fr);} }
+  /* La griglia mostra nove post: il resto sta sul profilo, e questa riga
+     e' l'unico punto in cui il sito lo dice. Piccola, non una CTA. */
+  .work-more{margin-top:22px; text-align:center; font-family:'JetBrains Mono';
+    font-size:0.72rem; letter-spacing:0.06em; color:var(--charcoal-dim);}
+  .work-more a{color:var(--ink); border-bottom:1px solid var(--line); padding-bottom:2px;
+    transition:border-color .2s;}
+  .work-more a:hover{border-bottom-color:var(--ink);}
+
+  /* SPEC GRID (pagine dettaglio) */
+  .spec-note{font-family:'JetBrains Mono'; font-size:0.72rem; color:var(--charcoal-dim); margin-bottom:28px; border-left:2px solid var(--bronze); padding-left:12px;}
+  .spec-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .spec-item{background:var(--white); padding:26px 24px;}
+  .spec-item .k{font-family:'JetBrains Mono'; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--charcoal-dim); display:block; margin-bottom:10px;}
+  .spec-item .v{font-family:'Barlow Condensed'; font-weight:600; font-size:1.3rem; text-transform:uppercase;}
+
+  .feature-list{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); margin-top:40px;}
+  .feature-item{background:var(--bg); padding:26px 28px; display:flex; gap:16px; align-items:flex-start;}
+  .feature-item .dot{width:8px; height:8px; background:var(--bronze); margin-top:8px; flex-shrink:0; transform:rotate(45deg);}
+  .feature-item p{font-size:0.92rem; color:var(--ink-soft); font-weight:400;}
+
+  .gallery{display:grid; grid-template-columns:1.4fr 1fr; gap:2px; background:var(--line);}
+  .gallery img{width:100%; height:100%; object-fit:cover;}
+  .gallery-col{display:grid; grid-template-rows:1fr 1fr; gap:2px;}
+  .gallery-main{height:520px;}
+
+  /* CTA BAND (pagine dettaglio) */
+  .cta-band{background:var(--ink); padding:70px 0; text-align:center;}
+  .cta-band h2{color:#fdfcf9; font-size:clamp(1.8rem,3vw,2.4rem); margin-bottom:18px;}
+  .cta-band p{color:#a9aaa6; margin-bottom:34px; max-width:480px; margin-left:auto; margin-right:auto;}
+
+  /* ===================== CONFIGURATORE ====================================
+     Impianto alla Porsche. La categoria del veicolo e' la SOGLIA: finche' non
+     e' scelta si e' in pagina, appena lo e' il configuratore prende tutto lo
+     schermo e si chiude solo con i due pulsanti dichiarati (esci / invia).
+     Niente uscita con lo scroll, niente uscita con Esc: e' una richiesta
+     esplicita, ed e' anche cio' che permette al passo "indietro" di restare
+     dentro al palco invece di sputare fuori chi sta configurando.
+     Telefono e scrivania condividono la STESSA struttura (mezzo sopra, scelte
+     sotto, barra azioni fissa): cambia il taglio, non l'impianto. */
+
+  /* ---- 1. la soglia, in pagina ---------------------------------------- */
+  .configurator{background:var(--bg-2); min-height:100vh; min-height:100dvh; display:flex; align-items:center; padding:120px 0;}
+  .cfg-head{text-align:center; max-width:620px; margin:0 auto 46px;}
+  .cfg-head .sec-eyebrow{justify-content:center; text-align:center;}
+  .cfg-head h2{font-size:clamp(2rem,3.6vw,2.9rem);}
+  .cfg-head p{color:var(--charcoal-dim); margin-top:16px; font-weight:300;}
+
+  /* Base delle schede-scelta: la soglia le usa grandi, il pannello le
+     stringe a righe. Le regole comuni stanno qui una volta sola. */
+  .option-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
+  .option-grid.cols-3{grid-template-columns:repeat(3,1fr);}
+  .opt-card{position:relative; border:1px solid var(--line); background:var(--white); padding:22px 20px; cursor:pointer; transition:border-color .2s, background .2s;}
+  .opt-card:hover{border-color:var(--ink);}
+  .opt-card.selected{border-color:var(--ink); background:var(--bronze-pale);}
+  .opt-card h4{font-family:'Barlow Condensed'; text-transform:uppercase; font-size:1.15rem; font-weight:700; margin-bottom:5px; letter-spacing:0.01em;}
+  .opt-card p{font-size:0.8rem; color:var(--charcoal-dim); font-weight:300;}
+  .opt-card img{width:100%; height:120px; object-fit:cover; margin-bottom:14px;}
+
+  /* Sulla soglia le due categorie sono due lastre grandi, non due caselle di
+     un modulo: e' l'unica scelta della schermata. */
+  .cfg-gate{max-width:880px; margin:0 auto;}
+  .cfg-gate .step h3, .cfg-gate .step .step-sub{display:none;}
+  .cfg-gate .option-grid{gap:1px; background:var(--line); border:1px solid var(--line);}
+  .cfg-gate .opt-card{border:none; background:var(--white); padding:42px 34px 38px; min-height:230px; display:flex; flex-direction:column; justify-content:flex-end;}
+  .cfg-gate .opt-card:hover{background:var(--white); border:none;}
+  .cfg-gate .opt-card h4{font-size:1.75rem; margin-bottom:10px;}
+  .cfg-gate .opt-card p{font-size:0.9rem; max-width:32ch;}
+  .cfg-gate .opt-card::before{
+    content:"→"; position:absolute; top:26px; right:28px; font-size:1.1rem; color:var(--charcoal-dim);
+    transform:translateX(-6px); opacity:0; transition:transform .35s cubic-bezier(.22,1,.36,1), opacity .25s;
+  }
+  .cfg-gate .opt-card:hover::before{opacity:1; transform:translateX(0);}
+  .cfg-gate .opt-card.selected::after{display:none;}
+  .cfg-gate-note{text-align:center; margin-top:26px; font-family:'JetBrains Mono'; font-size:0.64rem; letter-spacing:0.09em; text-transform:uppercase; color:var(--charcoal-dim);}
+
+  /* ---- 2. il palco a schermo pieno ------------------------------------- */
+  /* Il blocco dello scroll e' il trucco classico col body fisso: si memorizza
+     la posizione e si rimette all'uscita, altrimenti iOS riparte da capo. */
+  body.cfg-locked{position:fixed; left:0; right:0; width:100%; overflow:hidden;}
+  .cfg-stage{
+    position:fixed; inset:0; z-index:200; display:none;
+    grid-template-rows:auto minmax(0,1fr) auto;
+    height:100vh; height:100dvh; background:var(--white);
+  }
+  body.cfg-locked .cfg-stage{display:grid;}
+
+  .cfg-bar{display:flex; align-items:center; gap:28px; height:66px; padding:0 24px; border-bottom:1px solid var(--line); background:var(--white);}
+  .cfg-mark{font-family:'Archivo Black'; text-transform:uppercase; font-size:0.86rem; letter-spacing:-0.01em; flex:none;}
+  .cfg-exit{
+    flex:none; display:inline-flex; align-items:center; gap:10px; background:none;
+    border:1px solid var(--line); padding:10px 16px;
+    font-family:'JetBrains Mono'; font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--charcoal-dim); transition:border-color .2s, color .2s;
+  }
+  .cfg-exit:hover{border-color:var(--ink); color:var(--ink);}
+  .cfg-exit i{font-style:normal; font-size:0.85rem; line-height:1;}
+
+  /* passi: etichette su schermo largo, contatore su telefono */
+  .ramp-gauge{flex:1; min-width:0;}
+  .ramp-top{display:none;}
+  .ramp-top .step-label{font-family:'Barlow Condensed'; font-weight:600; text-transform:uppercase; letter-spacing:0.03em; font-size:1rem;}
+  .ramp-top .mono{font-size:0.62rem; letter-spacing:0.1em; color:var(--charcoal-dim); flex:none;}
+  .ramp-ticks{display:flex; justify-content:space-between; margin-bottom:9px;}
+  .ramp-ticks span{font-family:'JetBrains Mono'; font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase; color:#a5a49e; transition:color .3s;}
+  .ramp-ticks span.done{color:var(--ink);}
+  .ramp-track{position:relative; height:1px; background:var(--line); margin:0 4px;}
+  .ramp-fill{position:absolute; top:-3px; left:0; width:7px; height:7px; border-radius:50%; background:var(--ink); transition:left .45s cubic-bezier(.22,1,.36,1);}
+
+  .cfg-main{display:grid; grid-template-columns:minmax(0,1.5fr) minmax(370px,0.8fr); min-height:0;}
+
+  /* Il mezzo sta in una scatola scura: e' il fondo del girato, e sullo schermo
+     chiaro del pannello fa da fuoco visivo senza bisogno di cornici. */
+  .cfg-visual{position:relative; background:#0d0d0d; display:flex; flex-direction:column; min-height:0; overflow:hidden;}
+  .cfg-visual .tt{position:static; display:flex; flex-direction:column; flex:1; min-height:0; background:transparent; margin:0; padding:0;}
+  .cfg-visual .tt-viewport{flex:1; height:auto; min-height:0;}
+  .cfg-visual .tt-cap{padding:13px 22px; color:#8a8d92; border-top:1px solid rgba(255,255,255,0.08); flex:none;}
+  .cfg-visual .tt-what{color:#e8e7e3;}
+  .cfg-visual .tt-what.is-muted{color:#8a8d92;}
+
+  /* Non c'e' un girato a 360 per ogni allestimento: quando non c'e' si mette
+     la foto di studio e lo si dice, invece di far girare il mezzo sbagliato. */
+  .cfg-alt{position:absolute; inset:0; z-index:5; display:none; background:#0d0d0d;}
+  .cfg-alt.is-shown{display:block;}
+  .cfg-alt img{width:100%; height:100%; object-fit:cover;}
+  .cfg-alt span{
+    position:absolute; left:0; right:0; bottom:0; padding:44px 22px 15px;
+    background:linear-gradient(transparent, rgba(0,0,0,0.78));
+    font-family:'JetBrains Mono'; font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; color:#d6d3ca;
+  }
+
+  .cfg-panel{
+    border-left:1px solid var(--line); background:var(--white);
+    overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch;
+    min-height:0; padding:34px 32px 40px;
+  }
+  .cfg-panel .step{display:none;}
+  .cfg-panel .step.active{display:block; animation:fadein .35s ease;}
+  @keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+  .cfg-panel .step h3{font-size:1.45rem; margin-bottom:7px; font-weight:700;}
+  .cfg-panel .step .step-sub{color:var(--charcoal-dim); font-size:0.84rem; margin-bottom:26px; font-weight:300; line-height:1.5;}
+
+  /* Dentro al pannello ogni scelta e' una RIGA, non una piastrella: la colonna
+     e' stretta e le righe si leggono in verticale come il listino Porsche. */
+  .cfg-panel .option-grid, .cfg-panel .option-grid.cols-3{grid-template-columns:1fr; gap:1px; background:var(--line); border:1px solid var(--line);}
+  .cfg-panel .opt-card{
+    display:flex; align-items:center; gap:15px; border:none; background:var(--white);
+    padding:13px 44px 13px 15px; min-height:58px;
+  }
+  .cfg-panel .opt-card:hover{border:none; background:var(--bronze-pale);}
+  .cfg-panel .opt-card.selected{border:none; background:var(--bronze-pale);}
+  .cfg-panel .opt-card img{width:86px; height:56px; margin:0; flex:none; object-fit:cover;}
+  .cfg-panel .opt-card h4{font-size:1.05rem; margin-bottom:0;}
+  .cfg-panel .opt-card p{font-size:0.76rem; margin-top:2px;}
+  .cfg-panel .opt-card::after{
+    content:""; position:absolute; top:50%; right:16px; translate:0 -50%;
+    width:17px; height:17px; border:1px solid var(--line); border-radius:50%;
+    color:transparent; font-size:0; transition:background .2s, border-color .2s;
+  }
+  .cfg-panel .opt-card.selected::after{
+    content:"✓"; background:var(--ink); border-color:var(--ink); color:#fdfcf9;
+    font-size:0.6rem; display:grid; place-items:center; font-weight:600;
+  }
+
+  .accessori-grid{display:grid; grid-template-columns:1fr; gap:1px; background:var(--line); border:1px solid var(--line);}
+  .acc-item{display:flex; align-items:center; gap:12px; margin:0; background:var(--white); padding:11px 52px 11px 14px; cursor:pointer; transition:background .2s; position:relative; min-height:52px;
+    font-family:'Barlow'; font-size:0.86rem; font-weight:400; line-height:1.35; letter-spacing:0; text-transform:none; color:var(--ink);}
+  .acc-item:hover{background:var(--bronze-pale);}
+  .acc-item.selected{background:var(--bronze-pale);}
+  .acc-item input{flex:none; accent-color:var(--ink);}
+  /* ---- fototessere degli optional ---------------------------------------
+     Le immagini non sono nel markup: il nome del file si ricava dal nome
+     dell'optional (minuscolo, senza accenti, spazi in trattini) e il riquadro
+     compare SOLO se il file esiste davvero. Per aggiungerne uno basta
+     lasciarlo cadere in  Remake/Archivio/optionals/<slug>.webp  — nessuna
+     riga di HTML da toccare, e senza file non resta un buco grigio. */
+  .acc-thumb{flex:none; width:58px; height:40px; background-size:cover; background-position:center; background-color:var(--bg-2);}
+  .acc-item[data-spot]::after{content:"vedi"; position:absolute; right:14px; top:50%; translate:0 -50%; font-family:'JetBrains Mono'; font-size:.58rem; letter-spacing:.1em; text-transform:uppercase; color:var(--charcoal-dim); opacity:0; transition:opacity .2s;}
+  .acc-item[data-spot]:hover::after{opacity:1;}
+  .acc-item.is-looking{box-shadow:inset 3px 0 0 var(--ink);}   /* spuntato = fondo pieno, in visione = filetto: due stati distinti */
+  .acc-item .tag-new{font-family:'JetBrains Mono'; font-size:0.58rem; color:var(--bronze-deep); border:1px solid var(--line); padding:1px 5px; margin-left:6px; letter-spacing:0.03em; flex:none;}
+
+  /* ---- visore a 360 (motore invariato) --------------------------------- */
+  .tt-viewport{position:relative; overflow:hidden; background:#0d0d0d; cursor:grab; touch-action:pan-y;}
+  .tt-viewport.is-dragging{cursor:grabbing;}
+  .tt-plate{position:absolute; inset:0; transform-origin:center; transition:transform 1.05s cubic-bezier(.22,1,.36,1); will-change:transform;}
+  .tt-video, .tt-still{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; user-select:none; -webkit-user-drag:none;}
+  .tt-still{opacity:0; transition:opacity .35s ease;}
+  .tt-still.is-shown{opacity:1;}
+  .tt-markers{position:absolute; inset:0; pointer-events:none; transform-origin:center; transition:transform 1.05s cubic-bezier(.22,1,.36,1);}
+  .tt-marker{position:absolute; translate:-50% -50%; scale:calc(1 / var(--tt-s,1)); width:26px; height:26px; display:grid; place-items:center; opacity:0; transition:opacity .45s ease;}
+  .tt-marker.is-shown{opacity:1;}
+  .tt-dot{width:9px; height:9px; border-radius:999px; background:#fff; box-shadow:0 0 0 1.5px rgba(0,0,0,.45);}
+  .tt-ping{position:absolute; inset:0; border:1.5px solid rgba(255,255,255,.85); border-radius:999px; animation:tt-ping 2s cubic-bezier(.22,1,.36,1) infinite;}
+  @keyframes tt-ping{0%{transform:scale(.35); opacity:0;} 35%{opacity:1;} 100%{transform:scale(1); opacity:0;}}
+  .tt-loading{position:absolute; inset:auto 0 0 0; display:flex; align-items:center; gap:.8rem; padding:14px 18px; color:rgba(255,255,255,.75); font-family:'JetBrains Mono'; font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; transition:opacity .5s;}
+  .tt-loading.is-done{opacity:0; pointer-events:none;}
+  .tt-bar{flex:1; height:1.5px; background:rgba(255,255,255,.2); overflow:hidden;}
+  .tt-bar i{display:block; height:100%; width:0; background:#fff; transition:width .25s;}
+  .tt-cap{display:flex; align-items:baseline; justify-content:space-between; gap:14px; font-family:'JetBrains Mono'; font-size:.64rem; letter-spacing:.08em; text-transform:uppercase; color:var(--charcoal-dim);}
+  .tt-what{text-align:right;}
+  .tt-what.is-muted{text-transform:none; font-family:'Barlow'; letter-spacing:0; font-size:.76rem;}
+
+  /* ---- modulo e riepilogo ---------------------------------------------- */
+  .form-grid{display:grid; grid-template-columns:1fr; gap:20px;}
+  .form-grid .full{grid-column:1/-1;}
+  label{display:block; font-family:'JetBrains Mono'; font-size:0.66rem; text-transform:uppercase; letter-spacing:0.08em; color:#8a8a83; margin-bottom:7px;}
+  input[type=text], input[type=email], input[type=tel], textarea{
+    width:100%; border:none; border-bottom:1px solid var(--line); background:transparent; padding:8px 2px 10px;
+    font-family:'Barlow'; font-weight:300; font-size:1rem; color:var(--ink);
+  }
+  input:focus, textarea:focus{border-color:var(--ink); outline:none;}
+  textarea{resize:vertical; min-height:80px;}
+
+  .summary-box{background:var(--bg-2); border:1px solid var(--line); padding:22px 24px; margin-bottom:28px;}
+  .summary-box h4{font-family:'JetBrains Mono'; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--bronze-deep); margin-bottom:14px;}
+  .summary-row{display:flex; justify-content:space-between; gap:18px; font-size:0.86rem; padding:8px 0; border-bottom:1px solid var(--line); font-weight:300;}
+  .summary-row:last-child{border-bottom:none;}
+  .summary-row .k{color:#8a8a83; flex:none;}
+  .summary-row .v{font-weight:500; text-align:right;}
+
+  .confirm-icon{width:52px; height:52px; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; margin:0 auto 24px; border-radius:50%;}
+  .confirm-icon span{font-size:1.3rem; color:var(--bronze-deep);}
+  .confirm-title{text-align:center;}
+
+  /* ---- barra azioni ----------------------------------------------------- */
+  .cfg-foot{
+    display:flex; align-items:center; gap:22px; background:var(--white);
+    border-top:1px solid var(--line);
+    padding:15px 24px; padding-bottom:calc(15px + env(safe-area-inset-bottom));
+  }
+  .cfg-recap{display:flex; flex-wrap:wrap; gap:6px 22px; min-width:0; font-family:'JetBrains Mono'; font-size:0.61rem; letter-spacing:0.07em; text-transform:uppercase; color:#a5a49e;}
+  .cfg-recap b{font-weight:500; color:var(--ink);}
+  .cfg-actions{margin-left:auto; display:flex; align-items:center; gap:20px; flex:none;}
+  .btn-back{background:none; border:none; color:#8a8a83; font-family:'Barlow'; text-transform:uppercase; font-size:0.76rem; letter-spacing:0.06em;}
+  .btn-back:hover{color:var(--ink);}
+  .btn-next{
+    background:var(--ink); color:#fdfcf9; padding:15px 32px; border:1px solid var(--ink);
+    font-family:'Barlow'; font-weight:500; text-transform:uppercase; font-size:0.76rem; letter-spacing:0.08em;
+    transition:background .2s, color .2s;
+  }
+  .btn-next:hover{background:transparent; color:var(--ink);}
+  .btn-next:disabled{background:#d8d5c9; border-color:#d8d5c9; color:#a3a196; cursor:not-allowed;}
+  .btn-submit{background:var(--bronze); border-color:var(--bronze); color:#fdfcf9;}
+  .btn-submit:hover{background:transparent; color:var(--bronze-deep);}
+
+  /* ---- 3. telefono: stessa impalcatura, tagliata ------------------------ */
+  @media(max-width:900px){
+    .cfg-bar{height:56px; padding:0 14px; gap:14px;}
+    .cfg-mark{display:none;}
+    .cfg-exit{padding:8px 11px; font-size:0; gap:0; border-color:var(--line);}
+    .cfg-exit i{font-size:0.95rem;}
+    .ramp-top{display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:8px;}
+    .ramp-ticks{display:none;}
+
+    .cfg-main{grid-template-columns:1fr; grid-template-rows:auto minmax(0,1fr);}
+    .cfg-visual{height:40vh; height:40dvh; min-height:190px;}
+    .cfg-visual .tt-cap{padding:10px 16px; font-size:.58rem;}
+    .cfg-panel{border-left:none; border-top:1px solid var(--line); padding:22px 18px 34px;}
+    .cfg-panel .step h3{font-size:1.25rem;}
+    .cfg-panel .step .step-sub{margin-bottom:20px;}
+
+    .cfg-foot{padding:11px 14px; padding-bottom:calc(11px + env(safe-area-inset-bottom)); gap:12px;}
+    .cfg-recap{display:none;}
+    .cfg-actions{margin-left:0; width:100%; gap:12px;}
+    .btn-next{flex:1; padding:15px 18px;}
+    .btn-back{flex:none; padding:0 4px;}
+
+    /* La soglia si impila: due lastre una sopra l'altra, non due colonne da 3cm. */
+    .configurator{padding:100px 0 90px;}
+    .cfg-gate .opt-card{min-height:auto; padding:28px 22px;}
+    .cfg-gate .opt-card h4{font-size:1.35rem;}
+  }
+
+  /* CONTATTI / FOOTER */
+  .contact-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:60px; align-items:start;}
+  .contact-item{margin-bottom:26px; border-top:1px solid var(--line); padding-top:20px;}
+  .contact-item .mono{color:var(--bronze-deep); font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; display:block; margin-bottom:8px;}
+  .contact-item div.val{font-size:1.2rem; font-family:'Barlow Condensed'; font-weight:600; text-transform:uppercase; letter-spacing:0.02em;}
+  .map-box{border:1px solid var(--line); height:100%; min-height:260px; display:flex; align-items:center; justify-content:center; color:var(--charcoal-dim); font-family:'JetBrains Mono'; font-size:0.8rem; background:var(--bg-2);}
+
+  /* ===================== FOOTER ===========================================
+     Portato dal nostro remake in Astro: tre colonne (marchio, allestimenti,
+     contatti), poi il wordmark ufficiale a tutta larghezza, poi la riga
+     legale. Le etichette portano l'indice editoriale [ A ] / [ C ] come
+     nell'originale, scritto con ::before da data-index. */
+  .site-footer{border-top:1px solid var(--line); background:var(--bg);}
+  .foot-grid{display:grid; grid-template-columns:1.6fr 1fr 1fr; gap:40px; padding:80px 32px 90px;}
+  .foot-mark{display:flex; align-items:center; gap:12px; margin-bottom:16px;}
+  .foot-mark img{height:18px; width:auto;}
+  .foot-mark span{font-family:'Archivo Black'; font-size:1.1rem; letter-spacing:-0.01em; text-transform:uppercase;}
+  .foot-brand p{max-width:21rem; font-size:0.88rem; color:var(--charcoal-dim); font-weight:300;}
+
+  .foot-label{
+    display:inline-flex; align-items:center; gap:.6em; margin-bottom:20px;
+    font-family:'Barlow'; font-size:0.72rem; font-weight:600; letter-spacing:0.22em;
+    text-transform:uppercase; color:var(--charcoal-dim);
+  }
+  .foot-label::before{content:attr(data-index); color:var(--ink); font-variant-numeric:tabular-nums;}
+  .foot-list{list-style:none; display:grid; gap:10px; font-size:0.88rem; color:var(--charcoal-dim); font-weight:300;}
+  .foot-list a{transition:color .2s;}
+  .foot-list a:hover{color:var(--ink);}
+
+  /* Il wordmark e' decorativo (il nome e' gia' scritto sopra): sta fuori
+     dall'albero accessibile e non ha testo alternativo. */
+  .foot-wordmark{border-top:1px solid var(--line); padding:34px 0 38px;}
+  .foot-wordmark img{width:100%; height:auto; max-width:56rem; margin:0 auto;}
+
+  .foot-legal-bar{border-top:1px solid var(--line);}
+  .foot-legal{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:20px 32px; font-size:0.72rem; color:var(--charcoal-dim); letter-spacing:0.02em;
+  }
+  .foot-legal .foot-policies{display:flex; gap:20px;}
+  .foot-legal a{transition:color .2s;}
+  .foot-legal a:hover{color:var(--ink);}
+
+  @media(max-width:860px){
+    .foot-grid{grid-template-columns:1fr; gap:38px; padding:56px 32px 60px;}
+    .foot-wordmark{padding:26px 0 28px;}
+    .foot-legal{flex-direction:column; align-items:flex-start; gap:8px;}
+  }
+
+  @media(max-width:860px){
+    .navlinks{display:none;}
+    .navtoggle{display:block;}
+    .why-grid, .why-grid.cols-4, .process-grid{grid-template-columns:1fr;}
+    .model-grid{flex-direction:column;}
+    .why-card{margin-top:0; padding-top:26px; padding-bottom:26px;}
+    .option-grid, .option-grid.cols-3{grid-template-columns:1fr;}
+    .form-grid{grid-template-columns:1fr;}
+    .accessori-grid{grid-template-columns:1fr;}
+    .contact-grid{grid-template-columns:1fr;}
+    .spec-grid, .feature-list{grid-template-columns:1fr;}
+    .gallery{grid-template-columns:1fr;}
+    .gallery-main{height:300px;}
+    .gallery-col{grid-template-rows:1fr 1fr; height:300px;}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <nav class="wrap">
+    <a href="#home" class="logo-img"><img src="logo.png" alt="Startruck Italia"></a>
+    <div class="navlinks">
+      <a href="#home">Home</a>
+      <a href="#modelli">Modelli</a>
+      <a href="#lavori">Ultimi lavori</a>
+      <a href="#contatti">Contatti</a>
+    </div>
+    <a href="#configuratore" class="navcta">Configura preventivo</a>
+    <button class="navtoggle" aria-label="Menu">☰</button>
+  </nav>
+</header>
+
+<!-- ============ HOME ============ -->
+<div id="view-home">
+
+<section class="hero" id="home">
+  <video class="hero-video" autoplay muted loop playsinline poster="https://static.wixstatic.com/media/d56fb4_46c84cf020194791afba99d315b8882d~mv2.jpeg/v1/fill/w_1450,h_580,q_90,enc_avif,quality_auto/d56fb4_46c84cf020194791afba99d315b8882d~mv2.jpeg">
+    <source src="startruck-reel.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
+  <div class="wrap hero-inner">
+    <span class="eyebrow">Made in Italy — Allestimenti su misura</span>
+    <h1>Costruiti per correre.<br>Pensati per <em>durare</em>.</h1>
+    <p>Completamente in alluminio: leggeri, robusti e curati in ogni rifinitura.</p>
+    <div class="hero-ctas">
+      <a href="#configuratore" class="btn-primary">Richiedi un preventivo</a>
+      <a href="#modelli" class="btn-ghost">Scopri gli allestimenti</a>
+    </div>
+  </div>
+</section>
+
+<div class="ticker-band">
+  <div class="ticker-track">
+    <span>Bisarche su misura</span><span>Trasporto auto di lusso</span><span>Alluminio aeronautico</span><span>Discrezione</span><span>Made in Italy</span><span>Racing-grade</span><span>Collezioni private</span>
+    <span>Bisarche su misura</span><span>Trasporto auto di lusso</span><span>Alluminio aeronautico</span><span>Discrezione</span><span>Made in Italy</span><span>Racing-grade</span><span>Collezioni private</span>
+  </div>
+</div>
+
+<section class="section">
+  <div class="wrap">
+    <div class="manifesto">
+      <span class="sec-eyebrow">Il nostro perché</span>
+      <p><span class="ml ml-1">Il resto del settore tratta il trasporto come una <span class="m-dim">specifica</span></span> <span class="ml ml-2"><span class="m-dim">tecnica.</span> Noi lo trattiamo come ciò</span> <span class="ml ml-3">che è davvero: <span class="m-strong">la custodia di valore in movimento.</span></span></p>
+    </div>
+    <div class="why-grid cols-4">
+      <div class="why-card"><span class="num">01</span><h3>Su misura</h3><p>Ogni allestimento nasce attorno alle tue auto. Niente standard: solo la tua misura.</p></div>
+      <div class="why-card"><span class="num">02</span><h3>Artigianalità</h3><p>Mani italiane, alluminio aeronautico, finiture da atelier. Il dettaglio è la firma.</p></div>
+      <div class="why-card"><span class="num">03</span><h3>Discrezione</h3><p>Trasporta senza esporre. Riservatezza e sicurezza costruite nel mezzo, non aggiunte.</p></div>
+      <div class="why-card"><span class="num">04</span><h3>Affidabilità</h3><p>Provata sul campo, su migliaia di chilometri. Quando la consegna non ammette errori.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt route-clip" id="processo">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-eyebrow">Come lavoriamo</span>
+        <h2>Dal tuo garage alla<br>nostra officina, e ritorno.</h2>
+      </div>
+      <p class="sec-desc">Quattro fasi, un solo interlocutore. Dalla prima telefonata alla consegna sei sempre seguito — e lo restiamo anche dopo.</p>
+    </div>
+    <div class="route-wrap">
+    <svg class="route-src" viewBox="0 0 1098 477" aria-hidden="true" focusable="false">
+      <path id="routePath" fill="none" d="M0 6C212 6 240.5 58.02 265 109.5C289.5 160.98 265 342 265 342C265 385.98 320.2 478.3 447 469.5C605.5 458.5 552 357.5 541 342C541 342 514.5 292.98 510 226.98C505.5 160.98 541 109.5 541 109.5C559 71.3333 615.642 5.99997 700.5 6C879.5 6.00006 828 293.52 847 342C866 390.48 1004 525.48 1092 327.48" />
+    </svg>
+    <canvas class="route-canvas" aria-hidden="true"></canvas>
+    <div class="process-grid">
+      <div class="process-item"><span class="pnum">01</span><h3>Consulenza</h3><p>Ci racconti le tue auto, le tue rotte, le tue esigenze. Ascoltiamo prima di disegnare.</p></div>
+      <div class="process-item"><span class="pnum">02</span><h3>Progettazione</h3><p>Disegniamo l'allestimento su misura: layout, materiali, finiture, optional.</p></div>
+      <div class="process-item"><span class="pnum">03</span><h3>Costruzione</h3><p>Lo costruiamo a mano nella nostra officina di Pozzolo sul Mincio.</p></div>
+      <div class="process-item"><span class="pnum">04</span><h3>Consegna</h3><p>Te lo consegniamo pronto, collaudato, e restiamo al tuo fianco nel tempo.</p></div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="modelli">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-eyebrow">I nostri modelli</span>
+        <h2>Tre allestimenti.<br>Un solo standard.</h2>
+      </div>
+      <p class="sec-desc">Ogni modello nasce per un uso specifico: dalla pista al trasporto riservato, fino al recupero d'epoca.</p>
+    </div>
+  </div>
+  <div class="model-grid">
+      <article class="model-card">
+        <div class="model-img">
+          <span class="model-tag">Performance &amp; racing</span>
+          <video muted loop playsinline preload="auto" data-start="3.4" poster="poster-lemans.webp">
+            <source src="https://sampoai67.github.io/Startruck/video/lemans-hero.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="model-body">
+          <h3>Le Mans</h3>
+          <p>Progettato per offrire una struttura leggera, carico massimo e versatilità senza pari, pensato per chi non vuole rinunciare a nulla.</p>
+          <a href="#le-mans" class="model-link">Scopri Le Mans →</a>
+        </div>
+      </article>
+      <article class="model-card">
+        <div class="model-img">
+          <span class="model-tag">Trasporto confidenziale</span>
+          <video muted loop playsinline preload="auto" data-start="1.8" poster="poster-privacy.webp">
+            <source src="https://sampoai67.github.io/Startruck/video/privacy-hero.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="model-body">
+          <h3>Privacy</h3>
+          <p>Furgonato chiuso, nessuna vetrina. Quello che trasporti resta una cosa fra te e il destinatario.</p>
+          <a href="#privacy" class="model-link">Scopri Privacy →</a>
+        </div>
+      </article>
+      <article class="model-card">
+        <div class="model-img">
+          <span class="model-tag">Aspetto vintage</span>
+          <video muted loop playsinline preload="auto" data-start="3.4" poster="poster-typeh.webp">
+            <source src="https://sampoai67.github.io/Startruck/video/typeh-hero.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="model-body">
+          <h3>Type H</h3>
+          <p>La linea del Type H, la meccanica di oggi. Un mezzo che nessuno smette di guardare mentre lavora.</p>
+          <a href="#type-h" class="model-link">Scopri Type H →</a>
+        </div>
+      </article>
+  </div>
+</section>
+
+<section class="section alt" id="lavori">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-eyebrow">Dal cantiere alla strada</span>
+        <h2>Ultimi lavori</h2>
+      </div>
+    </div>
+    <div class="work-strip" id="workStrip">
+        <a class="work-cell"><img src="lavori/lavoro-01.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-02.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-03.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-04.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-05.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-06.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-07.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-08.webp" alt="" loading="lazy" decoding="async"></a>
+        <a class="work-cell"><img src="lavori/lavoro-09.webp" alt="" loading="lazy" decoding="async"></a>
+    </div>
+    <p class="work-more">
+      Per vederne altri, <a href="https://www.instagram.com/startruckitalia/" target="_blank" rel="noopener">@startruckitalia</a> su Instagram
+    </p>
+  </div>
+</section>
+
+<!-- CONFIGURATORE — SOGLIA
+     La categoria del veicolo e' l'unica scelta che si fa restando in pagina:
+     e' la porta. Il resto avviene nel palco a schermo pieno qui sotto. -->
+<section class="configurator" id="configuratore">
+  <div class="wrap">
+    <div class="cfg-head">
+      <span class="sec-eyebrow">Richiedi un preventivo</span>
+      <h2>Configura il tuo allestimento</h2>
+      <p>Si parte dalla categoria del mezzo. Da lì il configuratore prende tutto lo schermo: cinque passaggi, nessun account.</p>
+    </div>
+
+    <div class="cfg-gate" id="cfgGate">
+      <div class="step active" data-step="1">
+        <h3>Categoria del veicolo</h3>
+        <p class="step-sub">In base al peso complessivo cambia la patente necessaria per la guida.</p>
+        <div class="option-grid" id="grid-categoria">
+          <div class="opt-card" data-group="categoria" data-value="Patente B — fino a 3,5t">
+            <h4>Patente B</h4>
+            <p>Fino a 3,5 t di massa complessiva. Guidabile con patente auto standard.</p>
+          </div>
+          <div class="opt-card" data-group="categoria" data-value="Patente C — superiore a 3,5t">
+            <h4>Superiore a 3,5t</h4>
+            <p>Richiede patente C. Maggiore portata e più veicoli trasportabili.</p>
+          </div>
+        </div>
+      </div>
+      <p class="cfg-gate-note">Scegli una categoria per entrare nel configuratore</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONFIGURATORE — PALCO A SCHERMO PIENO
+     Si apre scegliendo la categoria e si chiude solo con "Esci dalla
+     configurazione" o inviando: lo scroll della pagina resta bloccato. -->
+<div class="cfg-stage" id="cfgStage" role="dialog" aria-modal="true" aria-label="Configuratore Startruck">
+
+  <header class="cfg-bar">
+    <span class="cfg-mark">Startruck</span>
+    <div class="ramp-gauge">
+      <div class="ramp-top">
+        <span class="step-label" id="stepLabel">Categoria veicolo</span>
+        <span class="mono" id="stepCounter">STEP 1 / 5</span>
+      </div>
+      <div class="ramp-ticks">
+        <span class="done" id="tick1">Categoria</span>
+        <span id="tick2">Autocarro</span>
+        <span id="tick3">Allestimento</span>
+        <span id="tick4">Accessori</span>
+        <span id="tick5">Contatti</span>
+      </div>
+      <div class="ramp-track"><div class="ramp-fill" id="rampFill" style="left:0%"></div></div>
+    </div>
+    <button class="cfg-exit" id="btnExit" type="button"><i>✕</i> Esci dalla configurazione</button>
+  </header>
+
+  <div class="cfg-main">
+
+    <!-- Il mezzo: un MP4 di 10 s che copre 360 gradi, ruotare = spostare
+         currentTime. Resta visibile per tutta la compilazione, non solo
+         al passo degli accessori. -->
+    <div class="cfg-visual">
+      <div class="tt" id="accViewer" data-duration="10">
+        <div class="tt-viewport" role="group" aria-label="Vista a 360 gradi dell'allestimento">
+          <div class="tt-plate">
+            <video class="tt-video" poster="https://sampoai67.github.io/Startruck/orbit/lemans/poster.webp"
+                   muted loop playsinline preload="none" aria-hidden="true"
+                   src="https://sampoai67.github.io/Startruck/orbit/lemans/orbit.mp4"></video>
+            <img class="tt-still" alt="" decoding="async">
+          </div>
+          <div class="tt-markers" aria-hidden="true"></div>
+          <div class="tt-loading"><span class="tt-bar"><i></i></span><span class="tt-pct">0%</span></div>
+        </div>
+        <div class="tt-cap">
+          <span>Trascina per ruotare</span>
+          <span class="tt-what" aria-live="polite">Vista completa</span>
+        </div>
+      </div>
+      <div class="cfg-alt" id="cfgAlt"><img alt="" decoding="async"><span></span></div>
+    </div>
+
+    <div class="cfg-panel" id="cfgPanel">
+
+      <div class="step" data-step="2">
+        <h3>Marca dell'autocarro</h3>
+        <p class="step-sub">Su quale telaio verrà realizzato l'allestimento?</p>
+        <div class="option-grid cols-3" id="grid-marca">
+          <div class="opt-card" data-group="marca" data-value="Fiat"><h4>Fiat</h4></div>
+          <div class="opt-card" data-group="marca" data-value="Mercedes"><h4>Mercedes</h4></div>
+          <div class="opt-card" data-group="marca" data-value="Ford"><h4>Ford</h4></div>
+          <div class="opt-card" data-group="marca" data-value="Iveco"><h4>Iveco</h4></div>
+          <div class="opt-card" data-group="marca" data-value="MAN"><h4>MAN</h4></div>
+          <div class="opt-card" data-group="marca" data-value="Citroën"><h4>Citroën</h4></div>
+        </div>
+        <div style="margin-top:22px;">
+          <label for="marcaAltro">Altro / non so ancora</label>
+          <input type="text" id="marcaAltro" placeholder="Indica il modello, oppure lascia vuoto">
+        </div>
+      </div>
+
+      <div class="step" data-step="3">
+        <h3>Modello di allestimento</h3>
+        <p class="step-sub">Scegli lo stile più adatto al tuo utilizzo.</p>
+        <div class="option-grid cols-3" id="grid-allestimento">
+          <div class="opt-card" data-group="allestimento" data-value="Le Mans">
+            <img src="https://static.wixstatic.com/media/d56fb4_b701ef5030114b05a9e77d921e1283da~mv2.jpg/v1/fill/w_980,h_735,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/lemans_urus.jpg" alt="Le Mans">
+            <div><h4>Le Mans</h4><p>Aperto, rapido, versatile.</p></div>
+          </div>
+          <div class="opt-card" data-group="allestimento" data-value="Privacy">
+            <img src="https://static.wixstatic.com/media/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg/v1/fill/w_1024,h_580,q_90,enc_avif,quality_auto/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg" alt="Privacy">
+            <div><h4>Privacy</h4><p>Chiuso, riservato, protetto.</p></div>
+          </div>
+          <div class="opt-card" data-group="allestimento" data-value="Type H">
+            <img src="https://static.wixstatic.com/media/d56fb4_272e847b30894699b412d3ce24f79a13~mv2.jpg/v1/crop/x_0,y_66,w_1600,h_920/fill/w_980,h_564,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/typeh_industrial.jpg" alt="Type H">
+            <div><h4>Type H</h4><p>Stile vintage industrial.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" data-step="4">
+        <h3>Accessori e optional</h3>
+        <p class="step-sub">Seleziona tutto ciò che ti serve: dove possiamo, ti mostriamo il pezzo sul mezzo. Puoi aggiungere altro nelle note al passo successivo.</p>
+        <div class="accessori-grid" id="grid-accessori">
+          <label class="acc-item" data-spot="verricello"><input type="checkbox" value="Verricello traslabile"> Verricello traslabile</label>
+          <label class="acc-item"><input type="checkbox" value="Balestra con soffioni ad aria posteriori"> Balestra con soffioni ad aria posteriori</label>
+          <label class="acc-item"><input type="checkbox" value="Solo soffioni posteriori ad aria"> Solo soffioni posteriori ad aria</label>
+          <label class="acc-item"><input type="checkbox" value="Rollbar alto dietro cabina"> Rollbar alto dietro cabina</label>
+          <label class="acc-item"><input type="checkbox" value="Lampeggiante soccorso"> Lampeggiante soccorso</label>
+          <label class="acc-item"><input type="checkbox" value="Carenatura laterale chiusa"> Carenatura laterale chiusa</label>
+          <label class="acc-item" data-spot="rampe"><input type="checkbox" value="Rampe di carico più larghe"> Rampe di carico più larghe</label>
+          <label class="acc-item" data-spot="rampe"><input type="checkbox" value="Rampe per supercar con cassetta dedicata"> Rampe per supercar con cassetta dedicata</label>
+          <label class="acc-item"><input type="checkbox" value="Porta ruote auto da corsa"> Porta ruote auto da corsa</label>
+          <label class="acc-item" data-spot="fari"><input type="checkbox" value="Faro di retromarcia aggiuntivo"> Faro di retromarcia aggiuntivo</label>
+          <label class="acc-item" data-spot="pianale"><input type="checkbox" value="LED sul pianale"> LED sul pianale</label>
+          <label class="acc-item"><input type="checkbox" value="Retrocamera per le manovre"> Retrocamera per le manovre</label>
+          <label class="acc-item"><input type="checkbox" value="Cassone portautensili"> Cassone portautensili <span class="tag-new">proposta</span></label>
+          <label class="acc-item" data-spot="cinghie"><input type="checkbox" value="Ancoraggi a cricchetto supplementari"> Ancoraggi a cricchetto supplementari <span class="tag-new">proposta</span></label>
+          <label class="acc-item"><input type="checkbox" value="Predisposizione GPS/localizzatore"> Predisposizione GPS/localizzatore <span class="tag-new">proposta</span></label>
+          <label class="acc-item" data-spot="full"><input type="checkbox" value="Verniciatura personalizzata / livrea"> Verniciatura personalizzata / livrea <span class="tag-new">proposta</span></label>
+        </div>
+      </div>
+
+      <div class="step" data-step="5">
+        <h3>I tuoi dati</h3>
+        <p class="step-sub">Ultimo passaggio: ti ricontattiamo per confermare i dettagli del preventivo.</p>
+        <div class="summary-box" id="summaryBox"></div>
+        <div class="form-grid">
+          <div><label for="nome">Nome e cognome *</label><input type="text" id="nome" required></div>
+          <div><label for="azienda">Azienda</label><input type="text" id="azienda"></div>
+          <div><label for="telefono">Telefono *</label><input type="tel" id="telefono" required></div>
+          <div><label for="email">Email *</label><input type="email" id="email" required></div>
+          <div class="full"><label for="note">Note aggiuntive</label><textarea id="note" placeholder="Altri accessori, tempistiche, quantità mezzi..."></textarea></div>
+        </div>
+      </div>
+
+      <div class="step" data-step="6">
+        <div class="confirm-icon"><span>—</span></div>
+        <h3 class="confirm-title">Configurazione pronta</h3>
+        <p class="step-sub" style="text-align:center;">Cliccando "Invia configurazione" si aprirà il tuo client email con tutti i dettagli già compilati, pronti per essere inviati a <strong>startruck@outlook.it</strong>.</p>
+        <div class="summary-box" id="summaryBox2"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="cfg-foot">
+    <div class="cfg-recap" id="cfgRecap"></div>
+    <div class="cfg-actions">
+      <button class="btn-back" id="btnBack" type="button" style="visibility:hidden;">← Indietro</button>
+      <button class="btn-next" id="btnNext" type="button" disabled>Continua →</button>
+    </div>
+  </footer>
+</div>
+
+<section class="section" id="contatti">
+  <div class="wrap contact-grid">
+    <div>
+      <span class="sec-eyebrow">Contatti</span>
+      <h2 style="margin-bottom:12px;">Vieni a trovarci</h2>
+      <div class="contact-item"><span class="mono">Sede</span><div class="val">Str. Boschi, 46045<br>Pozzolo sul Mincio, Mantova</div></div>
+      <div class="contact-item"><span class="mono">Email</span><div class="val">startruck@outlook.it</div></div>
+      <div class="contact-item"><span class="mono">Telefono</span><div class="val">+39 340 842 7538</div></div>
+    </div>
+    <div class="map-box">Mappa — Str. Boschi, Pozzolo sul Mincio (MN)</div>
+  </div>
+</section>
+
+</div>
+<!-- ============ /HOME ============ -->
+
+<!-- ============ LE MANS ============ -->
+<div id="view-le-mans" class="page-view" hidden>
+  <div class="wrap breadcrumb"><a href="#home">Home</a> / <a href="#modelli">Modelli</a> / <span>Le Mans</span></div>
+
+  <section class="model-hero">
+    <video class="hero-video" autoplay muted loop playsinline poster="https://static.wixstatic.com/media/d56fb4_b701ef5030114b05a9e77d921e1283da~mv2.jpg/v1/fill/w_1450,h_820,q_90,enc_avif,quality_auto/d56fb4_b701ef5030114b05a9e77d921e1283da~mv2.jpg">
+      <source src="https://sampoai67.github.io/Startruck/video/lemans-hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="wrap model-hero-inner">
+      <span class="model-tag-lg">Allestimento iconico</span>
+      <h1>Le Mans</h1>
+      <p>L'allestimento aperto più richiesto del nostro catalogo: rampe rapide, pianale in alluminio e massima visibilità del carico, per chi trasporta sportive ogni weekend.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-eyebrow">Caratteristiche tecniche</span>
+        <h2>Pensato per la velocità operativa</h2>
+        <p>Dati indicativi di riferimento — verranno confermati e personalizzati in base al telaio e alla configurazione scelta.</p>
+      </div>
+      <div class="spec-note">I valori seguenti sono orientativi: da confermare con il team tecnico Startruck prima della pubblicazione definitiva.</div>
+      <div class="spec-grid">
+        <div class="spec-item"><span class="k">Tipo pianale</span><span class="v">Alluminio aperto</span></div>
+        <div class="spec-item"><span class="k">Configurazione</span><span class="v">Rampe rapide</span></div>
+        <div class="spec-item"><span class="k">Compatibilità</span><span class="v">Patente B / C</span></div>
+        <div class="spec-item"><span class="k">Capacità indicativa</span><span class="v">1–2 vetture</span></div>
+        <div class="spec-item"><span class="k">Peso struttura</span><span class="v">Ottimizzato</span></div>
+        <div class="spec-item"><span class="k">Finitura</span><span class="v">Alluminio naturale / verniciato</span></div>
+      </div>
+      <div class="feature-list">
+        <div class="feature-item"><span class="dot"></span><p>Rampe di carico rapide, pensate per ridurre i tempi di carico e scarico anche in autonomia.</p></div>
+        <div class="feature-item"><span class="dot"></span><p>Pianale completamente in alluminio: struttura leggera, resistente e a bassa manutenzione.</p></div>
+        <div class="feature-item"><span class="dot"></span><p>Massima visibilità del carico durante il trasporto, ideale per showroom ed eventi.</p></div>
+        <div class="feature-item"><span class="dot"></span><p>Compatibile con la maggior parte degli accessori Startruck, dal verricello al rollbar.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-eyebrow">Galleria</span>
+        <h2>Le Mans su strada</h2>
+      </div>
+      <div class="gallery">
+        <div class="gallery-main"><img src="https://static.wixstatic.com/media/d56fb4_b701ef5030114b05a9e77d921e1283da~mv2.jpg/v1/fill/w_1450,h_1160,al_c,q_90,enc_avif,quality_auto/lemans_urus.jpg" alt="Le Mans su Lamborghini Urus"></div>
+        <div class="gallery-col">
+          <img src="https://static.wixstatic.com/media/d56fb4_46c84cf020194791afba99d315b8882d~mv2.jpeg/v1/fill/w_980,h_735,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Lambo.jpeg" alt="Le Mans su Lamborghini">
+          <img src="https://static.wixstatic.com/media/d56fb4_b701ef5030114b05a9e77d921e1283da~mv2.jpg/v1/fill/w_980,h_735,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/lemans_urus.jpg" alt="Dettaglio Le Mans">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap">
+      <h2>Configura il tuo Le Mans</h2>
+      <p>Scegli categoria, autocarro e accessori: la richiesta arriva direttamente al nostro team.</p>
+      <a href="#configuratore" class="btn-primary" onclick="prefillModel('Le Mans')">Vai al configuratore →</a>
+    </div>
+  </section>
+</div>
+<!-- ============ /LE MANS ============ -->
+
+<!-- ============ PRIVACY ============ -->
+<div id="view-privacy" class="page-view" hidden>
+  <div class="wrap breadcrumb"><a href="#home">Home</a> / <a href="#modelli">Modelli</a> / <span>Privacy</span></div>
+
+  <section class="model-hero">
+    <video class="hero-video" autoplay muted loop playsinline poster="https://static.wixstatic.com/media/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg/v1/fill/w_1450,h_820,q_90,enc_avif,quality_auto/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg">
+      <source src="https://sampoai67.github.io/Startruck/video/privacy-hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="wrap model-hero-inner">
+      <span class="model-tag-lg">Allestimento esclusivo</span>
+      <h1>Privacy</h1>
+      <p>Carrozzeria chiusa per trasporti riservati: la vettura viaggia protetta da sguardi e agenti atmosferici, senza rinunciare alla praticità di carico.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-eyebrow">Caratteristiche tecniche</span>
+        <h2>Riservatezza e protezione totale</h2>
+        <p>Dati indicativi di riferimento — verranno confermati e personalizzati in base al telaio e alla configurazione scelta.</p>
+      </div>
+      <div class="spec-note">I valori seguenti sono orientativi: da confermare con il team tecnico Startruck prima della pubblicazione definitiva.</div>
+      <div class="spec-grid">
+        <div class="spec-item"><span class="k">Tipo carrozzeria</span><span class="v">Chiusa integrale</span></div>
+        <div class="spec-item"><span class="k">Configurazione</span><span class="v">Carenatura laterale</span></div>
+        <div class="spec-item"><span class="k">Compatibilità</span><span class="v">Patente B / C</span></div>
+        <div class="spec-item"><span class="k">Capacità indicativa</span><span class="v">1–2 vetture</span></div>
+        <div class="spec-item"><span class="k">Protezione</span><span class="v">Sguardi e agenti atmosferici</span></div>
+        <div class="spec-item"><span class="k">Finitura</span><span class="v">Pannellatura su misura</span></div>
+      </div>
+      <div class="feature-list">
+        <div class="feature-item"><span class="dot"></span><p>Carrozzeria completamente chiusa: la vettura trasportata resta protetta da occhi indiscreti.</p></div>
+        <div class="feature-item"><span class="dot"></span><p>Protezione totale da pioggia, polvere e agenti atmosferici durante il trasporto.</p></div>
+        <div class="feature-item"><span class="dot"></span><p>Pensato per collezionisti, concessionarie e trasporti riservati di alto valore.</p></div>
+        <div class="feature-item"><span class="dot"></span><p>Compatibile con verricello, retrocamera e illuminazione LED interna su richiesta.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-eyebrow">Galleria</span>
+        <h2>Privacy su strada</h2>
+      </div>
+      <div class="gallery">
+        <div class="gallery-main"><img src="https://static.wixstatic.com/media/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg/v1/fill/w_1160,h_1160,al_c,q_90,enc_avif,quality_auto/privacy_mc20_JPG.jpg" alt="Privacy su Maserati MC20"></div>
+        <div class="gallery-col">
+          <img src="https://static.wixstatic.com/media/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg/v1/fill/w_980,h_735,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/privacy_mc20_JPG.jpg" alt="Dettaglio Privacy">
+          <img src="https://static.wixstatic.com/media/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg/v1/fill/w_980,h_735,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/privacy_mc20_JPG.jpg" alt="Privacy chiusa">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap">
+      <h2>Configura il tuo Privacy</h2>
+      <p>Scegli categoria, autocarro e accessori: la richiesta arriva direttamente al nostro team.</p>
+      <a href="#configuratore" class="btn-primary" onclick="prefillModel('Privacy')">Vai al configuratore →</a>
+    </div>
+  </section>
+</div>
+<!-- ============ /PRIVACY ============ -->
+
+<!-- ============ TYPE H ============ -->
+<div id="view-type-h" class="page-view" hidden>
+  <div class="wrap breadcrumb"><a href="#home">Home</a> / <a href="#modelli">Modelli</a> / <span>Type H</span></div>
+
+  <section class="model-hero">
+    <video class="hero-video" autoplay muted loop playsinline poster="https://static.wixstatic.com/media/d56fb4_272e847b30894699b412d3ce24f79a13~mv2.jpg/v1/crop/x_0,y_66,w_1600,h_920/fill/w_1450,h_820,al_c,q_90,enc_avif,quality_auto/typeh_industrial.jpg">
+      <source src="https://sampoai67.github.io/Startruck/video/typeh-hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="wrap model-hero-inner">
+      <span class="model-tag-lg">Allestimento vintage</span>
+      <h1>Type H</h1>
+      <p>Un allestimento unico nel suo genere, dallo stile industrial, pensato per chi recupera e trasporta auto d'epoca con carattere.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-eyebrow">Caratteristiche tecniche</span>
+        <h2>Carattere industriale, spirito d'epoca</h2>
+        <p>Dati indicativi di riferimento — verranno confermati e personalizzati in base al telaio e alla configurazione scelta.</p>
+      </div>
+      <div class="spec-note">I valori seguenti sono orientativi: da confermare con il team tecnico Startruck prima della pubblicazione definitiva.</div>
+      <div class="spec-grid">
+        <div class="spec-item"><span class="k">Stile</span><span class="v">Industrial / vintage</span></div>
+        <div class="spec-item"><span class="k">Configurazione</span><span class="v">Rollbar + pianale rinforzato</span></div>
+        <div class="spec-item"><span class="k">Compatibilità</span><span class="v">Patente B / C</span></div>
+        <div class="spec-item"><span class="k">Capacità indicativa</span><span class="v">1–2 vetture</span></div>
+        <div class="spec-item"><span class="k">Uso consigliato</span><span class="v">Auto d'epoca, recupero</span></div>
+        <div class="spec-item"><span class="k">Finitura</span><span class="v">Metallo a vista / verniciato</span></div>
+      </div>
+      <div class="feature-list">
+        <div class="feature-item"><span class="dot"></span><p>Struttura robusta pensata anche per il recupero e il trasporto di veicoli non perfettamente funzionanti.</p></div>
+        <div class="feature-item"><span class="dot"></span><p>Estetica industrial che valorizza il carattere del mezzo, ideale per club e appassionati.</p></div>
+        <div class="feature-item"><span class="dot"></span><p>Rampe e ancoraggi rinforzati, pensati per carichi delicati o non standard.</p></div>
+        <div class="feature-item"><span class="dot"></span><p>Compatibile con porta ruote da corsa, faro di retromarcia e cassone portautensili.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-eyebrow">Galleria</span>
+        <h2>Type H sul campo</h2>
+      </div>
+      <div class="gallery">
+        <div class="gallery-main"><img src="https://static.wixstatic.com/media/d56fb4_272e847b30894699b412d3ce24f79a13~mv2.jpg/v1/crop/x_0,y_66,w_1600,h_920/fill/w_1160,h_1160,al_c,q_90,enc_avif,quality_auto/typeh_industrial.jpg" alt="Type H industrial"></div>
+        <div class="gallery-col">
+          <img src="https://static.wixstatic.com/media/d56fb4_272e847b30894699b412d3ce24f79a13~mv2.jpg/v1/crop/x_0,y_66,w_1600,h_920/fill/w_980,h_564,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/typeh_industrial.jpg" alt="Dettaglio Type H">
+          <img src="https://static.wixstatic.com/media/d56fb4_272e847b30894699b412d3ce24f79a13~mv2.jpg/v1/crop/x_0,y_66,w_1600,h_920/fill/w_980,h_564,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/typeh_industrial.jpg" alt="Type H vintage">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap">
+      <h2>Configura il tuo Type H</h2>
+      <p>Scegli categoria, autocarro e accessori: la richiesta arriva direttamente al nostro team.</p>
+      <a href="#configuratore" class="btn-primary" onclick="prefillModel('Type H')">Vai al configuratore →</a>
+    </div>
+  </section>
+</div>
+<!-- ============ /TYPE H ============ -->
+
+<footer class="site-footer">
+  <div class="wrap foot-grid">
+    <div class="foot-brand">
+      <div class="foot-mark">
+        <img src="onlylogo.svg" alt="" width="46" height="18">
+        <span>Startruck</span>
+      </div>
+      <p>Allestimenti su misura per il trasporto di auto di lusso. Artigianalità italiana, Pozzolo sul Mincio (MN).</p>
+    </div>
+
+    <nav aria-label="Allestimenti">
+      <h2 class="foot-label" data-index="[ A ]">Allestimenti</h2>
+      <ul class="foot-list">
+        <li><a href="#le-mans">Le Mans</a></li>
+        <li><a href="#type-h">Type H</a></li>
+        <li><a href="#privacy">Privacy</a></li>
+        <li><a href="#processo">Processo</a></li>
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="foot-label" data-index="[ C ]">Contatti</h2>
+      <ul class="foot-list">
+        <li><a href="tel:+393408427538">+39 340 842 7538</a></li>
+        <li><a href="mailto:startruck@outlook.it">startruck@outlook.it</a></li>
+        <li>Str. Boschi, 46045<br>Pozzolo sul Mincio (MN)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="wrap" aria-hidden="true">
+    <div class="foot-wordmark">
+      <img src="wordmark-startruck.svg" alt="" width="2653" height="937" loading="lazy" decoding="async">
+    </div>
+  </div>
+
+  <div class="foot-legal-bar">
+    <div class="wrap foot-legal">
+      <span class="mono">© <span id="footYear">2026</span> Startruck Italia — P.IVA 02628680205 — Prototipo di progetto, non sito definitivo</span>
+      <div class="foot-policies mono">
+        <a href="https://sampoai67.github.io/Startruck/privacy-policy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="https://sampoai67.github.io/Startruck/cookie-policy/" target="_blank" rel="noopener">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ===== Configuratore ===== */
+  const steps = Array.from(document.querySelectorAll('.step'));
+  let current = 1;
+  const state = { categoria:null, marca:null, marcaAltro:'', allestimento:null, accessori:[], nome:'', azienda:'', telefono:'', email:'', note:'' };
+
+  const stepCounter = document.getElementById('stepCounter');
+  const stepLabel = document.getElementById('stepLabel');
+  const rampFill = document.getElementById('rampFill');
+  const btnNext = document.getElementById('btnNext');
+  const btnBack = document.getElementById('btnBack');
+  const labels = {1:'Categoria veicolo',2:'Autocarro base',3:'Allestimento',4:'Accessori',5:'I tuoi dati',6:'Riepilogo'};
+
+  function selectCard(group, value, el){
+    document.querySelectorAll(`.opt-card[data-group="${group}"]`).forEach(c=>c.classList.remove('selected'));
+    el.classList.add('selected');
+    state[group] = value;
+    validateStep();
+    refresh();
+    // La categoria e' la soglia: sceglierla dalla pagina fa entrare nel palco.
+    // Scegliendola di nuovo da dentro (passo 1) non si salta avanti da soli.
+    if(group === 'categoria' && !CFG.isOpen()){
+      CFG.enter();
+      current = 2;
+      showStep(2);
+    }
+  }
+
+  document.querySelectorAll('.opt-card').forEach(card=>{
+    card.addEventListener('click', ()=> selectCard(card.dataset.group, card.dataset.value, card));
+    card.setAttribute('tabindex','0');
+    card.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); card.click(); } });
+  });
+
+  document.getElementById('marcaAltro').addEventListener('input', e=>{ state.marcaAltro = e.target.value; validateStep(); refresh(); });
+
+  document.querySelectorAll('#grid-accessori .acc-item input').forEach(chk=>{
+    chk.addEventListener('change', ()=>{
+      chk.closest('.acc-item').classList.toggle('selected', chk.checked);
+      state.accessori = Array.from(document.querySelectorAll('#grid-accessori input:checked')).map(i=>i.value);
+      refresh();
+    });
+  });
+
+  ['nome','azienda','telefono','email','note'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', e=>{ state[id]=e.target.value; validateStep(); });
+  });
+
+  // Ridisegna cio' che dipende dallo stato ma non dal passo (riepilogo in
+  // barra, mezzo mostrato). Il corpo vero e' in coda allo script.
+  function refresh(){}
+
+  function validateStep(){
+    let ok = true;
+    if(current===1) ok = !!state.categoria;
+    if(current===2) ok = !!state.marca || state.marcaAltro.trim().length>0;
+    if(current===3) ok = !!state.allestimento;
+    if(current===4) ok = true;
+    if(current===5) ok = state.nome.trim() && state.telefono.trim() && state.email.trim();
+    btnNext.disabled = !ok;
+  }
+
+  function buildSummary(){
+    const marcaFinale = state.marcaAltro.trim() ? state.marcaAltro.trim() : (state.marca || '—');
+    // marcaFinale e' testo scritto da chi compila: ripulito prima di finire in HTML
+    const html = `
+      <h4>Riepilogo configurazione</h4>
+      <div class="summary-row"><span class="k">Categoria</span><span class="v">${esc(state.categoria || '—')}</span></div>
+      <div class="summary-row"><span class="k">Autocarro</span><span class="v">${esc(marcaFinale)}</span></div>
+      <div class="summary-row"><span class="k">Allestimento</span><span class="v">${esc(state.allestimento || '—')}</span></div>
+      <div class="summary-row"><span class="k">Accessori</span><span class="v">${state.accessori.length ? esc(state.accessori.join(', ')) : 'Nessuno selezionato'}</span></div>
+    `;
+    ['summaryBox','summaryBox2'].forEach(function(id){
+      const box = document.getElementById(id);
+      if(box) box.innerHTML = html;
+    });
+  }
+
+  function showStep(n){
+    steps.forEach(s=> s.classList.toggle('active', Number(s.dataset.step)===n));
+    if(n<=5){
+      stepCounter.textContent = `STEP ${n} / 5`;
+      stepLabel.textContent = labels[n];
+      rampFill.style.left = ((n-1)/4*100)+'%';
+      for(let i=1;i<=5;i++){
+        document.getElementById('tick'+i).classList.toggle('done', i<=n);
+      }
+    }
+    if(n>=5) buildSummary();
+    btnBack.style.visibility = (n===1) ? 'hidden' : 'visible';
+    btnNext.textContent = n===5 ? 'Vai al riepilogo →' : (n===6 ? 'Invia configurazione' : 'Continua →');
+    btnNext.classList.toggle('btn-submit', n>=5);
+    // Al riepilogo la scala resta in barra, tutta percorsa: toglierla farebbe
+    // saltare il pulsante di uscita dall'altra parte dello schermo.
+    if(n===6){
+      rampFill.style.left = '100%';
+      for(let i=1;i<=5;i++) document.getElementById('tick'+i).classList.add('done');
+      btnBack.textContent = '← Modifica dati';
+    } else if(n===5){
+      btnBack.textContent = '← Indietro';
+    }
+    validateStep();
+    if(n===6) btnNext.disabled = false;
+  }
+
+  btnNext.addEventListener('click', ()=>{
+    if(current===5){ current = 6; showStep(6); return; }
+    if(current===6){ sendMail(); setTimeout(CFG.leave, 400); return; }
+    current++;
+    showStep(current);
+  });
+
+  btnBack.addEventListener('click', ()=>{
+    if(current>1){ current--; showStep(current); }
+  });
+
+  function sendMail(){
+    const marcaFinale = state.marcaAltro.trim() ? state.marcaAltro.trim() : (state.marca || '—');
+    const subject = `Richiesta preventivo — ${state.allestimento || 'Allestimento'} su ${marcaFinale}`;
+    const body = [
+      `Nome: ${state.nome}`,
+      `Azienda: ${state.azienda || '-'}`,
+      `Telefono: ${state.telefono}`,
+      `Email: ${state.email}`,
+      ``,
+      `Categoria: ${state.categoria}`,
+      `Autocarro: ${marcaFinale}`,
+      `Allestimento: ${state.allestimento}`,
+      `Accessori: ${state.accessori.length ? state.accessori.join(', ') : 'Nessuno'}`,
+      ``,
+      `Note: ${state.note || '-'}`
+    ].join('\n');
+    window.location.href = `mailto:startruck@outlook.it?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  }
+
+  showStep(1);
+
+  function prefillModel(modello){
+    const card = document.querySelector(`.opt-card[data-group="allestimento"][data-value="${modello}"]`);
+    if(card){ selectCard('allestimento', modello, card); }
+  }
+
+  /* ===== Router a pagina singola ===== */
+  const viewHome = document.getElementById('view-home');
+  const pageViews = {
+    'le-mans': document.getElementById('view-le-mans'),
+    'privacy': document.getElementById('view-privacy'),
+    'type-h': document.getElementById('view-type-h')
+  };
+
+  function route(){
+    const hash = window.location.hash.replace('#','');
+    if(pageViews[hash]){
+      viewHome.hidden = true;
+      Object.values(pageViews).forEach(v => v.hidden = true);
+      pageViews[hash].hidden = false;
+      window.scrollTo({top:0});
+    } else {
+      viewHome.hidden = false;
+      Object.values(pageViews).forEach(v => v.hidden = true);
+      if(hash && document.getElementById(hash)){
+        setTimeout(()=> document.getElementById(hash).scrollIntoView({behavior:'smooth'}), 30);
+      } else {
+        window.scrollTo({top:0});
+      }
+    }
+  }
+
+  window.addEventListener('hashchange', route);
+  /* Le card modello: il video parte quando il puntatore entra e torna al poster
+     quando esce. play() puo' essere rifiutato (dati non pronti, risparmio
+     energetico): in quel caso resta il poster, non un buco nero. */
+  document.querySelectorAll('.model-grid .model-card').forEach(function (card) {
+    var v = card.querySelector('video');
+    if (!v) return;
+    var start = parseFloat(v.dataset.start || '0');
+    var play = function () {
+      // parti dal fotogramma del poster: senza questo il video stacca
+      // sull'apertura al buio della ripresa e sembra uno sfarfallio.
+      if (start && Math.abs(v.currentTime - start) > 0.05 && v.currentTime < start) {
+        try { v.currentTime = start; } catch (e) {}
+      }
+      var p = v.play(); if (p) p.catch(function () {});
+    };
+    var stop = function () { v.pause(); try { v.currentTime = start; } catch (e) {} };
+    card.addEventListener('pointerenter', function (e) { if (e.pointerType !== 'touch') play(); });
+    card.addEventListener('pointerleave', function (e) { if (e.pointerType !== 'touch') stop(); });
+    card.addEventListener('focusin', play);
+    card.addEventListener('focusout', stop);
+  });
+
+  /* ===== Visore accessori ================================================
+     Portato dal prototipo /test-configuratore del sito Astro. Il mezzo e' un
+     video da 10 s che copre 360 gradi: ruotare = spostare currentTime.
+     I punti sono ancorati ad ANGOLI, non a numeri di fotogramma, cosi' un
+     re-encode del video non obbliga a ritarare tutto da capo. */
+  var TT = (function () {
+    var HOT = {
+      pianale:    { titolo: 'Pianale in alluminio',    angle: 150, x: 0.34,  y: 0.60,  zoom: 2.0 },
+      rampe:      { titolo: 'Rampe, sotto il pianale', angle: 201, x: 0.565, y: 0.638, zoom: 3.0 },
+      verricello: { titolo: 'Verricello, lato guida',  angle: 291, x: 0.385, y: 0.51,  zoom: 3.2 },
+      fari:       { titolo: 'Fari sulla paratia',      angle: 201, x: 0.524, y: 0.466, zoom: 3.2 },
+      cinghie:    { titolo: 'Ancoraggi sul pianale',   angle: 201, x: 0.58,  y: 0.527, zoom: 4.0 },
+      full:       { titolo: 'Vista completa',          angle: 150, x: 0.5,   y: 0.5,   zoom: 1 }
+    };
+    var HI = { '150': 1, '201': 1, '291': 1 };
+    var HI_BASE = 'https://sampoai67.github.io/Startruck/orbit/lemans/hi/';
+
+    var root, viewport, plate, video, still, markerLayer, loading, bar, pct, what;
+    var duration = 10, ready = false, booted = false, anim = null, active = null;
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var drag = false, startX = 0, startT = 0;
+
+    function mod(a, n) { return ((a % n) + n) % n; }
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+    function timeOf(deg) { return (mod(deg, 360) / 360) * duration; }
+
+    /* --- ricerca: una sola in volo -------------------------------------
+       Assegnare currentTime a ogni pointermove intasa il decoder (su iOS in
+       particolare). Si tiene solo l'ultima posizione voluta e si ricerca di
+       nuovo appena la precedente e' finita. */
+    var wanted = null, seeking = false;
+    function flushSeek() {
+      if (seeking || wanted === null) return;
+      var t = wanted; wanted = null; seeking = true;
+      try { video.currentTime = t; } catch (e) { seeking = false; }
+    }
+    function seekTo(t) { wanted = mod(t, duration); flushSeek(); }
+
+    function startSpin() { if (!reduce) { var pl = video.play(); if (pl) pl.catch(function () {}); } }
+    function stopSpin() { video.pause(); }
+
+    function rotateTo(deg, then) {
+      if (anim) cancelAnimationFrame(anim);
+      stopSpin();
+      var from = video.currentTime, target = timeOf(deg), delta = target - from;
+      if (delta > duration / 2) delta -= duration;          // sempre per la via piu' corta
+      if (delta < -duration / 2) delta += duration;
+      if (reduce) { seekTo(target); if (then) then(); return; }
+      var dur = Math.min(280 + Math.abs(delta / duration) * 360 * 5.2, 1500);
+      var t0 = performance.now();
+      var step = function (now) {
+        var pr = Math.min((now - t0) / dur, 1);
+        seekTo(from + delta * easeOutCubic(pr));
+        if (pr < 1) anim = requestAnimationFrame(step);
+        else { anim = null; seekTo(target); if (then) then(); }
+      };
+      anim = requestAnimationFrame(step);
+    }
+
+    function zoomTo(h, id) {
+      var sc = h.zoom || 2.4;
+      if (sc === 1) { clearZoom(); return; }
+      var t = 'scale(' + sc + ') translate(' + ((0.5 - h.x) * 100).toFixed(2) + '%,' + ((0.5 - h.y) * 100).toFixed(2) + '%)';
+      plate.style.transform = t;
+      markerLayer.style.transform = t;
+      root.style.setProperty('--tt-s', String(sc));
+      Array.prototype.forEach.call(markerLayer.children, function (m) {
+        m.classList.toggle('is-shown', m.getAttribute('data-for') === id);
+      });
+      // il video e' a 1280 px: a 4x non regge, si sovrappone il fermo-immagine
+      // grande, ma solo quando e' arrivato, per non far lampeggiare il riquadro.
+      if (HI[String(h.angle)]) {
+        var url = HI_BASE + h.angle + '.webp', pre = new Image();
+        pre.onload = function () { if (active !== id) return; still.src = url; still.classList.add('is-shown'); };
+        pre.src = url;
+      }
+    }
+
+    function clearZoom(instant) {
+      if (instant) { plate.style.transition = 'none'; markerLayer.style.transition = 'none'; still.style.transition = 'none'; }
+      plate.style.transform = '';
+      markerLayer.style.transform = '';
+      root.style.setProperty('--tt-s', '1');
+      still.classList.remove('is-shown');
+      Array.prototype.forEach.call(markerLayer.children, function (m) { m.classList.remove('is-shown'); });
+      if (instant) { void plate.offsetWidth; plate.style.transition = ''; markerLayer.style.transition = ''; still.style.transition = ''; }
+    }
+
+    function say(text, muted) {
+      if (!what) return;
+      what.textContent = text;
+      what.classList.toggle('is-muted', !!muted);
+    }
+
+    function look(id, label) {
+      var h = HOT[id];
+      if (!h) return;
+      if (!booted) boot();
+      active = id;
+      if (!ready) { say(label || h.titolo); return; }
+      say(label || h.titolo, !!label);
+      clearZoom();
+      rotateTo(h.angle, function () { zoomTo(h, id); });
+    }
+
+    function boot() {
+      if (booted) return;
+      booted = true;
+      root = document.getElementById('accViewer');
+      if (!root) return;
+      viewport = root.querySelector('.tt-viewport');
+      plate = root.querySelector('.tt-plate');
+      video = root.querySelector('.tt-video');
+      still = root.querySelector('.tt-still');
+      markerLayer = root.querySelector('.tt-markers');
+      loading = root.querySelector('.tt-loading');
+      bar = root.querySelector('.tt-bar i');
+      pct = root.querySelector('.tt-pct');
+      what = root.querySelector('.tt-what');
+      duration = Number(root.getAttribute('data-duration') || 10);
+
+      Object.keys(HOT).forEach(function (id) {
+        if (id === 'full') return;
+        var m = document.createElement('span');
+        m.className = 'tt-marker';
+        m.setAttribute('data-for', id);
+        m.style.left = (HOT[id].x * 100).toFixed(2) + '%';
+        m.style.top = (HOT[id].y * 100).toFixed(2) + '%';
+        m.innerHTML = '<span class="tt-ping"></span><span class="tt-dot"></span>';
+        markerLayer.appendChild(m);
+      });
+
+      video.addEventListener('seeked', function () { seeking = false; flushSeek(); });
+
+      viewport.addEventListener('pointerdown', function (e) {
+        if (!ready) return;
+        drag = true; startX = e.clientX; startT = video.currentTime;
+        stopSpin();
+        if (anim) { cancelAnimationFrame(anim); anim = null; }   // il dito ha priorita'
+        if (active) { clearZoom(true); active = null; say('Vista completa'); }
+        viewport.setPointerCapture(e.pointerId);
+        viewport.classList.add('is-dragging');
+      });
+      viewport.addEventListener('pointermove', function (e) {
+        if (!drag) return;
+        seekTo(startT - ((e.clientX - startX) / viewport.clientWidth) * duration);
+      });
+      var endDrag = function (e) {
+        if (!drag) return;
+        drag = false;
+        viewport.classList.remove('is-dragging');
+        if (viewport.releasePointerCapture) viewport.releasePointerCapture(e.pointerId);
+      };
+      viewport.addEventListener('pointerup', endDrag);
+      viewport.addEventListener('pointercancel', endDrag);
+
+      var setProgress = function (pr) { bar.style.width = Math.round(pr * 100) + '%'; pct.textContent = Math.round(pr * 100) + '%'; };
+      video.addEventListener('progress', function () {
+        if (!video.duration) return;
+        var end = video.buffered.length ? video.buffered.end(video.buffered.length - 1) : 0;
+        setProgress(Math.min(end / video.duration, 1));
+      });
+      var go = function () {
+        if (ready) return;
+        ready = true; setProgress(1);
+        loading.classList.add('is-done');
+        if (active && active !== 'full') look(active); else startSpin();
+      };
+      video.addEventListener('canplaythrough', go);
+      // su alcuni browser canplaythrough non arriva mai se il video e' in cache
+      video.addEventListener('loadeddata', function () { setTimeout(go, 400); });
+
+      video.preload = 'auto';
+      video.load();
+    }
+
+    return { boot: boot, look: look, has: function (id) { return !!HOT[id]; } };
+  })();
+
+  /* Spuntare un accessorio muove il mezzo: chi configura vede DOVE finisce il
+     pezzo che ha appena scelto. Gli optional senza un bersaglio reale nel
+     girato non fingono una posizione, lo dicono. */
+  document.querySelectorAll('#grid-accessori .acc-item').forEach(function (item) {
+    item.addEventListener('click', function () {
+      document.querySelectorAll('#grid-accessori .acc-item').forEach(function (o) { o.classList.remove('is-looking'); });
+      item.classList.add('is-looking');
+      var spot = item.getAttribute('data-spot');
+      if (spot && TT.has(spot)) {
+        TT.look(spot);
+      } else {
+        var name = item.textContent.replace('proposta', '').trim();
+        TT.look('full', name + ' \u2014 non visibile su questo mezzo');
+      }
+    });
+  });
+
+
+
+  /* ===== Ultimi lavori ====================================================
+     La griglia e' gia' nel documento: se il JSON non arriva (file aperto in
+     locale, rete assente, scraper a vuoto) resta quella, non un buco. Quando
+     invece arriva, la sostituisce con i post piu' recenti.
+     Il conteggio viene troncato a multiplo di 3: una riga incompleta
+     spezzerebbe l'ultima coppia. */
+  (function () {
+    var strip = document.getElementById('workStrip');
+    if (!strip || !window.fetch) return;
+    fetch('lavori.json', { cache: 'no-cache' })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (data) {
+        var posts = (data && data.posts) || [];
+        posts = posts.slice(0, Math.floor(posts.length / 3) * 3);
+        if (!posts.length) return;
+        strip.innerHTML = posts.map(function (q) {
+          var tag = q.permalink ? 'a href="' + q.permalink + '" target="_blank" rel="noopener"' : 'a';
+          var cap = q.caption ? '<span class="work-cap">' + q.caption.replace(/[<>]/g, '') + '</span>' : '';
+          return '<' + tag + ' class="work-cell">'
+               + '<img src="' + q.img + '" alt="' + (q.caption || '').replace(/"/g, '') + '" loading="lazy" decoding="async">'
+               + cap + '</a>';
+        }).join('');
+      })
+      .catch(function () { /* resta la griglia statica */ });
+  })();
+
+  /* ===== Percorso a traccia di pneumatico ================================
+     La striscia di battistrada e' un disegno DRITTO. Per farla curvare si
+     taglia a fettine lungo il percorso: ogni fettina viene ruotata della
+     tangente in quel punto, quindi i tasselli restano perpendicolari alla
+     direzione di marcia invece di essere schiacciati da uno stiramento.
+     Niente tassello singolo ripetuto: il battistrada e' irregolare di
+     proposito, si srotola tutto e si ricomincia solo a fine striscia. */
+  (function () {
+    var wrap = document.querySelector('.route-wrap');
+    if (!wrap) return;
+    var cv = wrap.querySelector('.route-canvas');
+    var grid = wrap.querySelector('.process-grid');
+    var ctx = cv.getContext('2d');
+
+    var VB_W = 1098, VB_H = 477;   // riquadro del tracciato disegnato in Figma
+    var STROKE = 47;               // larghezza di una gomma vera, non di un filo
+    var PITCH = 2;                 // battistrada allungato 2x nel senso di marcia
+    var OVER = 150;                // quanto il canvas deborda ai lati della griglia
+    var STEP = 2;     // lunghezza della fettina, in pixel di destinazione
+
+    var img = new Image();
+    var ready = false;
+    img.onload = function () { ready = true; draw(); };
+    img.src = 'tread.png';
+
+    function draw() {
+      var path = document.getElementById('routePath');
+      if (!ready || !path || matchMedia('(max-width:860px)').matches) return;
+      var w = wrap.clientWidth, gh = grid.offsetHeight;
+      if (!w || !gh) return;
+
+      /* Il tracciato disegnato copre la RIGA di schede e non si tocca: e' la
+         parte che incrocia le quattro fasi. A sinistra e a destra viene
+         PROLUNGATO fino ai bordi dello schermo con due tratti calcolati qui.
+         Le giunzioni sono a tangente continua (il tracciato parte e finisce
+         con una pendenza nota), altrimenti si vedrebbe lo spigolo. */
+      var k = w / VB_W;
+      var routeH = VB_H * k;
+      var THICK = STROKE * k;
+
+      var wrapRect = wrap.getBoundingClientRect();
+      var leftPx = Math.max(0, wrapRect.left) + 60;              // fin oltre il bordo
+      var rightPx = Math.max(0, window.innerWidth - wrapRect.right) + 60;
+      var extL = leftPx / k, extR = rightPx / k;                 // in unita' del tracciato
+
+      /* --- prolungamento sinistro ---------------------------------------
+         Il tracciato attacca a (0,6) in orizzontale: basta un'onda intera che
+         arrivi piatta su quel punto. */
+      var ampL = Math.min(120, extL * 0.55);
+      var ptsL = [];
+      var stepsL = Math.max(2, Math.round(extL / (STEP / k)));
+      for (var i = 0; i < stepsL; i++) {
+        var t1 = i / stepsL;                                     // 0 = bordo schermo
+        ptsL.push({ x: -extL + extL * t1, y: 6 + ampL * (1 - Math.cos(2 * Math.PI * t1)) / 2 });
+      }
+
+      /* --- prolungamento destro -----------------------------------------
+         Qui il tracciato finisce in salita ripida (pendenza -198/88): prima un
+         tratto corto che raddrizza la curva, poi un'onda come le altre. */
+      var END_X = 1092, END_Y = 327.48, SLOPE = -198 / 88;
+      var turn = Math.min(110, extR * 0.42);
+      var crest = END_Y - Math.min(130, turn * 1.25);
+      var ptsR = [];
+      var stepsT = Math.max(2, Math.round(turn / (STEP / k)));
+      for (var j = 1; j <= stepsT; j++) {
+        var u = j / stepsT, u2 = u * u, u3 = u2 * u;
+        // Hermite: posizione e pendenza iniziali del tracciato, arrivo in piano
+        var h00 = 2 * u3 - 3 * u2 + 1, h10 = u3 - 2 * u2 + u, h01 = -2 * u3 + 3 * u2;
+        ptsR.push({ x: END_X + turn * u, y: h00 * END_Y + h10 * (SLOPE * turn) + h01 * crest });
+      }
+      var rest = Math.max(0, extR - turn);
+      var ampR = Math.min(150, rest * 0.5);
+      var stepsR = Math.max(2, Math.round(rest / (STEP / k)));
+      for (var m = 1; m <= stepsR; m++) {
+        var t2 = m / stepsR;
+        ptsR.push({ x: END_X + turn + rest * t2, y: crest + ampR * (1 - Math.cos(2 * Math.PI * t2)) / 2 });
+      }
+
+      /* --- il tracciato disegnato, campionato a lunghezza d'arco --------- */
+      var total = path.getTotalLength();
+      var pathStep = STEP / k;
+      var ptsM = [];
+      for (var l = 0; l <= total; l += pathStep) {
+        var q = path.getPointAtLength(l);
+        ptsM.push({ x: q.x, y: q.y });
+      }
+      var pts = ptsL.concat(ptsM, ptsR);
+
+      /* La verticale e' ancorata alle SCHEDE, non all'ingombro totale: cosi'
+         i prolungamenti non spostano di un pixel la parte che le incrocia. */
+      var yMin = 1e9, yMax = -1e9;
+      for (var n = 0; n < pts.length; n++) { if (pts[n].y < yMin) yMin = pts[n].y; if (pts[n].y > yMax) yMax = pts[n].y; }
+      var half = VB_H / 2;
+      var needTop = (half - yMin) * k + THICK / 2 - gh / 2;
+      var needBot = (yMax - half) * k + THICK / 2 - gh / 2;
+      var PAD = Math.max(40, needTop, needBot) + 2;
+      var h = gh + PAD * 2;
+      var cardMid = PAD + gh / 2;
+
+      // il canvas copre tutta la larghezza della finestra: la sezione taglia
+      var CW = window.innerWidth;
+      cv.style.left = (-wrapRect.left) + 'px';
+      cv.style.top = (-PAD) + 'px';
+      cv.style.width = CW + 'px';
+      cv.style.height = h + 'px';
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = Math.round(CW * dpr);
+      cv.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, CW, h);
+      ctx.translate(wrapRect.left, 0);   // x=0 del tracciato = bordo sinistro della griglia
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.globalAlpha = 0.92;
+
+      var SW = img.naturalWidth, SH = img.naturalHeight;
+      var scale = (THICK / SH) * PITCH;
+      var srcX = 0;
+      var map = function (q) { return { x: q.x * k, y: (q.y - half) * k + cardMid }; };
+
+      var prev = map(pts[0]);
+      for (var z = 1; z < pts.length; z++) {
+        var cur = map(pts[z]);
+        var dx = cur.x - prev.x, dy = cur.y - prev.y;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d > 0.01) {
+          var ang = Math.atan2(dy, dx);
+          var srcW = d / scale;
+
+          ctx.save();
+          ctx.translate(prev.x, prev.y);
+          ctx.rotate(ang);
+          if (srcX + srcW <= SW) {
+            ctx.drawImage(img, srcX, 0, srcW, SH, 0, -THICK / 2, d + 0.6, THICK);
+          } else {
+            // la striscia e' finita a meta' fettina: si chiude e si riparte da capo
+            var first = SW - srcX, r = first / srcW;
+            ctx.drawImage(img, srcX, 0, first, SH, 0, -THICK / 2, d * r + 0.6, THICK);
+            ctx.drawImage(img, 0, 0, srcW - first, SH, d * r, -THICK / 2, d * (1 - r) + 0.6, THICK);
+          }
+          ctx.restore();
+          srcX = (srcX + srcW) % SW;
+        }
+        prev = cur;
+      }
+    }
+
+    var t = null;
+    function redraw() { clearTimeout(t); t = setTimeout(draw, 120); }
+    addEventListener('resize', redraw);
+    if (window.ResizeObserver) new ResizeObserver(redraw).observe(grid);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+    draw();
+  })();
+
+  /* La barra segue la direzione dello scorrimento e cambia veste passato
+     l'hero. La soglia si rilegge a ogni giro perche' le pagine modello
+     hanno un hero di altezza diversa dalla home. */
+  (function () {
+    var lastY = window.scrollY, ticking = false;
+    function heroDepth() {
+      var el = document.querySelector('#view-home:not([hidden]) .hero, .page-view:not([hidden]) .model-hero');
+      return el ? el.getBoundingClientRect().height - 85 : 0;
+    }
+    function update() {
+      var y = Math.max(window.scrollY, 0), past = y > heroDepth();
+      document.body.classList.toggle('nav-solid', past);
+      if (y > lastY + 6 && past) document.body.classList.add('nav-hidden');
+      else if (y < lastY - 6 || y <= 0) document.body.classList.remove('nav-hidden');
+      lastY = y; ticking = false;
+    }
+    addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    addEventListener('hashchange', function () { setTimeout(update, 60); });
+    update();
+  })();
+
+  /* ===== Palco del configuratore =========================================
+     La categoria del veicolo e' la soglia: sceglierla porta dentro, e da li'
+     si esce solo con "Esci dalla configurazione" o inviando. Niente uscita
+     con lo scroll e niente uscita con Esc, per richiesta esplicita: e' anche
+     cio' che permette al passo "indietro" di tornare alla categoria senza
+     sbattere fuori chi sta configurando.
+     La scheda del passo 1 non e' duplicata: e' lo STESSO nodo, spostato fra
+     la soglia e il pannello, cosi' non esistono due stati da tenere allineati. */
+  var CFG = (function () {
+    var stage = document.getElementById('cfgStage');
+    var gate = document.getElementById('cfgGate');
+    var panel = document.getElementById('cfgPanel');
+    var note = document.querySelector('.cfg-gate-note');
+    var step1 = document.querySelector('.step[data-step="1"]');
+    var savedY = 0, open = false;
+
+    /* lo scroll della pagina e' "smooth": rimetterlo a mano lo farebbe volare */
+    function jumpTo(y) {
+      var h = document.documentElement, prev = h.style.scrollBehavior;
+      h.style.scrollBehavior = 'auto';
+      window.scrollTo(0, y);
+      h.style.scrollBehavior = prev;
+    }
+
+    function enter() {
+      if (open) return;
+      open = true;
+      savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
+      panel.insertBefore(step1, panel.firstChild);
+      document.body.style.top = (-savedY) + 'px';
+      document.body.classList.add('cfg-locked');
+      TT.boot();
+      cercaFoto();
+      document.getElementById('btnExit').focus();
+    }
+
+    function leave() {
+      if (!open) return;
+      open = false;
+      gate.appendChild(step1);
+      if (note) gate.appendChild(note);        // la nota resta in fondo alla soglia
+      document.body.classList.remove('cfg-locked');
+      document.body.style.top = '';
+      jumpTo(savedY);
+    }
+
+    return { enter: enter, leave: leave, isOpen: function () { return open; } };
+  })();
+
+  document.getElementById('btnExit').addEventListener('click', CFG.leave);
+
+  /* ===== Fototessere degli optional ======================================
+     Il nome del file si ricava dall'etichetta: minuscolo, senza accenti,
+     spazi e simboli in trattini. Il riquadro compare SOLO se il file esiste,
+     quindi finche' le foto non ci sono non resta un rettangolo grigio.
+     Per aggiungerne una basta lasciar cadere il file in
+        Remake/Archivio/optionals/<slug>.webp
+     senza toccare una riga di HTML. */
+  function slugify(s) {
+    return String(s).toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+  var cercaFoto = function () {
+    cercaFoto = function () {};                 // una volta sola per sessione
+    document.querySelectorAll('#grid-accessori .acc-item').forEach(function (item) {
+      var chk = item.querySelector('input');
+      if (!chk) return;
+      var url = 'optionals/' + slugify(chk.value) + '.webp';
+      var probe = new Image();
+      probe.onload = function () {
+        var t = document.createElement('span');
+        t.className = 'acc-thumb';
+        t.style.backgroundImage = 'url("' + url + '")';
+        item.insertBefore(t, chk.nextSibling);
+      };
+      probe.src = url;
+    });
+  };
+
+  /* ===== Riepilogo in barra e mezzo mostrato ============================= */
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  function renderRecap() {
+    var box = document.getElementById('cfgRecap');
+    if (!box) return;
+    var marca = state.marcaAltro.trim() || state.marca;
+    var bits = [
+      ['Categoria', state.categoria ? state.categoria.split('—')[0].trim() : null],
+      ['Autocarro', marca],
+      ['Allestimento', state.allestimento],
+      ['Accessori', state.accessori.length ? String(state.accessori.length) : null]
+    ];
+    box.innerHTML = bits.map(function (b) {
+      return '<span>' + b[0] + ' <b>' + (b[1] ? esc(b[1]) : '—') + '</b></span>';
+    }).join('');
+  }
+
+  /* Il girato a 360 esiste solo per il Le Mans. Sugli altri allestimenti si
+     mostra la foto di studio e lo si dice, invece di far ruotare il mezzo
+     sbagliato. Al passo degli accessori il visore torna comunque: li' serve
+     a indicare DOVE finisce il pezzo, e il riferimento e' dichiarato. */
+  var ALT = {
+    'Privacy': 'https://static.wixstatic.com/media/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg/v1/fill/w_1024,h_580,q_90,enc_avif,quality_auto/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg',
+    'Type H': 'https://static.wixstatic.com/media/d56fb4_272e847b30894699b412d3ce24f79a13~mv2.jpg/v1/crop/x_0,y_66,w_1600,h_920/fill/w_980,h_564,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/typeh_industrial.jpg'
+  };
+  function syncVisual(n) {
+    var alt = document.getElementById('cfgAlt');
+    if (!alt) return;
+    var src = (n !== 4) && state.allestimento && ALT[state.allestimento];
+    if (src) {
+      alt.querySelector('img').src = src;
+      alt.querySelector('span').textContent = state.allestimento + ' — foto di studio. La vista a 360° è girata sul Le Mans.';
+      alt.classList.add('is-shown');
+    } else {
+      alt.classList.remove('is-shown');
+      if (n === 4 && state.allestimento && ALT[state.allestimento]) {
+        TT.look('full', 'Riferimento a 360°: Le Mans');
+      }
+    }
+  }
+
+  refresh = function () { renderRecap(); syncVisual(current); };
+
+  var _showStep = showStep;
+  showStep = function (n) {
+    _showStep(n);
+    if (n === 4) TT.boot();
+    renderRecap();
+    syncVisual(n);
+    var panel = document.getElementById('cfgPanel');
+    if (panel) panel.scrollTop = 0;
+  };
+
+  // L'anno nel footer: un file statico non lo aggiorna da solo, e un 2026
+  // scolpito nel markup invecchia male sotto gli occhi del cliente.
+  (function () {
+    var y = document.getElementById('footYear');
+    if (y) y.textContent = new Date().getFullYear();
+  })();
+
+  route();
+
+</script>
+
+</body>
+</html>

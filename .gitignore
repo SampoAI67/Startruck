@@ -53,3 +53,19 @@ dist/
 .astro/
 *.log
 .DS_Store
+
+# --- Prototipo remake ---
+# Gli asset generati (griglia lavori, battistrada, poster delle card) vanno
+# versionati: il workflow "Ultimi lavori" li committa, e le regole *.webp /
+# *.png qui sopra altrimenti li scartano in silenzio.
+!Remake/Archivio/lavori/*.webp
+!Remake/Archivio/optionals/*.webp
+!Remake/Archivio/poster-*.webp
+!Remake/Archivio/tread.png
+!Remake/Archivio/logo.png
+
+# Il template delle variabili resta tracciato, il .env vero no
+!.env.example
+
+# Archivio compresso: e la stessa roba della cartella, 16 MB in piu per nulla
+*.zip

@@ -1,0 +1,23 @@
+Foto degli optional del configuratore.
+
+Lascia cadere qui i file con QUESTI nomi esatti (.webp, ritaglio orizzontale,
+circa 240x160 px bastano: nel configuratore il riquadro e' 58x40).
+Il riquadro compare da solo, non c'e' HTML da toccare. I file mancanti
+semplicemente non mostrano nulla, non lasciano un buco grigio.
+
+verricello-traslabile.webp                    Verricello traslabile
+balestra-con-soffioni-ad-aria-posteriori.webp Balestra con soffioni ad aria posteriori
+solo-soffioni-posteriori-ad-aria.webp         Solo soffioni posteriori ad aria
+rollbar-alto-dietro-cabina.webp               Rollbar alto dietro cabina
+lampeggiante-soccorso.webp                    Lampeggiante soccorso
+carenatura-laterale-chiusa.webp               Carenatura laterale chiusa
+rampe-di-carico-piu-larghe.webp               Rampe di carico più larghe
+rampe-per-supercar-con-cassetta-dedicata.webp Rampe per supercar con cassetta dedicata
+porta-ruote-auto-da-corsa.webp                Porta ruote auto da corsa
+faro-di-retromarcia-aggiuntivo.webp           Faro di retromarcia aggiuntivo
+led-sul-pianale.webp                          LED sul pianale
+retrocamera-per-le-manovre.webp               Retrocamera per le manovre
+cassone-portautensili.webp                    Cassone portautensili
+ancoraggi-a-cricchetto-supplementari.webp     Ancoraggi a cricchetto supplementari
+predisposizione-gps-localizzatore.webp        Predisposizione GPS/localizzatore
+verniciatura-personalizzata-livrea.webp       Verniciatura personalizzata / livrea
