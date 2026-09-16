@@ -37,7 +37,7 @@ jobs:
       - name: Scarica i post e ricostruisci la griglia
         env:
           APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
-        run: node scripts/build-lavori.mjs --apify --limit 9
+        run: node scripts/build-lavori.mjs --apify --limit 12
 
       - name: Committa solo se e' cambiato qualcosa
         run: |

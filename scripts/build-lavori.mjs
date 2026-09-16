@@ -8,8 +8,8 @@
 // gli URL della CDN (scontent-*.cdninstagram.com) sono firmati e scadono, quindi
 // salvarli significa ritrovarsi la griglia vuota dopo qualche giorno.
 //
-//   node scripts/build-lavori.mjs --local "public/img" --limit 9
-//   APIFY_TOKEN=xxx node scripts/build-lavori.mjs --apify --limit 9
+//   node scripts/build-lavori.mjs --local "public/img" --limit 12
+//   APIFY_TOKEN=xxx node scripts/build-lavori.mjs --apify --limit 12
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -25,9 +25,10 @@ const flag = (n, d = null) => {
   const i = args.indexOf(n);
   return i === -1 ? d : (args[i + 1] && !args[i + 1].startsWith('--') ? args[i + 1] : true);
 };
-// La griglia e' a 3 colonne e ogni lavoro e' una coppia di post: un conteggio
-// che non sia multiplo di 3 lascia una riga monca e spezza le coppie.
-const limit = Math.floor(Number(flag('--limit', 9)) / 3) * 3;
+// La rotaia scorre per colonne di DUE: dodici post sono sei colonne piene,
+// che e' la disposizione chiesta. Un numero dispari lascerebbe l'ultima
+// casella in basso vuota, quindi si tronca al pari.
+const limit = Math.floor(Number(flag('--limit', 12)) / 2) * 2;
 
 // Il token sta in una variabile d'ambiente (CI) oppure in un file FUORI dal
 // repo: non finisce in un commit e non passa dalla chat.

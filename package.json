@@ -8,8 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "lavori": "node scripts/build-lavori.mjs --apify --limit 9",
-    "lavori:local": "node scripts/build-lavori.mjs --local public/img --limit 9",
+    "lavori": "node scripts/build-lavori.mjs --apify --limit 12",
+    "lavori:local": "node scripts/build-lavori.mjs --local public/img --limit 12",
     "prebuild": "node scripts/sync-remake.mjs",
     "remake": "node scripts/sync-remake.mjs"
   },

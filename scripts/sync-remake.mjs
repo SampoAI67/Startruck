@@ -21,6 +21,7 @@ const OUT = 'public/remake';
 const FILES = [
   ['startruck-remake-work.html', 'index.html'],
   'logo.png',
+  'logo-startruck.svg',
   'onlylogo.svg',
   'wordmark-startruck.svg',
   'tread.png',

@@ -54,7 +54,7 @@
      - sull'hero e' trasparente e il video le passa sotto (l'hero e' tirato su
        di 85px con un margine negativo: la barra resta sticky, non fixed, cosi'
        le altre viste con briciole di pane non ci finiscono sotto);
-     - superato l'hero diventa piena e a colori invertiti rispetto alla pagina;
+     - superato l'hero diventa piena e CHIARA, come nella versione del cliente;
      - scorrendo in giu' si ritira, risalendo torna. */
   header.site{
     position:sticky; top:0; z-index:50;
@@ -63,19 +63,29 @@
     transition:transform .45s cubic-bezier(.22,1,.36,1), background .35s ease,
                border-color .35s ease, backdrop-filter .35s ease;
   }
-  header.site .logo-img img{filter:invert(1);}          /* il marchio e' nero pieno */
+  /* Sopra al video la barra e' trasparente e allora il marchio e i testi
+     devono schiarirsi per restare leggibili: il marchio e' nero di suo, qui
+     viene invertito. Appena la barra diventa chiara torna nero da solo. */
+  header.site .logo-img img{filter:invert(1); transition:filter .35s ease;}
   header.site .navlinks a{color:rgba(253,252,249,0.72);}
   header.site .navlinks a:hover{color:#fdfcf9;}
   header.site .navcta{color:#fdfcf9; border-color:rgba(253,252,249,0.55);}
   header.site .navcta:hover{background:#fdfcf9; color:var(--ink); border-color:#fdfcf9;}
   header.site .navtoggle{color:#fdfcf9;}
+  /* Passato l'hero: la barra chiara dell'originale del cliente. */
   body.nav-solid header.site{
-    background:rgba(28,31,36,0.92);
+    background:rgba(228,227,224,0.9);
     backdrop-filter:blur(10px);
-    border-bottom-color:rgba(255,255,255,0.14);
+    border-bottom-color:var(--line);
   }
-  body.nav-hidden header.site{transform:translateY(-100%);}
-  nav.wrap{display:flex; align-items:center; justify-content:space-between; height:84px;}
+  body.nav-solid header.site .logo-img img{filter:none;}
+  body.nav-solid header.site .navlinks a{color:var(--charcoal-dim);}
+  body.nav-solid header.site .navlinks a:hover{color:var(--ink);}
+  body.nav-solid header.site .navcta{color:var(--ink); border-color:var(--ink);}
+  body.nav-solid header.site .navcta:hover{background:var(--ink); color:var(--white); border-color:var(--ink);}
+  body.nav-solid header.site .navtoggle{color:var(--ink);}
+  body.nav-hidden:not(.nav-open) header.site{transform:translateY(-100%);}
+  nav.wrap{display:flex; align-items:center; justify-content:space-between; height:84px; position:relative;}
   .logo-img{display:flex; align-items:center;}
   .logo-img img{height:34px; width:auto; display:block;}
   .navlinks{display:flex; gap:40px; align-items:center;}
@@ -91,7 +101,23 @@
     transition:background .2s, color .2s, border-color .2s;
   }
   .navcta:hover{background:var(--ink); color:var(--white);}
-  .navtoggle{display:none; background:none; border:none; color:var(--ink); font-size:1.6rem;}
+  .navtoggle{display:none; background:none; border:none; color:var(--ink); font-size:1.6rem; line-height:1; padding:6px 4px;}
+  /* Il pulsante c'era ma non apriva niente: su telefono i link sono nascosti e
+     la barra restava senza navigazione. Il pannello scende da sotto la barra. */
+  .navpanel{
+    position:absolute; left:0; right:0; top:100%;
+    background:rgba(228,227,224,0.97); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    display:grid; padding:6px 32px 18px;
+    max-height:0; overflow:hidden; visibility:hidden;
+    transition:max-height .38s cubic-bezier(.22,1,.36,1), visibility .38s;
+  }
+  body.nav-open .navpanel{max-height:60vh; visibility:visible;}
+  .navpanel a{
+    padding:15px 0; border-bottom:1px solid var(--line);
+    font-size:0.86rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--ink);
+  }
+  .navpanel a:last-child{border-bottom:none;}
   header.site{transition:transform .45s cubic-bezier(.22,1,.36,1);}
 
   /* BREADCRUMB */
@@ -187,7 +213,16 @@
      traccia lascerebbe passare il nero. Si appoggia su un fondo pieno, cosi'
      la tinta del filetto resta identica ma i 2px fra le schede sono opachi. */
   .route-wrap .process-grid{position:relative; z-index:1; background-color:var(--bg-2); background-image:linear-gradient(var(--line), var(--line));}
-  @media(max-width:860px){ .route-canvas{display:none;} }
+  /* Su telefono le quattro schede si impilano e il tracciato scende invece
+     di attraversare: la colonna si stringe per lasciare ai lati lo spazio
+     in cui si vedono le anse, esattamente come su schermo largo le si
+     vedono sopra e sotto la riga. */
+  @media(max-width:860px){
+    .route-clip{padding-bottom:120px;}
+    .route-clip .sec-head{margin-bottom:105px;}
+    .route-wrap .process-grid{max-width:74%; margin-left:auto; margin-right:auto;}
+    .route-wrap .process-item{padding:26px 22px;}
+  }
   .process-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:2px; background:var(--line); margin-top:8px;}
   .process-item{background:var(--white); padding:34px 28px;}
   .process-item .pnum{font-family:'Archivo Black'; font-size:2.2rem; -webkit-text-stroke:1px var(--bronze-deep); color:transparent; display:block; margin-bottom:18px;}
@@ -204,13 +239,10 @@
     background:var(--white); display:flex; flex-direction:column; overflow:hidden;
     transition:flex-grow .66s cubic-bezier(.22,1,.36,1);
   }
-  @media(hover:hover) and (min-width:861px){
-    .model-grid:hover .model-card{flex-grow:.825;}
-    .model-grid .model-card:hover{flex-grow:1.35;}
-  }
+  /* Il cliente le vuole ferme: passando sopra parte solo il video, la scheda
+     non si allarga e le altre non si stringono. */
   .model-img{height:clamp(300px, 42vh, 460px); overflow:hidden; position:relative; background:var(--bg-2);}
-  .model-img img, .model-img video{width:100%; height:100%; object-fit:cover; transition:transform .9s cubic-bezier(.22,1,.36,1);}
-  .model-card:hover .model-img img, .model-card:hover .model-img video{transform:scale(1.04);}
+  .model-img img, .model-img video{width:100%; height:100%; object-fit:cover;}
   .model-body{transition:padding .66s cubic-bezier(.22,1,.36,1);}
   .model-tag{position:absolute; top:16px; left:16px; color:#fdfcf9; font-family:'JetBrains Mono'; font-size:0.66rem; padding:5px 12px; letter-spacing:0.1em; text-transform:uppercase; border:1px solid rgba(253,252,249,0.6); background:rgba(20,22,26,0.35);}
   .model-body{padding:30px 30px 34px; flex:1; display:flex; flex-direction:column;}
@@ -222,8 +254,26 @@
   /* Tre colonne, non quattro: ogni lavoro e' una coppia di post e con tre
      per riga le coppie restano vicine invece di spezzarsi a fine riga.
      Il conteggio e' sempre multiplo di 3, cosi' non resta una riga monca. */
-  .work-strip{display:grid; grid-template-columns:repeat(3,1fr); gap:2px; margin-top:24px; background:var(--line);}
-  .work-cell{position:relative; display:block; aspect-ratio:1/1; overflow:hidden; background:var(--bg-2);}
+  /* Due righe che corrono in orizzontale: ogni colonna e' una coppia, e le
+     coppie oltre la sesta si raggiungono trascinando. Il riquadro mantiene la
+     misura che aveva a tre per riga, quindi sullo schermo ne entrano circa tre
+     e le altre si scoprono tirando. */
+  .work-rail{
+    margin-top:24px; overflow-x:auto; overscroll-behavior-x:contain;
+    cursor:grab; scrollbar-width:none; -ms-overflow-style:none;
+    -webkit-overflow-scrolling:touch;
+  }
+  .work-rail::-webkit-scrollbar{display:none;}
+  .work-rail.is-dragging{cursor:grabbing;}
+  .work-rail.is-dragging .work-cell{pointer-events:none;}   /* trascinare non apre il post */
+  .work-strip{
+    --cell:clamp(190px, 31vw, 371px);
+    display:grid; grid-auto-flow:column;
+    grid-template-rows:repeat(2, var(--cell));
+    grid-auto-columns:var(--cell);
+    gap:2px; background:var(--line); width:max-content;
+  }
+  .work-cell{position:relative; display:block; overflow:hidden; background:var(--bg-2);}
   .work-cell img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .8s cubic-bezier(.22,1,.36,1);}
   .work-cell:hover img{transform:scale(1.04);}
   .work-cell[href]{cursor:pointer;}
@@ -234,7 +284,7 @@
     opacity:0; transition:opacity .3s ease;
   }
   .work-cell:hover .work-cap{opacity:1;}
-  @media(max-width:560px){ .work-strip{grid-template-columns:repeat(2,1fr);} }
+  .work-hint{margin-top:14px; font-family:'JetBrains Mono'; font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--charcoal-dim);}
   /* La griglia mostra nove post: il resto sta sul profilo, e questa riga
      e' l'unico punto in cui il sito lo dice. Piccola, non una CTA. */
   .work-more{margin-top:22px; text-align:center; font-family:'JetBrains Mono';
@@ -582,7 +632,7 @@
 
 <header class="site">
   <nav class="wrap">
-    <a href="#home" class="logo-img"><img src="logo.png" alt="Startruck Italia"></a>
+    <a href="#home" class="logo-img"><img src="logo-startruck.svg" alt="Startruck Italia" width="588" height="100"></a>
     <div class="navlinks">
       <a href="#home">Home</a>
       <a href="#modelli">Modelli</a>
@@ -590,7 +640,14 @@
       <a href="#contatti">Contatti</a>
     </div>
     <a href="#configuratore" class="navcta">Configura preventivo</a>
-    <button class="navtoggle" aria-label="Menu">☰</button>
+    <button class="navtoggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navPanel">☰</button>
+    <div class="navpanel" id="navPanel">
+      <a href="#home">Home</a>
+      <a href="#modelli">Modelli</a>
+      <a href="#lavori">Ultimi lavori</a>
+      <a href="#processo">Processo</a>
+      <a href="#contatti">Contatti</a>
+    </div>
   </nav>
 </header>
 
@@ -720,6 +777,7 @@
         <h2>Ultimi lavori</h2>
       </div>
     </div>
+    <div class="work-rail" id="workRail">
     <div class="work-strip" id="workStrip">
         <a class="work-cell"><img src="lavori/lavoro-01.webp" alt="" loading="lazy" decoding="async"></a>
         <a class="work-cell"><img src="lavori/lavoro-02.webp" alt="" loading="lazy" decoding="async"></a>
@@ -731,6 +789,8 @@
         <a class="work-cell"><img src="lavori/lavoro-08.webp" alt="" loading="lazy" decoding="async"></a>
         <a class="work-cell"><img src="lavori/lavoro-09.webp" alt="" loading="lazy" decoding="async"></a>
     </div>
+    </div>
+    <p class="work-hint">Trascina per vedere gli altri</p>
     <p class="work-more">
       Per vederne altri, <a href="https://www.instagram.com/startruckitalia/" target="_blank" rel="noopener">@startruckitalia</a> su Instagram
     </p>
@@ -1567,8 +1627,8 @@
      La griglia e' gia' nel documento: se il JSON non arriva (file aperto in
      locale, rete assente, scraper a vuoto) resta quella, non un buco. Quando
      invece arriva, la sostituisce con i post piu' recenti.
-     Il conteggio viene troncato a multiplo di 3: una riga incompleta
-     spezzerebbe l'ultima coppia. */
+     Il conteggio viene troncato a multiplo di 2: la griglia scorre per
+     colonne di due, e un numero dispari lascerebbe l'ultima casella vuota. */
   (function () {
     var strip = document.getElementById('workStrip');
     if (!strip || !window.fetch) return;
@@ -1576,7 +1636,7 @@
       .then(function (r) { if (!r.ok) throw 0; return r.json(); })
       .then(function (data) {
         var posts = (data && data.posts) || [];
-        posts = posts.slice(0, Math.floor(posts.length / 3) * 3);
+        posts = posts.slice(0, Math.floor(posts.length / 2) * 2);   // colonne intere
         if (!posts.length) return;
         strip.innerHTML = posts.map(function (q) {
           var tag = q.permalink ? 'a href="' + q.permalink + '" target="_blank" rel="noopener"' : 'a';
@@ -1587,6 +1647,54 @@
         }).join('');
       })
       .catch(function () { /* resta la griglia statica */ });
+  })();
+
+  /* ===== Menu di telefono ================================================
+     Si chiude da solo scegliendo una voce: sono ancore nella stessa pagina,
+     restare aperti coprirebbe cio' a cui si e' appena saltati. */
+  (function () {
+    var btn = document.getElementById('navToggle'), panel = document.getElementById('navPanel');
+    if (!btn || !panel) return;
+    var set = function (open) {
+      document.body.classList.toggle('nav-open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.textContent = open ? '✕' : '☰';
+    };
+    btn.addEventListener('click', function () { set(!document.body.classList.contains('nav-open')); });
+    panel.addEventListener('click', function (e) { if (e.target.tagName === 'A') set(false); });
+    addEventListener('resize', function () { if (innerWidth > 860) set(false); });
+  })();
+
+  /* ===== Rotaia dei lavori ==============================================
+     Trascinamento col mouse: il dito sul telefono scorre gia' da solo. Si
+     distingue il trascinamento dal clic con una soglia di pochi pixel,
+     altrimenti tirare la striscia aprirebbe un post di Instagram. */
+  (function () {
+    var rail = document.getElementById('workRail');
+    if (!rail) return;
+    var down = false, moved = false, startX = 0, startLeft = 0;
+
+    rail.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch') return;             // lo scorrimento nativo fa meglio
+      down = true; moved = false;
+      startX = e.clientX; startLeft = rail.scrollLeft;
+      rail.setPointerCapture(e.pointerId);
+    });
+    rail.addEventListener('pointermove', function (e) {
+      if (!down) return;
+      var dx = e.clientX - startX;
+      if (!moved && Math.abs(dx) > 4) { moved = true; rail.classList.add('is-dragging'); }
+      if (moved) rail.scrollLeft = startLeft - dx;
+    });
+    var end = function (e) {
+      if (!down) return;
+      down = false;
+      rail.classList.remove('is-dragging');
+      if (rail.releasePointerCapture) try { rail.releasePointerCapture(e.pointerId); } catch (x) {}
+    };
+    rail.addEventListener('pointerup', end);
+    rail.addEventListener('pointercancel', end);
+    rail.addEventListener('dragstart', function (e) { e.preventDefault(); });
   })();
 
   /* ===== Percorso a traccia di pneumatico ================================
@@ -1616,28 +1724,59 @@
 
     function draw() {
       var path = document.getElementById('routePath');
-      if (!ready || !path || matchMedia('(max-width:860px)').matches) return;
-      var w = wrap.clientWidth, gh = grid.offsetHeight;
+      if (!ready || !path) return;
+      var w = wrap.clientWidth, gh = grid.offsetHeight, gw = grid.offsetWidth;
       if (!w || !gh) return;
+
+      /* Un solo tracciato, due assi.
+         Schermo largo: la x del disegno corre lungo la RIGA di schede e la y e'
+         lo scarto sopra/sotto. Telefono: lo stesso, ruotato di un quarto di
+         giro — la x corre lungo la COLONNA e la y diventa lo scarto a destra e
+         a sinistra. Le anse escono dai fianchi dello schermo come di la' escono
+         sopra e sotto, e i prolungamenti entrano da sopra ed escono da sotto
+         senza che una riga della loro costruzione cambi. */
+      var vert = matchMedia('(max-width:860px)').matches;
 
       /* Il tracciato disegnato copre la RIGA di schede e non si tocca: e' la
          parte che incrocia le quattro fasi. A sinistra e a destra viene
          PROLUNGATO fino ai bordi dello schermo con due tratti calcolati qui.
          Le giunzioni sono a tangente continua (il tracciato parte e finisce
          con una pendenza nota), altrimenti si vedrebbe lo spigolo. */
-      var k = w / VB_W;
-      var routeH = VB_H * k;
-      var THICK = STROKE * k;
-
       var wrapRect = wrap.getBoundingClientRect();
-      var leftPx = Math.max(0, wrapRect.left) + 60;              // fin oltre il bordo
-      var rightPx = Math.max(0, window.innerWidth - wrapRect.right) + 60;
-      var extL = leftPx / k, extR = rightPx / k;                 // in unita' del tracciato
+      var gridRect = grid.getBoundingClientRect();
+      var CW = window.innerWidth;
+
+      /* kMain scala l'asse LUNGO (quello che incrocia le schede una dopo
+         l'altra), kCross l'ampiezza dell'onda. In verticale le schede devono
+         occupare la stessa fetta di ampiezza che occupano in orizzontale
+         (~49%), altrimenti o coprono tutto o le anse restano fuori. */
+      var kMain, kCross;
+      if (vert) {
+        kMain = gh / VB_W;
+        kCross = gw / (VB_H * 0.49);
+      } else {
+        kMain = w / VB_W;
+        kCross = kMain;
+      }
+      var k = kMain;
+      var THICK = STROKE * kCross;
+
+      // quanto il tracciato entra prima della prima scheda e esce dopo l'ultima
+      var beforePx, afterPx;
+      if (vert) {
+        beforePx = 150; afterPx = 150;
+      } else {
+        beforePx = Math.max(0, wrapRect.left) + 60;              // fin oltre il bordo
+        afterPx = Math.max(0, CW - wrapRect.right) + 60;
+      }
+      var extL = beforePx / kMain, extR = afterPx / kMain;       // in unita' del tracciato
+      var aniso = kCross / kMain;                               // 1 in orizzontale
+      var SWING = vert ? 0.42 : 1;                              // quanto larga l'ansa di coda
 
       /* --- prolungamento sinistro ---------------------------------------
          Il tracciato attacca a (0,6) in orizzontale: basta un'onda intera che
          arrivi piatta su quel punto. */
-      var ampL = Math.min(120, extL * 0.55);
+      var ampL = Math.min(120, extL * 0.55) * SWING / aniso;
       var ptsL = [];
       var stepsL = Math.max(2, Math.round(extL / (STEP / k)));
       for (var i = 0; i < stepsL; i++) {
@@ -1648,9 +1787,9 @@
       /* --- prolungamento destro -----------------------------------------
          Qui il tracciato finisce in salita ripida (pendenza -198/88): prima un
          tratto corto che raddrizza la curva, poi un'onda come le altre. */
-      var END_X = 1092, END_Y = 327.48, SLOPE = -198 / 88;
+      var END_X = 1092, END_Y = 327.48, SLOPE = (-198 / 88) * SWING / aniso;
       var turn = Math.min(110, extR * 0.42);
-      var crest = END_Y - Math.min(130, turn * 1.25);
+      var crest = END_Y - Math.min(130, turn * 1.25) * SWING / aniso;
       var ptsR = [];
       var stepsT = Math.max(2, Math.round(turn / (STEP / k)));
       for (var j = 1; j <= stepsT; j++) {
@@ -1660,7 +1799,7 @@
         ptsR.push({ x: END_X + turn * u, y: h00 * END_Y + h10 * (SLOPE * turn) + h01 * crest });
       }
       var rest = Math.max(0, extR - turn);
-      var ampR = Math.min(150, rest * 0.5);
+      var ampR = Math.min(150, rest * 0.5) * SWING / aniso;
       var stepsR = Math.max(2, Math.round(rest / (STEP / k)));
       for (var m = 1; m <= stepsR; m++) {
         var t2 = m / stepsR;
@@ -1677,21 +1816,42 @@
       }
       var pts = ptsL.concat(ptsM, ptsR);
 
-      /* La verticale e' ancorata alle SCHEDE, non all'ingombro totale: cosi'
-         i prolungamenti non spostano di un pixel la parte che le incrocia. */
-      var yMin = 1e9, yMax = -1e9;
-      for (var n = 0; n < pts.length; n++) { if (pts[n].y < yMin) yMin = pts[n].y; if (pts[n].y > yMax) yMax = pts[n].y; }
+      /* Il riquadro e' ancorato alle SCHEDE, non all'ingombro totale: cosi' i
+         prolungamenti non spostano di un pixel la parte che le incrocia. */
       var half = VB_H / 2;
-      var needTop = (half - yMin) * k + THICK / 2 - gh / 2;
-      var needBot = (yMax - half) * k + THICK / 2 - gh / 2;
-      var PAD = Math.max(40, needTop, needBot) + 2;
-      var h = gh + PAD * 2;
-      var cardMid = PAD + gh / 2;
+      var along = function (q) { return q.x * kMain; };          // lungo le schede
+      var cross = function (q) { return (q.y - half) * kCross; };  // scarto dall'asse
+
+      var padTop, padBot, h, mainOrigin, crossMid;
+      if (vert) {
+        var aMin = 1e9, aMax = -1e9;
+        for (var n = 0; n < pts.length; n++) {
+          var a = along(pts[n]);
+          if (a < aMin) aMin = a;
+          if (a > aMax) aMax = a;
+        }
+        padTop = Math.max(20, -aMin + THICK / 2) + 2;
+        padBot = Math.max(20, aMax - gh + THICK / 2) + 2;
+        h = gh + padTop + padBot;
+        mainOrigin = padTop;
+        crossMid = (gridRect.left - wrapRect.left) + gw / 2;     // asse della colonna
+      } else {
+        var cMin = 1e9, cMax = -1e9;
+        for (var n2 = 0; n2 < pts.length; n2++) {
+          var c = cross(pts[n2]);
+          if (c < cMin) cMin = c;
+          if (c > cMax) cMax = c;
+        }
+        var need = Math.max(-cMin, cMax) + THICK / 2 - gh / 2;
+        padTop = padBot = Math.max(40, need) + 2;
+        h = gh + padTop * 2;
+        mainOrigin = 0;
+        crossMid = padTop + gh / 2;                              // asse della riga
+      }
 
       // il canvas copre tutta la larghezza della finestra: la sezione taglia
-      var CW = window.innerWidth;
       cv.style.left = (-wrapRect.left) + 'px';
-      cv.style.top = (-PAD) + 'px';
+      cv.style.top = (-padTop) + 'px';
       cv.style.width = CW + 'px';
       cv.style.height = h + 'px';
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1707,7 +1867,9 @@
       var SW = img.naturalWidth, SH = img.naturalHeight;
       var scale = (THICK / SH) * PITCH;
       var srcX = 0;
-      var map = function (q) { return { x: q.x * k, y: (q.y - half) * k + cardMid }; };
+      var map = vert
+        ? function (q) { return { x: cross(q) + crossMid, y: along(q) + mainOrigin }; }
+        : function (q) { return { x: along(q),            y: cross(q) + crossMid };  };
 
       var prev = map(pts[0]);
       for (var z = 1; z < pts.length; z++) {
