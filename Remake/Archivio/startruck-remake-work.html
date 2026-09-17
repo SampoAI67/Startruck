@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Startruck Italia — Allestimenti per il Trasporto Veicoli</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Sora:wght@400;600;700&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#e4e3e0;
@@ -120,10 +120,6 @@
   .navpanel a:last-child{border-bottom:none;}
   header.site{transition:transform .45s cubic-bezier(.22,1,.36,1);}
 
-  /* BREADCRUMB */
-  .breadcrumb{padding:22px 0; font-family:'JetBrains Mono'; font-size:0.72rem; letter-spacing:0.06em; color:var(--charcoal-dim); text-transform:uppercase;}
-  .breadcrumb a:hover{color:var(--ink);}
-  .breadcrumb span{color:var(--ink);}
 
   /* HERO */
   .hero{position:relative; min-height:725px; display:flex; align-items:center; padding:195px 0 110px; margin-top:-85px; overflow:hidden; background:#111;}
@@ -153,12 +149,6 @@
   }
   .btn-ghost:hover{border-color:#fdfcf9;}
 
-  /* MODEL HERO (pagine dettaglio) */
-  .model-hero{position:relative; min-height:605px; display:flex; align-items:flex-end; padding:155px 0 70px; margin-top:-85px; overflow:hidden; background:#111;}
-  .model-hero-inner{position:relative; z-index:2; max-width:700px;}
-  .model-tag-lg{display:inline-block; font-family:'JetBrains Mono'; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:#c7c6c2; border:1px solid rgba(255,255,255,0.4); padding:6px 14px; margin-bottom:20px;}
-  .model-hero h1{font-size:clamp(2.6rem,6vw,4.6rem); color:#fdfcf9;}
-  .model-hero p{margin-top:20px; font-size:1.05rem; color:#d6d3ca; max-width:480px; font-weight:300;}
 
   /* TICKER */
   .ticker-band{background:var(--white); overflow:hidden; border-block:1px solid var(--line);}
@@ -296,27 +286,330 @@
     transition:border-color .2s;}
   .work-more a:hover{border-bottom-color:var(--ink);}
 
-  /* SPEC GRID (pagine dettaglio) */
-  .spec-note{font-family:'JetBrains Mono'; font-size:0.72rem; color:var(--charcoal-dim); margin-bottom:28px; border-left:2px solid var(--bronze); padding-left:12px;}
-  .spec-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
-  .spec-item{background:var(--white); padding:26px 24px;}
-  .spec-item .k{font-family:'JetBrains Mono'; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--charcoal-dim); display:block; margin-bottom:10px;}
-  .spec-item .v{font-family:'Barlow Condensed'; font-weight:600; font-size:1.3rem; text-transform:uppercase;}
+  /* ===================== PAGINE MODELLO ====================================
+     Importate dal remake in Astro (src/pages/allestimenti/[slug].astro) cosi'
+     come sono: stessi blocchi, stesso ordine, stesso stile. Il loro sistema
+     (Sora + Manrope, bianco, angoli arrotondati) NON e' quello del resto di
+     questo file: e' voluto, l'adattamento si fa a mano dopo.
+     Tutto e' racchiuso sotto .mp, cosi' niente di questo esce dalle tre viste
+     e niente delle regole globali di sopra (h2 in Archivo, label in mono,
+     input a filo) ci entra senza essere stato annullato qui. */
+  .mp{
+    --mp-bg:#ffffff;
+    --mp-surface:#f4f4f4;
+    --mp-ink:#161616;
+    --mp-ink-soft:#5e5e5e;
+    --mp-muted:#6e6e6e;
+    --mp-hairline:#d8d8d8;
+    --mp-error:#b00020;
+    --mp-display:"Sora", ui-sans-serif, system-ui, sans-serif;
+    --mp-sans:"Manrope", ui-sans-serif, system-ui, sans-serif;
+    --mp-r-md:8px;
+    --mp-r-lg:14px;
+    background:var(--mp-bg); color:var(--mp-ink);
+    font-family:var(--mp-sans); font-weight:400; line-height:1.6;
+  }
+  /* annulla le regole globali della pagina di casa */
+  .mp h1, .mp h2, .mp h3, .mp h4{
+    font-family:var(--mp-display); font-weight:700; text-transform:none;
+    color:inherit; line-height:1.02; letter-spacing:-0.025em; text-wrap:balance;
+  }
+  .mp ul{list-style:none;}
+  /* In Astro l'altezza automatica delle immagini la mette il preflight di
+     Tailwind: qui no, e l'attributo height="1067" vincerebbe su aspect-ratio
+     allungando le foto della galleria a oltre mille pixel. */
+  .mp img{height:auto;}
+  .mp label{
+    font-family:var(--mp-sans); font-size:0.7rem; font-weight:600; letter-spacing:0.18em;
+    text-transform:uppercase; color:inherit; opacity:0.6; margin-bottom:0.6rem;
+  }
 
-  .feature-list{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); margin-top:40px;}
-  .feature-item{background:var(--bg); padding:26px 28px; display:flex; gap:16px; align-items:flex-start;}
-  .feature-item .dot{width:8px; height:8px; background:var(--bronze); margin-top:8px; flex-shrink:0; transform:rotate(45deg);}
-  .feature-item p{font-size:0.92rem; color:var(--ink-soft); font-weight:400;}
+  .mp-container{width:100%; max-width:1280px; margin-inline:auto; padding-inline:1.5rem;}
+  @media(min-width:1024px){ .mp-container{padding-inline:2.5rem;} }
 
-  .gallery{display:grid; grid-template-columns:1.4fr 1fr; gap:2px; background:var(--line);}
-  .gallery img{width:100%; height:100%; object-fit:cover;}
-  .gallery-col{display:grid; grid-template-rows:1fr 1fr; gap:2px;}
-  .gallery-main{height:520px;}
+  /* ---- ritmo bianco / grigio / nero ------------------------------------ */
+  .mp-light  {background:var(--mp-bg);      color:var(--mp-ink);}
+  .mp-surface{background:var(--mp-surface); color:var(--mp-ink);}
+  .mp-dark   {background:var(--mp-ink);     color:#fff;}
+  .mp-dark + .mp-dark{margin-top:-1px;}
+  .mp-pad      {padding-block:6rem;}
+  .mp-pad-tight{padding-block:3.5rem;}
+  @media(min-width:768px){ .mp-pad{padding-block:8rem;} .mp-pad-tight{padding-block:5rem;} }
 
-  /* CTA BAND (pagine dettaglio) */
-  .cta-band{background:var(--ink); padding:70px 0; text-align:center;}
-  .cta-band h2{color:#fdfcf9; font-size:clamp(1.8rem,3vw,2.4rem); margin-bottom:18px;}
-  .cta-band p{color:#a9aaa6; margin-bottom:34px; max-width:480px; margin-left:auto; margin-right:auto;}
+  .mp-label{
+    display:inline-flex; align-items:center; gap:.6em; margin-bottom:2.5rem;
+    font-family:var(--mp-sans); font-size:.72rem; font-weight:600; letter-spacing:.22em;
+    text-transform:uppercase; color:var(--mp-muted);
+  }
+  .mp-label::before{content:attr(data-index); color:var(--mp-ink); font-variant-numeric:tabular-nums;}
+  .mp-dark .mp-label{color:rgba(255,255,255,.55);}
+  .mp-dark .mp-label::before{color:#fff;}
+  .mp-light .mp-soft, .mp-surface .mp-soft{color:var(--mp-ink-soft);}
+  .mp-dark .mp-soft{color:rgba(255,255,255,.72);}
+  .mp-light .mp-rule, .mp-surface .mp-rule{border-color:var(--mp-hairline);}
+  .mp-dark .mp-rule{border-color:rgba(255,255,255,.16);}
+
+  .mp-display-2{font-size:clamp(2rem, 5.5vw, 4.5rem);}
+  .mp-display-3{font-size:clamp(1.6rem, 3vw, 2.6rem);}
+
+  /* ---- movimento -------------------------------------------------------- */
+  @keyframes mp-reveal-up{from{opacity:0; transform:translateY(28px);} to{opacity:1; transform:none;}}
+  @keyframes mp-kenburns{from{transform:scale(1.08);} to{transform:scale(1.18);}}
+  .mp [data-reveal]{opacity:0;}
+  .mp [data-reveal].is-in{animation:mp-reveal-up .9s cubic-bezier(.22,1,.36,1) forwards;}
+  .mp-mask{display:block; overflow:hidden; padding-bottom:.14em; margin-bottom:-.14em;}
+  .mp-mask > span{display:block; transform:translateY(105%); transition:transform 1s cubic-bezier(.22,1,.36,1); transition-delay:var(--d,0s);}
+  .mp .is-in .mp-mask > span{transform:none;}
+  /* La pagina di casa spegne TUTTE le animazioni con "riduci movimento": qui
+     senza questa regola i blocchi resterebbero a opacita' zero per sempre. */
+  @media(prefers-reduced-motion:reduce){
+    .mp [data-reveal]{opacity:1;}
+    .mp-mask > span{transform:none;}
+  }
+
+  /* ---- 01 / 03 · banner video (VideoBanner) ----------------------------- */
+  .mp-vb{position:relative; width:100%; overflow:hidden; background:var(--mp-ink); color:#fff;}
+  .mp-vb-full{height:100vh; height:100svh; min-height:600px;}
+  .mp-vb-tall{height:86vh; height:86svh; min-height:520px;}
+  /* il primo banner scivola sotto la barra trasparente, come l'hero di casa */
+  .mp-vb-first{margin-top:-85px;}
+  .mp-vb-media{position:absolute; inset:-8% 0; will-change:transform;}
+  .mp-vb-video{width:100%; height:100%; object-fit:cover; animation:mp-kenburns 26s ease-out forwards;}
+  .mp-vb-scrim{
+    position:absolute; inset:0;
+    background:
+      linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.2) 52%, rgba(0,0,0,.5) 100%),
+      linear-gradient(to right, rgba(0,0,0,.62) 0%, rgba(0,0,0,0) 60%);
+  }
+  .mp-vb-content{
+    position:relative; height:100%; display:flex; flex-direction:column; justify-content:flex-end;
+    padding-block:clamp(6rem, 12vh, 9rem);
+  }
+  .mp-vb .mp-label{margin-bottom:1.5rem;}
+  .mp-vb-title{font-size:clamp(2.6rem, 8vw, 6.5rem); line-height:.94; letter-spacing:-0.035em; max-width:16ch;}
+  .mp-vb-text{margin-top:1.6rem; max-width:46ch; font-size:clamp(1rem, 1.3vw, 1.15rem); color:rgba(255,255,255,.78);}
+  .mp-vb-cta{
+    display:inline-flex; align-items:center; gap:.75rem; margin-top:2.2rem; padding:.95rem 1.6rem;
+    border-radius:var(--mp-r-md); background:#fff; color:var(--mp-ink);
+    font-family:var(--mp-display); font-weight:600; font-size:.88rem;
+    transition:gap .25s, background .2s;
+  }
+  .mp-vb-cta svg{width:24px; height:12px;}
+  .mp-vb-cta:hover{gap:1.15rem; background:rgba(255,255,255,.86);}
+  .mp-vb-cue{
+    position:absolute; left:50%; bottom:1.75rem; translate:-50% 0;
+    display:flex; flex-direction:column; align-items:center; gap:.6rem;
+    font-size:.62rem; letter-spacing:.3em; color:rgba(255,255,255,.55);
+  }
+  .mp-vb-cue i{
+    width:1px; height:40px; transform-origin:top;
+    background:linear-gradient(to bottom, rgba(255,255,255,.7), transparent);
+    animation:mp-cue 2.2s ease-in-out infinite;
+  }
+  @keyframes mp-cue{
+    0%  {transform:scaleY(0); opacity:0;}
+    35% {transform:scaleY(1); opacity:1;}
+    100%{transform:scaleY(1) translateY(40px); opacity:0;}
+  }
+
+  /* ---- striscia della dotazione (Marquee) ------------------------------- */
+  .mp-mq{overflow:hidden; padding-block:1rem; border-block:1px solid var(--mp-hairline); background:var(--mp-bg); color:var(--mp-ink);}
+  .mp-mq-track{display:inline-flex; white-space:nowrap; animation:ticker 42s linear infinite;}
+  .mp-mq-seq, .mp-mq-cell{display:inline-flex; align-items:center;}
+  .mp-mq-word{
+    padding-inline:1.75rem; white-space:nowrap;
+    font-family:var(--mp-display); font-size:.82rem; font-weight:600;
+    letter-spacing:.18em; text-transform:uppercase;
+  }
+  .mp-slashes{display:inline-flex; gap:.18em; font-size:.9rem; opacity:.35;}
+  .mp-slashes i{display:block; width:.26em; height:1em; transform:skewX(-22deg); background:currentColor;}
+  .mp-slashes i:nth-child(2){opacity:.55;}
+  .mp-slashes i:nth-child(3){opacity:.28;}
+
+  /* ---- 02 · identita' + numeri ------------------------------------------ */
+  .mp-intro{display:grid; gap:2.5rem 4rem;}
+  @media(min-width:1024px){ .mp-intro{grid-template-columns:1.1fr 1fr;} }
+  .mp-intro-dim{color:rgba(22,22,22,.45);}
+  .mp-intro-text{font-size:1.125rem;}
+  @media(min-width:1024px){ .mp-intro-text{padding-top:.75rem;} }
+
+  .mp-sr{display:grid; grid-template-columns:1fr; margin-top:4rem;}
+  @media(min-width:640px) { .mp-sr{grid-template-columns:repeat(2, 1fr);} }
+  @media(min-width:768px) { .mp-sr{margin-top:5rem;} }
+  @media(min-width:1000px){ .mp-sr{grid-template-columns:repeat(4, 1fr);} }
+  .mp-sr-item{display:flex; flex-direction:column; gap:.45rem; padding:1.75rem 0; border-top:1px solid;}
+  @media(min-width:640px){ .mp-sr-item{padding-inline-end:2rem;} }
+  .mp-sr-value{
+    font-family:var(--mp-display); font-weight:700; font-size:clamp(2.4rem, 5vw, 3.8rem);
+    line-height:1; letter-spacing:-0.035em; font-variant-numeric:tabular-nums;
+  }
+  .mp-sr-label{font-size:.72rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; opacity:.55;}
+  .mp-sr-note{font-size:.9rem; max-width:26ch;}
+
+  /* ---- 04 · dotazione / optionals (SpecTabs) ---------------------------- */
+  .mp-st-head{display:flex; gap:2.5rem; border-bottom:1px solid rgba(255,255,255,.16);}
+  .mp-st-tab{display:inline-flex; align-items:flex-start; gap:.45rem; padding:0 0 1.1rem; background:none; border:0; color:inherit; cursor:pointer; position:relative;}
+  .mp-st-tablabel{font-family:var(--mp-display); font-weight:700; font-size:clamp(1.5rem, 3.4vw, 2.4rem); letter-spacing:-0.03em; opacity:.38; transition:opacity .3s;}
+  .mp-st-count{font-size:.68rem; letter-spacing:.12em; opacity:.3; padding-top:.35em;}
+  .mp-st-tab.is-active .mp-st-tablabel{opacity:1;}
+  .mp-st-tab::after{
+    content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:currentColor;
+    transform:scaleX(0); transform-origin:left; transition:transform .5s cubic-bezier(.22,1,.36,1);
+  }
+  .mp-st-tab.is-active::after{transform:scaleX(1);}
+  .mp-st-body{display:grid; gap:clamp(2rem, 5vw, 4rem); margin-top:clamp(2rem, 4vw, 3.25rem);}
+  @media(min-width:960px){ .mp-st-body{grid-template-columns:1fr 1fr; align-items:start;} }
+  .mp-st-lists{display:grid;}
+  .mp-st-list{grid-area:1 / 1; opacity:0; visibility:hidden; transform:translateY(10px); transition:opacity .45s ease, transform .45s ease, visibility .45s;}
+  .mp-st-list.is-active{opacity:1; visibility:visible; transform:none;}
+  .mp-st-item{border-bottom:1px solid rgba(255,255,255,.14);}
+  .mp-st-row{display:flex; align-items:center; gap:1.1rem; width:100%; padding:1.1rem 0; background:none; border:0; color:inherit; cursor:pointer; text-align:left; font-family:inherit;}
+  .mp-st-num{font-size:.68rem; letter-spacing:.1em; opacity:.35; font-variant-numeric:tabular-nums;}
+  .mp-st-title{flex:1; font-family:var(--mp-display); font-weight:600; font-size:clamp(.98rem, 1.5vw, 1.15rem); transition:opacity .25s;}
+  .mp-st-row:hover .mp-st-title{opacity:.62;}
+  .mp-plus{position:relative; width:13px; height:13px; flex:none; opacity:.6;}
+  .mp-plus i{position:absolute; inset:50% 0 auto 0; height:1.5px; background:currentColor; transition:transform .4s cubic-bezier(.22,1,.36,1);}
+  .mp-plus i:nth-child(2){transform:rotate(90deg);}
+  .mp-st-row.is-open .mp-plus i:nth-child(2){transform:rotate(0);}
+  .mp-st-panel{display:grid; grid-template-rows:0fr; transition:grid-template-rows .5s cubic-bezier(.22,1,.36,1);}
+  .mp-st-row.is-open + .mp-st-panel{grid-template-rows:1fr;}
+  .mp-st-inner{overflow:hidden;}
+  .mp-st-spec{font-family:var(--mp-display); font-weight:600; font-size:.95rem; margin-bottom:.4rem; padding-left:2.1rem;}
+  .mp-st-desc{font-size:.92rem; line-height:1.6; opacity:.68; max-width:46ch; padding:0 0 1.3rem 2.1rem;}
+  .mp-st-figure{position:relative; overflow:hidden; border-radius:var(--mp-r-lg);}
+  @media(min-width:960px){ .mp-st-figure{position:sticky; top:7rem;} }
+  .mp-st-figure img{width:100%; height:100%; object-fit:cover; display:block;}
+  .mp-st-hint{
+    position:absolute; left:1rem; bottom:1rem; display:inline-flex; align-items:center; gap:.5rem;
+    padding:.45rem .85rem; border-radius:999px; background:rgba(0,0,0,.55); backdrop-filter:blur(6px);
+    color:#fff; font-size:.66rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase;
+  }
+  .mp-st-dot{width:6px; height:6px; border-radius:999px; background:currentColor; animation:mp-pulse 1.8s ease-in-out infinite;}
+  @keyframes mp-pulse{0%, 100%{opacity:1; transform:scale(1);} 50%{opacity:.3; transform:scale(.6);}}
+
+  /* ---- 05 · i progetti (Gallery) ---------------------------------------- */
+  .mp-gal{display:grid; gap:clamp(.75rem, 1.5vw, 1.25rem); grid-template-columns:1fr;}
+  @media(min-width:640px) { .mp-gal{grid-template-columns:repeat(2, 1fr);} }
+  @media(min-width:1024px){ .mp-gal{grid-template-columns:repeat(3, 1fr);} }
+  /* sei immagini: la prima e' un riquadro 2x2 e la griglia a 3 si chiude esatta */
+  @media(min-width:1024px){
+    .mp-gal-feature .mp-gal-item:first-child{grid-column:span 2; grid-row:span 2; display:flex; flex-direction:column; min-height:0;}
+    .mp-gal-feature .mp-gal-item:first-child .mp-gal-frame{flex:1; min-height:0;}
+    .mp-gal-feature .mp-gal-item:first-child img{aspect-ratio:auto; height:100%;}
+  }
+  .mp-gal-frame{overflow:hidden; border-radius:var(--mp-r-md); background:var(--mp-surface);}
+  .mp-gal-frame img{
+    width:100%; aspect-ratio:3 / 2; object-fit:cover; display:block;
+    transform:scale(1.01); filter:grayscale(.15);
+    transition:transform .9s cubic-bezier(.22,1,.36,1), filter .6s;
+  }
+  .mp-gal-item:hover .mp-gal-frame img{transform:scale(1.06); filter:grayscale(0);}
+  .mp-gal figcaption{margin-top:.75rem; font-size:.72rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; opacity:.5;}
+  .mp-gal-title{margin-bottom:3.5rem;}
+
+  /* ---- 06 · clienti (ClientLogos) --------------------------------------- */
+  .mp-cl-title{
+    font-family:var(--mp-display); font-size:clamp(1.1rem, 2vw, 1.5rem); font-weight:600;
+    letter-spacing:-0.015em; text-align:center; margin-bottom:clamp(2.5rem, 5vw, 4rem); opacity:.65;
+  }
+  .mp-cl-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:clamp(1.5rem, 4vw, 3.5rem); align-items:center; justify-items:center;}
+  @media(min-width:700px) { .mp-cl-grid{grid-template-columns:repeat(5, 1fr);} }
+  @media(min-width:1100px){ .mp-cl-grid{grid-template-columns:repeat(9, 1fr);} }
+  /* i file sono loghi BIANCHI su trasparenza: sui fondi chiari vanno invertiti */
+  .mp-cl-grid img{width:auto; height:clamp(30px, 4vw, 44px); object-fit:contain; opacity:.55; filter:invert(1); transition:opacity .35s;}
+  .mp-cl-grid li:hover img{opacity:1;}
+
+  /* ---- 07 · domande frequenti (Faq) ------------------------------------- */
+  .mp-faq-wrap{display:grid; gap:2rem 4rem;}
+  @media(min-width:1024px){
+    .mp-faq-wrap{grid-template-columns:.8fr 1.2fr;}
+    .mp-faq-side{position:sticky; top:7rem; align-self:start;}
+  }
+  .mp-faq-side h2{margin-bottom:1rem;}
+  .mp-faq-side p{max-width:24rem;}
+  .mp-faq{border-top:1px solid var(--mp-hairline);}
+  .mp-faq-item{border-bottom:1px solid var(--mp-hairline);}
+  .mp-faq details{--dur:.5s;}
+  .mp-faq summary{display:flex; align-items:center; justify-content:space-between; gap:2rem; padding:1.5rem 0; cursor:pointer; list-style:none;}
+  .mp-faq summary::-webkit-details-marker{display:none;}
+  .mp-faq-q{font-family:var(--mp-display); font-weight:600; font-size:clamp(1.05rem, 1.7vw, 1.35rem); letter-spacing:-0.015em; transition:opacity .25s;}
+  .mp-faq summary:hover .mp-faq-q{opacity:.6;}
+  .mp-faq .mp-plus{width:15px; height:15px; opacity:1;}
+  .mp-faq details[open] .mp-plus i:nth-child(2){transform:rotate(0deg);}
+  .mp-faq-panel{display:grid; grid-template-rows:0fr; transition:grid-template-rows var(--dur) cubic-bezier(.22,1,.36,1);}
+  .mp-faq details[open] .mp-faq-panel{grid-template-rows:1fr;}
+  .mp-faq-inner{overflow:hidden;}
+  .mp-faq-inner p{
+    max-width:62ch; padding-bottom:1.6rem; color:var(--mp-ink-soft);
+    opacity:0; transform:translateY(6px); transition:opacity .4s ease .1s, transform .4s ease .1s;
+  }
+  .mp-faq details[open] .mp-faq-inner p{opacity:1; transform:none;}
+
+  /* ---- 08 · le altre linee ---------------------------------------------- */
+  .mp-others{display:grid; gap:1.5rem;}
+  @media(min-width:768px){ .mp-others{grid-template-columns:repeat(2, 1fr);} }
+  .mp-ol{position:relative; display:block; overflow:hidden; border-radius:var(--mp-r-lg); aspect-ratio:16 / 9; color:#fff;}
+  .mp-ol img{width:100%; height:100%; object-fit:cover; transition:transform 1s cubic-bezier(.22,1,.36,1);}
+  .mp-ol:hover img{transform:scale(1.05);}
+  .mp-ol-scrim{position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,.1) 65%);}
+  .mp-ol-body{position:absolute; left:clamp(1.25rem, 3vw, 2rem); bottom:clamp(1.25rem, 3vw, 2rem); display:flex; flex-direction:column; gap:.3rem;}
+  .mp-ol-tag{font-size:.66rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.65);}
+  .mp-ol-name{font-family:var(--mp-display); font-weight:700; font-size:clamp(1.6rem, 3.4vw, 2.6rem); letter-spacing:-0.03em; line-height:1;}
+  .mp-ol-go{position:absolute; right:clamp(1.25rem, 3vw, 2rem); bottom:clamp(1.25rem, 3vw, 2rem); font-size:1.5rem; transition:transform .4s cubic-bezier(.22,1,.36,1);}
+  .mp-ol:hover .mp-ol-go{transform:translateX(7px);}
+
+  /* ---- 09 · contatti (ContactForm) -------------------------------------- */
+  .mp-cf{display:grid; gap:clamp(2.5rem, 6vw, 5rem); align-items:start;}
+  @media(min-width:900px){ .mp-cf{grid-template-columns:1fr 1fr;} }
+  .mp-cf-formtitle{font-size:1.05rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase; margin-bottom:2rem; opacity:.55;}
+  .mp-cf-field{margin-bottom:1.5rem;}
+  .mp-cf-row{display:grid; gap:1.5rem;}
+  @media(min-width:560px){ .mp-cf-row{grid-template-columns:1fr 1fr;} }
+  /* .mp davanti: la regola globale input[type=text] del configuratore ha la
+     stessa specificita' e sta piu' in basso, quindi vincerebbe lei, con filo e
+     testo scuri su fondo scuro: campi invisibili e testo digitato invisibile. */
+  .mp .mp-cf input, .mp .mp-cf textarea{
+    width:100%; background:transparent; border:0; border-bottom:1.5px solid rgba(255,255,255,.28);
+    padding:.7rem 0; font-family:inherit; font-size:1rem; font-weight:400; color:inherit;
+    border-radius:0; transition:border-color .3s;
+  }
+  .mp .mp-cf input::placeholder, .mp .mp-cf textarea::placeholder{color:currentColor; opacity:.32;}
+  .mp .mp-cf input:focus, .mp .mp-cf textarea:focus{outline:none; border-color:#fff;}
+  .mp .mp-cf textarea{resize:vertical; min-height:3.5rem;}
+  .mp .mp-cf-field.is-invalid input, .mp .mp-cf-field.is-invalid textarea{border-color:#ff8a9b;}
+  .mp-cf-submit{
+    display:inline-flex; align-items:center; gap:.9rem; margin-top:.6rem; padding:.95rem 1.6rem;
+    border:1.5px solid currentColor; border-radius:var(--mp-r-md); background:transparent; color:inherit;
+    font-family:var(--mp-display); font-weight:600; font-size:.85rem; letter-spacing:.04em;
+    cursor:pointer; transition:background .25s, color .25s, gap .25s;
+  }
+  .mp-cf-submit svg{width:24px; height:12px; transition:transform .3s;}
+  .mp-cf-submit:hover{gap:1.3rem; background:#fff; color:var(--mp-ink);}
+  .mp-cf-submit:hover svg{transform:translateX(4px);}
+  .mp-cf-submit[disabled]{opacity:.5; cursor:progress;}
+  .mp-cf-status{margin-top:1rem; font-size:.88rem; min-height:1.3em; opacity:.75;}
+  .mp-cf-aside .mp-label{margin-bottom:1.5rem;}
+  .mp-cf-kicker{font-weight:400 !important; font-size:clamp(1.15rem, 2.4vw, 1.9rem); letter-spacing:-0.02em; opacity:.7;}
+  .mp-cf-shout{font-family:var(--mp-display); font-weight:700; font-size:clamp(2.6rem, 8vw, 6rem); line-height:.92; letter-spacing:-0.035em; margin:.2em 0 1.2em;}
+  .mp-cf-contacts{display:grid; gap:.7rem; font-size:.95rem;}
+  .mp-cf-contacts a{transition:opacity .2s;}
+  .mp-cf-contacts a:hover{opacity:.6;}
+  .mp-cf-addr{opacity:.6;}
+  /* Unica aggiunta rispetto al remake in Astro: le vecchie pagine del cliente
+     portavano al configuratore con il modello gia' scelto, e quel percorso
+     non si perde. */
+  .mp-cf-cfg{
+    display:inline-flex; align-items:center; gap:.7rem; margin-top:2.2rem; padding:.95rem 1.6rem;
+    border-radius:var(--mp-r-md); background:#fff; color:var(--mp-ink);
+    font-family:var(--mp-display); font-weight:600; font-size:.85rem; transition:gap .25s;
+  }
+  .mp-cf-cfg svg{width:24px; height:12px; flex:none;}
+  .mp-cf-cfg{white-space:nowrap;}
+  .mp-cf-cfg:hover{gap:1.1rem;}
+
+  @media(prefers-reduced-motion:reduce){
+    .mp-vb-video, .mp-vb-cue i, .mp-st-dot, .mp-mq-track{animation:none;}
+  }
 
   /* ===================== CONFIGURATORE ====================================
      Impianto alla Porsche. La categoria del veicolo e' la SOGLIA: finche' non
@@ -662,10 +955,6 @@
     .form-grid{grid-template-columns:1fr;}
     .accessori-grid{grid-template-columns:1fr;}
     .contact-grid{grid-template-columns:1fr;}
-    .spec-grid, .feature-list{grid-template-columns:1fr;}
-    .gallery{grid-template-columns:1fr;}
-    .gallery-main{height:300px;}
-    .gallery-col{grid-template-rows:1fr 1fr; height:300px;}
   }
 
   @media(prefers-reduced-motion:reduce){
@@ -1100,206 +1389,1318 @@
 </div>
 <!-- ============ /HOME ============ -->
 
+<!-- MODELLI:INIZIO — generato da scripts/build-model-pages.mjs a partire da
+     src/data/lines.ts. Rigenerare SOVRASCRIVE questo blocco: se le viste sono
+     gia' state ritoccate a mano, non rilanciare lo script. -->
+
 <!-- ============ LE MANS ============ -->
-<div id="view-le-mans" class="page-view" hidden>
-  <div class="wrap breadcrumb"><a href="#home">Home</a> / <a href="#modelli">Modelli</a> / <span>Le Mans</span></div>
-
-  <section class="model-hero">
-    <video class="hero-video" autoplay muted loop playsinline poster="https://static.wixstatic.com/media/d56fb4_b701ef5030114b05a9e77d921e1283da~mv2.jpg/v1/fill/w_1450,h_820,q_90,enc_avif,quality_auto/d56fb4_b701ef5030114b05a9e77d921e1283da~mv2.jpg">
-      <source src="https://sampoai67.github.io/Startruck/video/lemans-hero.mp4" type="video/mp4">
-    </video>
-    <div class="hero-overlay"></div>
-    <div class="wrap model-hero-inner">
-      <span class="model-tag-lg">Allestimento iconico</span>
-      <h1>Le Mans</h1>
-      <p>L'allestimento aperto più richiesto del nostro catalogo: rampe rapide, pianale in alluminio e massima visibilità del carico, per chi trasporta sportive ogni weekend.</p>
+<div id="view-le-mans" class="page-view mp" hidden>
+  <!-- 01 · hero (nero) -->
+  <section class="mp-vb mp-dark mp-vb-full mp-vb-first">
+    <div class="mp-vb-media" data-parallax>
+      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/lemans-hero.webp" muted loop playsinline preload="none" aria-hidden="true">
+        <source src="https://sampoai67.github.io/Startruck/video/lemans-hero-mobile.mp4" media="(max-width: 760px)" type="video/mp4">
+        <source src="https://sampoai67.github.io/Startruck/video/lemans-hero.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="mp-vb-scrim"></div>
+    <div class="mp-container mp-vb-content">
+      <p class="mp-label" data-index="[ 01 ]" data-reveal>Performance &amp; racing</p>
+      <h1 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Le Mans</span></span></h1>
+      <p class="mp-vb-text" data-reveal data-delay=".18s">Progettato per offrire una struttura leggera, carico massimo e versatilità senza pari, pensato per chi non vuole rinunciare a nulla.</p>
+      
+    </div>
+    <div class="mp-vb-cue" aria-hidden="true"><span>SCROLL</span><i></i></div>
+  </section>
+  <!-- dotazione che scorre -->
+  <div class="mp-mq">
+    <div class="mp-mq-track">
+      <span class="mp-mq-seq"><span class="mp-mq-cell"><span class="mp-mq-word">Pianale</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Rampe a scomparsa</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Verricello traslabile</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fune sintetica</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fari LED notturni</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Luci ingombro laterali LED</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Set 4 cinghie</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span></span><span class="mp-mq-seq" aria-hidden="true"><span class="mp-mq-cell"><span class="mp-mq-word">Pianale</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Rampe a scomparsa</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Verricello traslabile</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fune sintetica</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fari LED notturni</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Luci ingombro laterali LED</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Set 4 cinghie</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span></span>
+    </div>
+  </div>
+  <!-- 02 · identità + numeri (bianco) -->
+  <section class="mp-light mp-pad">
+    <div class="mp-container">
+      <p class="mp-label" data-index="[ 02 ]" data-reveal>L'allestimento</p>
+      
+      <div class="mp-intro">
+        <h2 class="mp-display-2" data-reveal>
+          <span class="mp-mask"><span>Costruito attorno</span></span>
+          <span class="mp-mask"><span style="--d:.08s">alle tue auto,</span></span>
+          <span class="mp-mask"><span style="--d:.16s" class="mp-intro-dim">non al catalogo.</span></span>
+        </h2>
+        <p class="mp-intro-text mp-soft" data-reveal data-delay=".2s">Grazie alla struttura interamente in alluminio, Le Mans garantisce una leggerezza eccezionale e un carico utile fino a 1,5 tonnellate: tutta la capacità che ti serve, con la semplice patente B. È compatibile con i principali marchi del settore e si adatta alle esigenze della tua flotta senza chiederti di cambiare abitudini.</p>
+      </div>
+      <ul class="mp-sr">
+        
+        <li class="mp-sr-item mp-rule" data-reveal data-delay="0.00s">
+          <span class="mp-sr-value" data-count="1,5 t">1,5 t</span>
+          <span class="mp-sr-label">Carico utile</span>
+          <span class="mp-sr-note mp-soft">Fino a una tonnellata e mezza di vettura, senza sconfinare.</span>
+        </li>
+        <li class="mp-sr-item mp-rule" data-reveal data-delay="0.08s">
+          <span class="mp-sr-value" data-count="B">B</span>
+          <span class="mp-sr-label">Patente</span>
+          <span class="mp-sr-note mp-soft">Resta nei 3,5 t: lo guida chiunque abbia la patente B.</span>
+        </li>
+        <li class="mp-sr-item mp-rule" data-reveal data-delay="0.16s">
+          <span class="mp-sr-value" data-count="11">11</span>
+          <span class="mp-sr-label">Marchi compatibili</span>
+          <span class="mp-sr-note mp-soft">Dai telai Iveco e Mercedes fino a Ford e Maxus.</span>
+        </li>
+        <li class="mp-sr-item mp-rule" data-reveal data-delay="0.24s">
+          <span class="mp-sr-value" data-count="100%">100%</span>
+          <span class="mp-sr-label">Alluminio</span>
+          <span class="mp-sr-note mp-soft">Struttura interamente in lega: leggera dove conta.</span>
+        </li>
+      </ul>
     </div>
   </section>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="sec-eyebrow">Caratteristiche tecniche</span>
-        <h2>Pensato per la velocità operativa</h2>
-        <p>Dati indicativi di riferimento — verranno confermati e personalizzati in base al telaio e alla configurazione scelta.</p>
-      </div>
-      <div class="spec-note">I valori seguenti sono orientativi: da confermare con il team tecnico Startruck prima della pubblicazione definitiva.</div>
-      <div class="spec-grid">
-        <div class="spec-item"><span class="k">Tipo pianale</span><span class="v">Alluminio aperto</span></div>
-        <div class="spec-item"><span class="k">Configurazione</span><span class="v">Rampe rapide</span></div>
-        <div class="spec-item"><span class="k">Compatibilità</span><span class="v">Patente B / C</span></div>
-        <div class="spec-item"><span class="k">Capacità indicativa</span><span class="v">1–2 vetture</span></div>
-        <div class="spec-item"><span class="k">Peso struttura</span><span class="v">Ottimizzato</span></div>
-        <div class="spec-item"><span class="k">Finitura</span><span class="v">Alluminio naturale / verniciato</span></div>
-      </div>
-      <div class="feature-list">
-        <div class="feature-item"><span class="dot"></span><p>Rampe di carico rapide, pensate per ridurre i tempi di carico e scarico anche in autonomia.</p></div>
-        <div class="feature-item"><span class="dot"></span><p>Pianale completamente in alluminio: struttura leggera, resistente e a bassa manutenzione.</p></div>
-        <div class="feature-item"><span class="dot"></span><p>Massima visibilità del carico durante il trasporto, ideale per showroom ed eventi.</p></div>
-        <div class="feature-item"><span class="dot"></span><p>Compatibile con la maggior parte degli accessori Startruck, dal verricello al rollbar.</p></div>
-      </div>
+  <!-- 03 · il mezzo da vicino (nero) -->
+  <section class="mp-vb mp-dark mp-vb-tall">
+    <div class="mp-vb-media" data-parallax>
+      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/lemans-detail.webp" muted loop playsinline preload="none" aria-hidden="true">
+        
+        <source src="https://sampoai67.github.io/Startruck/video/lemans-detail.mp4" type="video/mp4">
+      </video>
     </div>
+    <div class="mp-vb-scrim"></div>
+    <div class="mp-container mp-vb-content">
+      <p class="mp-label" data-index="[ 03 ]" data-reveal>Il mezzo da vicino</p>
+      <h2 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Ogni dettaglio</span></span><span class="mp-mask"><span style="--d:0.09s">è una decisione.</span></span></h2>
+      <p class="mp-vb-text" data-reveal data-delay=".18s">Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.</p>
+      <div data-reveal data-delay=".26s"><a class="mp-vb-cta" href="#" data-scrollto="dotazione-le-mans">Guarda la dotazione <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></a></div>
+    </div>
+    
   </section>
-
-  <section class="section alt">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="sec-eyebrow">Galleria</span>
-        <h2>Le Mans su strada</h2>
-      </div>
-      <div class="gallery">
-        <div class="gallery-main"><img src="https://static.wixstatic.com/media/d56fb4_b701ef5030114b05a9e77d921e1283da~mv2.jpg/v1/fill/w_1450,h_1160,al_c,q_90,enc_avif,quality_auto/lemans_urus.jpg" alt="Le Mans su Lamborghini Urus"></div>
-        <div class="gallery-col">
-          <img src="https://static.wixstatic.com/media/d56fb4_46c84cf020194791afba99d315b8882d~mv2.jpeg/v1/fill/w_980,h_735,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Lambo.jpeg" alt="Le Mans su Lamborghini">
-          <img src="https://static.wixstatic.com/media/d56fb4_b701ef5030114b05a9e77d921e1283da~mv2.jpg/v1/fill/w_980,h_735,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/lemans_urus.jpg" alt="Dettaglio Le Mans">
+  <!-- 04 · dotazione / optionals (nero) -->
+  <section class="mp-dark mp-pad" id="dotazione-le-mans">
+    <div class="mp-container">
+      <p class="mp-label" data-index="[ 04 ]" data-reveal>Cosa c'è a bordo</p>
+      
+      <div class="mp-st">
+        <div class="mp-st-head" role="tablist">
+          
+          <button class="mp-st-tab is-active" type="button" role="tab" data-tab="dotazione" aria-selected="true">
+            <span class="mp-st-tablabel">Dotazione</span>
+            <span class="mp-st-count">07</span>
+          </button>
+          <button class="mp-st-tab" type="button" role="tab" data-tab="optionals" aria-selected="false">
+            <span class="mp-st-tablabel">Optionals</span>
+            <span class="mp-st-count">06</span>
+          </button>
+        </div>
+        <div class="mp-st-body">
+          <div class="mp-st-lists">
+            
+            <ul class="mp-st-list is-active" data-panel="dotazione">
+              
+              <li class="mp-st-item">
+                <button class="mp-st-row is-open" type="button">
+                  <span class="mp-st-num">01</span>
+                  <span class="mp-st-title">Pianale</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  <p class="mp-st-spec">Pianale 5.000 × 2.130 mm</p>
+                  <p class="mp-st-desc">Il piano di carico di Le Mans: alluminio estruso, superficie antiscivolo e punti di ancoraggio distribuiti su tutta la lunghezza.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">02</span>
+                  <span class="mp-st-title">Rampe a scomparsa</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Si sfilano da sotto il pianale e rientrano a filo: nessun ingombro esterno, nessun pezzo da caricare a parte.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">03</span>
+                  <span class="mp-st-title">Verricello traslabile</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Scorre lateralmente per allinearsi all’auto invece di costringere l’auto ad allinearsi a lui. Tiro sempre dritto.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">04</span>
+                  <span class="mp-st-title">Fune sintetica</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Più leggera dell’acciaio e più sicura in caso di rottura: non frusta. Si maneggia a mani nude.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">05</span>
+                  <span class="mp-st-title">Fari LED notturni</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Illuminano l’area di lavoro dietro al mezzo. Carico e scarico al buio senza torce né improvvisazione.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">06</span>
+                  <span class="mp-st-title">Luci ingombro laterali LED</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Profilo del mezzo sempre leggibile agli altri, anche con poca luce e in manovra.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">07</span>
+                  <span class="mp-st-title">Set 4 cinghie</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Quattro cinghie a cricchetto con ganci dedicati agli ancoraggi del pianale. Incluse, non un accessorio.</p>
+                </div></div>
+              </li>
+            </ul>
+            <ul class="mp-st-list" data-panel="optionals">
+              
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">01</span>
+                  <span class="mp-st-title">Verricello elettrico maggiorato</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Per chi carica ogni giorno e non può permettersi di aspettare. Comando a distanza e tiro più deciso sulle vetture pesanti.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">02</span>
+                  <span class="mp-st-title">Pedana posteriore estraibile</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Riduce l’angolo di attacco: utile con le auto ribassate, dove ogni grado in meno è un paraurti salvato.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">03</span>
+                  <span class="mp-st-title">Cassetta porta-attrezzi integrata</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Ricavata nel sottopianale, chiusa a chiave. Cinghie e attrezzi restano a bordo senza rubare spazio al carico.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">04</span>
+                  <span class="mp-st-title">Illuminazione perimetrale supplementare</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Barre LED aggiuntive lungo il pianale: carichi e scarichi di notte con la stessa sicurezza del giorno.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">05</span>
+                  <span class="mp-st-title">Ruota di scorta con supporto dedicato</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Alloggiamento sotto telaio, fuori dalla vista e fuori dall’area di carico.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">06</span>
+                  <span class="mp-st-title">Livrea e personalizzazione grafica</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Il mezzo diventa il tuo biglietto da visita: colori, logo e finiture studiati con te.</p>
+                </div></div>
+              </li>
+            </ul>
+          </div>
+          
+          <figure class="mp-st-figure" data-reveal>
+            <img src="https://sampoai67.github.io/Startruck/img/lemans-03.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+            <figcaption class="mp-st-hint"><span class="mp-st-dot"></span>Click</figcaption>
+          </figure>
         </div>
       </div>
     </div>
   </section>
-
-  <section class="cta-band">
-    <div class="wrap">
-      <h2>Configura il tuo Le Mans</h2>
-      <p>Scegli categoria, autocarro e accessori: la richiesta arriva direttamente al nostro team.</p>
-      <a href="#configuratore" class="btn-primary" onclick="prefillModel('Le Mans')">Vai al configuratore →</a>
+  <!-- 05 · i progetti (bianco) -->
+  <section class="mp-light mp-pad">
+    <div class="mp-container">
+      <p class="mp-label" data-index="[ 05 ]" data-reveal>Più iconici</p>
+      
+      <h2 class="mp-display-2 mp-gal-title" data-reveal>I progetti</h2>
+      <div class="mp-gal mp-gal-feature">
+        
+        <figure class="mp-gal-item" data-reveal data-delay="0.00s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-01.webp" alt="Peugeot Boxer" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Peugeot Boxer</figcaption>
+        </figure>
+        <figure class="mp-gal-item" data-reveal data-delay="0.08s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-02.webp" alt="Mercedes Sprinter" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Mercedes Sprinter</figcaption>
+        </figure>
+        <figure class="mp-gal-item" data-reveal data-delay="0.16s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-03.webp" alt="MAN TGE" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>MAN TGE</figcaption>
+        </figure>
+        <figure class="mp-gal-item" data-reveal data-delay="0.00s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-04.webp" alt="Iveco Daily" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Iveco Daily</figcaption>
+        </figure>
+        <figure class="mp-gal-item" data-reveal data-delay="0.08s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-05.webp" alt="Mercedes — dettaglio" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Mercedes — dettaglio</figcaption>
+        </figure>
+        <figure class="mp-gal-item" data-reveal data-delay="0.16s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-06.webp" alt="Peugeot — vista drone" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Peugeot — vista drone</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  <!-- 06 · clienti (grigio) -->
+  <section class="mp-surface mp-pad-tight">
+    <div class="mp-container">
+      
+      
+      <div class="mp-cl">
+        <h2 class="mp-cl-title" data-reveal>Chi ha scelto Le Mans</h2>
+        <ul class="mp-cl-grid">
+          
+          <li data-reveal data-delay="0.00s"><img src="https://sampoai67.github.io/Startruck/logos/iveco.webp" alt="Iveco" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.05s"><img src="https://sampoai67.github.io/Startruck/logos/mercedes.webp" alt="Mercedes-Benz" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.10s"><img src="https://sampoai67.github.io/Startruck/logos/man.webp" alt="MAN" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.15s"><img src="https://sampoai67.github.io/Startruck/logos/ww.webp" alt="Volkswagen" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.20s"><img src="https://sampoai67.github.io/Startruck/logos/renault.webp" alt="Renault" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.25s"><img src="https://sampoai67.github.io/Startruck/logos/peugeot.webp" alt="Peugeot" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.30s"><img src="https://sampoai67.github.io/Startruck/logos/citroen.webp" alt="Citroën" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.35s"><img src="https://sampoai67.github.io/Startruck/logos/fiat.webp" alt="Fiat" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.40s"><img src="https://sampoai67.github.io/Startruck/logos/ford.webp" alt="Ford" width="160" height="80" loading="lazy" decoding="async"></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <!-- 07 · domande frequenti (bianco) -->
+  <section class="mp-light mp-pad">
+    <div class="mp-container">
+      <p class="mp-label" data-index="[ 06 ]" data-reveal>Domande frequenti</p>
+      
+      <div class="mp-faq-wrap">
+        <div class="mp-faq-side">
+          <h2 class="mp-display-3" data-reveal>Abbiamo già risposto</h2>
+          <p class="mp-soft" data-reveal data-delay=".08s">Le domande che ci fanno più spesso. Se non trovi la tua, chiamaci: rispondiamo noi, non un centralino.</p>
+        </div>
+      <ul class="mp-faq">
+        
+        <li class="mp-faq-item" data-reveal data-delay="0.00s">
+          <details name="faq-le-mans">
+            <summary><span class="mp-faq-q">Su quali veicoli potete montare un allestimento?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>Lavoriamo sui principali telai in commercio: Iveco, Mercedes, MAN, Volkswagen, Renault, Peugeot, Citroën, Fiat, Nissan, Ford e Maxus. Se il tuo mezzo non è in elenco scrivici: nella maggior parte dei casi troviamo comunque la soluzione.</p></div></div>
+          </details>
+        </li>
+        <li class="mp-faq-item" data-reveal data-delay="0.04s">
+          <details name="faq-le-mans">
+            <summary><span class="mp-faq-q">Serve la patente C per guidarlo?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>No. Le Mans è progettato attorno al limite delle 3,5 tonnellate: struttura interamente in alluminio, peso contenuto e carico utile fino a 1,5 tonnellate. Si guida con la patente B.</p></div></div>
+          </details>
+        </li>
+        <li class="mp-faq-item" data-reveal data-delay="0.08s">
+          <details name="faq-le-mans">
+            <summary><span class="mp-faq-q">Quanto tempo serve per la consegna?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>Dipende dall’allestimento e dalla disponibilità del telaio. Dopo il sopralluogo ti diamo una finestra di consegna precisa e la manteniamo: preferiamo dire una data vera piuttosto che una comoda.</p></div></div>
+          </details>
+        </li>
+        <li class="mp-faq-item" data-reveal data-delay="0.12s">
+          <details name="faq-le-mans">
+            <summary><span class="mp-faq-q">Posso portare il mio veicolo o lo procurate voi?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>Entrambe le cose. Puoi portarci il tuo telaio oppure ce ne occupiamo noi, seguendo l’ordine e la pratica dal primo all’ultimo passaggio.</p></div></div>
+          </details>
+        </li>
+        <li class="mp-faq-item" data-reveal data-delay="0.16s">
+          <details name="faq-le-mans">
+            <summary><span class="mp-faq-q">L’allestimento è omologato?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>Sì. Ogni mezzo esce dalla nostra officina con la pratica di omologazione completa e i documenti pronti per la circolazione.</p></div></div>
+          </details>
+        </li>
+        <li class="mp-faq-item" data-reveal data-delay="0.20s">
+          <details name="faq-le-mans">
+            <summary><span class="mp-faq-q">Fate assistenza dopo la consegna?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>Sì, e non è un servizio a parte: chi ha costruito il tuo allestimento è la stessa persona che risponde al telefono se un anno dopo hai bisogno di un ricambio o di una regolazione.</p></div></div>
+          </details>
+        </li>
+      </ul>
+      </div>
+    </div>
+  </section>
+  <!-- 08 · le altre linee (grigio) -->
+  <section class="mp-surface mp-pad">
+    <div class="mp-container">
+      <p class="mp-label" data-index="[ 07 ]" data-reveal>Le altre linee</p>
+      
+      <div class="mp-others">
+        
+        <a class="mp-ol" href="#privacy" data-reveal>
+          <img src="https://sampoai67.github.io/Startruck/img/privacy-hero.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+          <span class="mp-ol-scrim"></span>
+          <span class="mp-ol-body"><span class="mp-ol-tag">Trasporto confidenziale</span><span class="mp-ol-name">Privacy</span></span>
+          <span class="mp-ol-go" aria-hidden="true">→</span>
+        </a>
+        <a class="mp-ol" href="#type-h" data-reveal>
+          <img src="https://sampoai67.github.io/Startruck/img/typeh-hero.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+          <span class="mp-ol-scrim"></span>
+          <span class="mp-ol-body"><span class="mp-ol-tag">Aspetto vintage</span><span class="mp-ol-name">Type H</span></span>
+          <span class="mp-ol-go" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+  <!-- 09 · contatti (nero) -->
+  <section class="mp-dark mp-pad">
+    <div class="mp-container">
+      
+      
+      <div class="mp-cf">
+        <form class="mp-cf-form" data-mailto="startruck@outlook.it" data-model="Le Mans" novalidate>
+          <h2 class="mp-cf-formtitle">Richiedi un preventivo</h2>
+          <div class="mp-cf-field">
+            <label for="cf-le-mans-name">Nome completo</label>
+            <input id="cf-le-mans-name" name="name" type="text" placeholder="Nome e cognome" required autocomplete="name">
+          </div>
+          <div class="mp-cf-row">
+            <div class="mp-cf-field">
+              <label for="cf-le-mans-email">Email</label>
+              <input id="cf-le-mans-email" name="email" type="email" placeholder="nome@esempio.it" required autocomplete="email">
+            </div>
+            <div class="mp-cf-field">
+              <label for="cf-le-mans-phone">Telefono</label>
+              <input id="cf-le-mans-phone" name="phone" type="tel" placeholder="+39 ___ ___ ____" autocomplete="tel">
+            </div>
+          </div>
+          <div class="mp-cf-field">
+            <label for="cf-le-mans-msg">Messaggio</label>
+            <textarea id="cf-le-mans-msg" name="message" rows="4" placeholder="Che mezzo hai e cosa devi trasportare?" required></textarea>
+          </div>
+          <button class="mp-cf-submit" type="submit"><span>Invia</span> <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></button>
+          <p class="mp-cf-status" role="status" aria-live="polite"></p>
+        </form>
+        <div class="mp-cf-aside">
+          <p class="mp-label" data-index="[ ✱ ]">Parliamone</p>
+          <h2 class="mp-cf-kicker" data-reveal>Se hai in mente un progetto</h2>
+          <p class="mp-cf-shout" data-reveal data-delay=".08s">CONTATTACI</p>
+          <ul class="mp-cf-contacts">
+            <li><a href="tel:+393408427538">+39 340 842 7538</a></li>
+            <li><a href="mailto:startruck@outlook.it">startruck@outlook.it</a></li>
+            <li class="mp-cf-addr">Str. Boschi — 46045 Pozzolo sul Mincio (MN)</li>
+          </ul>
+          <a class="mp-cf-cfg" href="#configuratore" data-prefill="Le Mans">Configura Le Mans <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></a>
+        </div>
+      </div>
     </div>
   </section>
 </div>
 <!-- ============ /LE MANS ============ -->
 
 <!-- ============ PRIVACY ============ -->
-<div id="view-privacy" class="page-view" hidden>
-  <div class="wrap breadcrumb"><a href="#home">Home</a> / <a href="#modelli">Modelli</a> / <span>Privacy</span></div>
-
-  <section class="model-hero">
-    <video class="hero-video" autoplay muted loop playsinline poster="https://static.wixstatic.com/media/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg/v1/fill/w_1450,h_820,q_90,enc_avif,quality_auto/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg">
-      <source src="https://sampoai67.github.io/Startruck/video/privacy-hero.mp4" type="video/mp4">
-    </video>
-    <div class="hero-overlay"></div>
-    <div class="wrap model-hero-inner">
-      <span class="model-tag-lg">Allestimento esclusivo</span>
-      <h1>Privacy</h1>
-      <p>Carrozzeria chiusa per trasporti riservati: la vettura viaggia protetta da sguardi e agenti atmosferici, senza rinunciare alla praticità di carico.</p>
+<div id="view-privacy" class="page-view mp" hidden>
+  <!-- 01 · hero (nero) -->
+  <section class="mp-vb mp-dark mp-vb-full mp-vb-first">
+    <div class="mp-vb-media" data-parallax>
+      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/privacy-hero.webp" muted loop playsinline preload="none" aria-hidden="true">
+        <source src="https://sampoai67.github.io/Startruck/video/privacy-hero-mobile.mp4" media="(max-width: 760px)" type="video/mp4">
+        <source src="https://sampoai67.github.io/Startruck/video/privacy-hero.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="mp-vb-scrim"></div>
+    <div class="mp-container mp-vb-content">
+      <p class="mp-label" data-index="[ 01 ]" data-reveal>Trasporto confidenziale</p>
+      <h1 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Privacy</span></span></h1>
+      <p class="mp-vb-text" data-reveal data-delay=".18s">Furgonato chiuso, nessuna vetrina. Quello che trasporti resta una cosa fra te e il destinatario.</p>
+      
+    </div>
+    <div class="mp-vb-cue" aria-hidden="true"><span>SCROLL</span><i></i></div>
+  </section>
+  <!-- dotazione che scorre -->
+  <div class="mp-mq">
+    <div class="mp-mq-track">
+      <span class="mp-mq-seq"><span class="mp-mq-cell"><span class="mp-mq-word">Pianale</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Rampe a scomparsa</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Verricello traslabile</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fune sintetica</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fari LED notturni</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Luci ingombro laterali LED</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Set 4 cinghie</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span></span><span class="mp-mq-seq" aria-hidden="true"><span class="mp-mq-cell"><span class="mp-mq-word">Pianale</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Rampe a scomparsa</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Verricello traslabile</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fune sintetica</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fari LED notturni</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Luci ingombro laterali LED</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Set 4 cinghie</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span></span>
+    </div>
+  </div>
+  <!-- 02 · identità + numeri (bianco) -->
+  <section class="mp-light mp-pad">
+    <div class="mp-container">
+      <p class="mp-label" data-index="[ 02 ]" data-reveal>L'allestimento</p>
+      
+      <div class="mp-intro">
+        <h2 class="mp-display-2" data-reveal>
+          <span class="mp-mask"><span>Costruito attorno</span></span>
+          <span class="mp-mask"><span style="--d:.08s">alle tue auto,</span></span>
+          <span class="mp-mask"><span style="--d:.16s" class="mp-intro-dim">non al catalogo.</span></span>
+        </h2>
+        <p class="mp-intro-text mp-soft" data-reveal data-delay=".2s">Privacy nasce per chi sposta auto che non devono essere viste: prototipi, vetture da collezione, consegne che richiedono riservatezza. Il vano è completamente chiuso e coibentato, l’accesso è controllato e dall’esterno il mezzo non racconta nulla del suo contenuto. La stessa cura costruttiva di Le Mans, applicata alla discrezione.</p>
+      </div>
+      <ul class="mp-sr">
+        
+        <li class="mp-sr-item mp-rule" data-reveal data-delay="0.00s">
+          <span class="mp-sr-value" data-count="Vano chiuso">Vano chiuso</span>
+          <span class="mp-sr-label">Struttura</span>
+          <span class="mp-sr-note mp-soft">Nessuna visibilità dall’esterno, in sosta come in viaggio.</span>
+        </li>
+        <li class="mp-sr-item mp-rule" data-reveal data-delay="0.08s">
+          <span class="mp-sr-value" data-count="Su misura">Su misura</span>
+          <span class="mp-sr-label">Ancoraggi</span>
+          <span class="mp-sr-note mp-soft">Posizionati sulle vetture che trasporti davvero.</span>
+        </li>
+        <li class="mp-sr-item mp-rule" data-reveal data-delay="0.16s">
+          <span class="mp-sr-value" data-count="B">B</span>
+          <span class="mp-sr-label">Patente</span>
+          <span class="mp-sr-note mp-soft">Progettato per restare nei 3,5 t.</span>
+        </li>
+        <li class="mp-sr-item mp-rule" data-reveal data-delay="0.24s">
+          <span class="mp-sr-value" data-count="24/7">24/7</span>
+          <span class="mp-sr-label">Reperibilità</span>
+          <span class="mp-sr-note mp-soft">Chi ha costruito il mezzo risponde anche dopo la consegna.</span>
+        </li>
+      </ul>
     </div>
   </section>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="sec-eyebrow">Caratteristiche tecniche</span>
-        <h2>Riservatezza e protezione totale</h2>
-        <p>Dati indicativi di riferimento — verranno confermati e personalizzati in base al telaio e alla configurazione scelta.</p>
-      </div>
-      <div class="spec-note">I valori seguenti sono orientativi: da confermare con il team tecnico Startruck prima della pubblicazione definitiva.</div>
-      <div class="spec-grid">
-        <div class="spec-item"><span class="k">Tipo carrozzeria</span><span class="v">Chiusa integrale</span></div>
-        <div class="spec-item"><span class="k">Configurazione</span><span class="v">Carenatura laterale</span></div>
-        <div class="spec-item"><span class="k">Compatibilità</span><span class="v">Patente B / C</span></div>
-        <div class="spec-item"><span class="k">Capacità indicativa</span><span class="v">1–2 vetture</span></div>
-        <div class="spec-item"><span class="k">Protezione</span><span class="v">Sguardi e agenti atmosferici</span></div>
-        <div class="spec-item"><span class="k">Finitura</span><span class="v">Pannellatura su misura</span></div>
-      </div>
-      <div class="feature-list">
-        <div class="feature-item"><span class="dot"></span><p>Carrozzeria completamente chiusa: la vettura trasportata resta protetta da occhi indiscreti.</p></div>
-        <div class="feature-item"><span class="dot"></span><p>Protezione totale da pioggia, polvere e agenti atmosferici durante il trasporto.</p></div>
-        <div class="feature-item"><span class="dot"></span><p>Pensato per collezionisti, concessionarie e trasporti riservati di alto valore.</p></div>
-        <div class="feature-item"><span class="dot"></span><p>Compatibile con verricello, retrocamera e illuminazione LED interna su richiesta.</p></div>
-      </div>
+  <!-- 03 · il mezzo da vicino (nero) -->
+  <section class="mp-vb mp-dark mp-vb-tall">
+    <div class="mp-vb-media" data-parallax>
+      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/privacy-detail.webp" muted loop playsinline preload="none" aria-hidden="true">
+        
+        <source src="https://sampoai67.github.io/Startruck/video/privacy-detail.mp4" type="video/mp4">
+      </video>
     </div>
+    <div class="mp-vb-scrim"></div>
+    <div class="mp-container mp-vb-content">
+      <p class="mp-label" data-index="[ 03 ]" data-reveal>Il mezzo da vicino</p>
+      <h2 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Ogni dettaglio</span></span><span class="mp-mask"><span style="--d:0.09s">è una decisione.</span></span></h2>
+      <p class="mp-vb-text" data-reveal data-delay=".18s">Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.</p>
+      <div data-reveal data-delay=".26s"><a class="mp-vb-cta" href="#" data-scrollto="dotazione-privacy">Guarda la dotazione <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></a></div>
+    </div>
+    
   </section>
-
-  <section class="section alt">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="sec-eyebrow">Galleria</span>
-        <h2>Privacy su strada</h2>
-      </div>
-      <div class="gallery">
-        <div class="gallery-main"><img src="https://static.wixstatic.com/media/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg/v1/fill/w_1160,h_1160,al_c,q_90,enc_avif,quality_auto/privacy_mc20_JPG.jpg" alt="Privacy su Maserati MC20"></div>
-        <div class="gallery-col">
-          <img src="https://static.wixstatic.com/media/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg/v1/fill/w_980,h_735,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/privacy_mc20_JPG.jpg" alt="Dettaglio Privacy">
-          <img src="https://static.wixstatic.com/media/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg/v1/fill/w_980,h_735,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/privacy_mc20_JPG.jpg" alt="Privacy chiusa">
+  <!-- 04 · dotazione / optionals (nero) -->
+  <section class="mp-dark mp-pad" id="dotazione-privacy">
+    <div class="mp-container">
+      <p class="mp-label" data-index="[ 04 ]" data-reveal>Cosa c'è a bordo</p>
+      
+      <div class="mp-st">
+        <div class="mp-st-head" role="tablist">
+          
+          <button class="mp-st-tab is-active" type="button" role="tab" data-tab="dotazione" aria-selected="true">
+            <span class="mp-st-tablabel">Dotazione</span>
+            <span class="mp-st-count">07</span>
+          </button>
+          <button class="mp-st-tab" type="button" role="tab" data-tab="optionals" aria-selected="false">
+            <span class="mp-st-tablabel">Optionals</span>
+            <span class="mp-st-count">06</span>
+          </button>
+        </div>
+        <div class="mp-st-body">
+          <div class="mp-st-lists">
+            
+            <ul class="mp-st-list is-active" data-panel="dotazione">
+              
+              <li class="mp-st-item">
+                <button class="mp-st-row is-open" type="button">
+                  <span class="mp-st-num">01</span>
+                  <span class="mp-st-title">Pianale</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Il piano di carico di Privacy: alluminio estruso, superficie antiscivolo e punti di ancoraggio distribuiti su tutta la lunghezza.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">02</span>
+                  <span class="mp-st-title">Rampe a scomparsa</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Si sfilano da sotto il pianale e rientrano a filo: nessun ingombro esterno, nessun pezzo da caricare a parte.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">03</span>
+                  <span class="mp-st-title">Verricello traslabile</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Scorre lateralmente per allinearsi all’auto invece di costringere l’auto ad allinearsi a lui. Tiro sempre dritto.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">04</span>
+                  <span class="mp-st-title">Fune sintetica</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Più leggera dell’acciaio e più sicura in caso di rottura: non frusta. Si maneggia a mani nude.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">05</span>
+                  <span class="mp-st-title">Fari LED notturni</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Illuminano l’area di lavoro dietro al mezzo. Carico e scarico al buio senza torce né improvvisazione.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">06</span>
+                  <span class="mp-st-title">Luci ingombro laterali LED</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Profilo del mezzo sempre leggibile agli altri, anche con poca luce e in manovra.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">07</span>
+                  <span class="mp-st-title">Set 4 cinghie</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Quattro cinghie a cricchetto con ganci dedicati agli ancoraggi del pianale. Incluse, non un accessorio.</p>
+                </div></div>
+              </li>
+            </ul>
+            <ul class="mp-st-list" data-panel="optionals">
+              
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">01</span>
+                  <span class="mp-st-title">Vano coibentato e climatizzato</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Temperatura sotto controllo per vetture da collezione e verniciature delicate.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">02</span>
+                  <span class="mp-st-title">Serratura rinforzata con codice</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Accesso al vano riservato a chi deve averlo. Nessuna chiave che gira per l’officina.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">03</span>
+                  <span class="mp-st-title">Tracciamento GPS del mezzo</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Posizione del veicolo sempre verificabile durante il trasferimento.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">04</span>
+                  <span class="mp-st-title">Pedana posteriore estraibile</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Riduce l’angolo di attacco: utile con le auto ribassate, dove ogni grado in meno è un paraurti salvato.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">05</span>
+                  <span class="mp-st-title">Cassetta porta-attrezzi integrata</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Ricavata nel sottopianale, chiusa a chiave. Cinghie e attrezzi restano a bordo senza rubare spazio al carico.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">06</span>
+                  <span class="mp-st-title">Illuminazione perimetrale supplementare</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Barre LED aggiuntive lungo il pianale: carichi e scarichi di notte con la stessa sicurezza del giorno.</p>
+                </div></div>
+              </li>
+            </ul>
+          </div>
+          
+          <figure class="mp-st-figure" data-reveal>
+            <img src="https://sampoai67.github.io/Startruck/img/privacy-03.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+            <figcaption class="mp-st-hint"><span class="mp-st-dot"></span>Click</figcaption>
+          </figure>
         </div>
       </div>
     </div>
   </section>
-
-  <section class="cta-band">
-    <div class="wrap">
-      <h2>Configura il tuo Privacy</h2>
-      <p>Scegli categoria, autocarro e accessori: la richiesta arriva direttamente al nostro team.</p>
-      <a href="#configuratore" class="btn-primary" onclick="prefillModel('Privacy')">Vai al configuratore →</a>
+  <!-- 05 · i progetti (bianco) -->
+  <section class="mp-light mp-pad">
+    <div class="mp-container">
+      <p class="mp-label" data-index="[ 05 ]" data-reveal>Più iconici</p>
+      
+      <h2 class="mp-display-2 mp-gal-title" data-reveal>I progetti</h2>
+      <div class="mp-gal mp-gal-feature">
+        
+        <figure class="mp-gal-item" data-reveal data-delay="0.00s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-01.webp" alt="Peugeot Boxer" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Peugeot Boxer</figcaption>
+        </figure>
+        <figure class="mp-gal-item" data-reveal data-delay="0.08s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-02.webp" alt="Citroën Jumper" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Citroën Jumper</figcaption>
+        </figure>
+        <figure class="mp-gal-item" data-reveal data-delay="0.16s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-03.webp" alt="Iveco Daily" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Iveco Daily</figcaption>
+        </figure>
+        <figure class="mp-gal-item" data-reveal data-delay="0.00s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-04.webp" alt="Fiat Ducato" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Fiat Ducato</figcaption>
+        </figure>
+        <figure class="mp-gal-item" data-reveal data-delay="0.08s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-05.webp" alt="Dettaglio interno" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Dettaglio interno</figcaption>
+        </figure>
+        <figure class="mp-gal-item" data-reveal data-delay="0.16s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-06.webp" alt="Vano di carico" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Vano di carico</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  <!-- 06 · clienti (grigio) -->
+  <section class="mp-surface mp-pad-tight">
+    <div class="mp-container">
+      
+      
+      <div class="mp-cl">
+        <h2 class="mp-cl-title" data-reveal>Chi ha scelto Privacy</h2>
+        <ul class="mp-cl-grid">
+          
+          <li data-reveal data-delay="0.00s"><img src="https://sampoai67.github.io/Startruck/logos/iveco.webp" alt="Iveco" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.05s"><img src="https://sampoai67.github.io/Startruck/logos/mercedes.webp" alt="Mercedes-Benz" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.10s"><img src="https://sampoai67.github.io/Startruck/logos/man.webp" alt="MAN" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.15s"><img src="https://sampoai67.github.io/Startruck/logos/ww.webp" alt="Volkswagen" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.20s"><img src="https://sampoai67.github.io/Startruck/logos/renault.webp" alt="Renault" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.25s"><img src="https://sampoai67.github.io/Startruck/logos/peugeot.webp" alt="Peugeot" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.30s"><img src="https://sampoai67.github.io/Startruck/logos/citroen.webp" alt="Citroën" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.35s"><img src="https://sampoai67.github.io/Startruck/logos/fiat.webp" alt="Fiat" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.40s"><img src="https://sampoai67.github.io/Startruck/logos/ford.webp" alt="Ford" width="160" height="80" loading="lazy" decoding="async"></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <!-- 07 · domande frequenti (bianco) -->
+  <section class="mp-light mp-pad">
+    <div class="mp-container">
+      <p class="mp-label" data-index="[ 06 ]" data-reveal>Domande frequenti</p>
+      
+      <div class="mp-faq-wrap">
+        <div class="mp-faq-side">
+          <h2 class="mp-display-3" data-reveal>Abbiamo già risposto</h2>
+          <p class="mp-soft" data-reveal data-delay=".08s">Le domande che ci fanno più spesso. Se non trovi la tua, chiamaci: rispondiamo noi, non un centralino.</p>
+        </div>
+      <ul class="mp-faq">
+        
+        <li class="mp-faq-item" data-reveal data-delay="0.00s">
+          <details name="faq-privacy">
+            <summary><span class="mp-faq-q">Su quali veicoli potete montare un allestimento?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>Lavoriamo sui principali telai in commercio: Iveco, Mercedes, MAN, Volkswagen, Renault, Peugeot, Citroën, Fiat, Nissan, Ford e Maxus. Se il tuo mezzo non è in elenco scrivici: nella maggior parte dei casi troviamo comunque la soluzione.</p></div></div>
+          </details>
+        </li>
+        <li class="mp-faq-item" data-reveal data-delay="0.04s">
+          <details name="faq-privacy">
+            <summary><span class="mp-faq-q">Serve la patente C per guidarlo?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>No. Le Mans è progettato attorno al limite delle 3,5 tonnellate: struttura interamente in alluminio, peso contenuto e carico utile fino a 1,5 tonnellate. Si guida con la patente B.</p></div></div>
+          </details>
+        </li>
+        <li class="mp-faq-item" data-reveal data-delay="0.08s">
+          <details name="faq-privacy">
+            <summary><span class="mp-faq-q">Quanto tempo serve per la consegna?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>Dipende dall’allestimento e dalla disponibilità del telaio. Dopo il sopralluogo ti diamo una finestra di consegna precisa e la manteniamo: preferiamo dire una data vera piuttosto che una comoda.</p></div></div>
+          </details>
+        </li>
+        <li class="mp-faq-item" data-reveal data-delay="0.12s">
+          <details name="faq-privacy">
+            <summary><span class="mp-faq-q">Posso portare il mio veicolo o lo procurate voi?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>Entrambe le cose. Puoi portarci il tuo telaio oppure ce ne occupiamo noi, seguendo l’ordine e la pratica dal primo all’ultimo passaggio.</p></div></div>
+          </details>
+        </li>
+        <li class="mp-faq-item" data-reveal data-delay="0.16s">
+          <details name="faq-privacy">
+            <summary><span class="mp-faq-q">L’allestimento è omologato?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>Sì. Ogni mezzo esce dalla nostra officina con la pratica di omologazione completa e i documenti pronti per la circolazione.</p></div></div>
+          </details>
+        </li>
+        <li class="mp-faq-item" data-reveal data-delay="0.20s">
+          <details name="faq-privacy">
+            <summary><span class="mp-faq-q">Fate assistenza dopo la consegna?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>Sì, e non è un servizio a parte: chi ha costruito il tuo allestimento è la stessa persona che risponde al telefono se un anno dopo hai bisogno di un ricambio o di una regolazione.</p></div></div>
+          </details>
+        </li>
+      </ul>
+      </div>
+    </div>
+  </section>
+  <!-- 08 · le altre linee (grigio) -->
+  <section class="mp-surface mp-pad">
+    <div class="mp-container">
+      <p class="mp-label" data-index="[ 07 ]" data-reveal>Le altre linee</p>
+      
+      <div class="mp-others">
+        
+        <a class="mp-ol" href="#le-mans" data-reveal>
+          <img src="https://sampoai67.github.io/Startruck/img/lemans-hero.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+          <span class="mp-ol-scrim"></span>
+          <span class="mp-ol-body"><span class="mp-ol-tag">Performance &amp; racing</span><span class="mp-ol-name">Le Mans</span></span>
+          <span class="mp-ol-go" aria-hidden="true">→</span>
+        </a>
+        <a class="mp-ol" href="#type-h" data-reveal>
+          <img src="https://sampoai67.github.io/Startruck/img/typeh-hero.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+          <span class="mp-ol-scrim"></span>
+          <span class="mp-ol-body"><span class="mp-ol-tag">Aspetto vintage</span><span class="mp-ol-name">Type H</span></span>
+          <span class="mp-ol-go" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+  <!-- 09 · contatti (nero) -->
+  <section class="mp-dark mp-pad">
+    <div class="mp-container">
+      
+      
+      <div class="mp-cf">
+        <form class="mp-cf-form" data-mailto="startruck@outlook.it" data-model="Privacy" novalidate>
+          <h2 class="mp-cf-formtitle">Richiedi un preventivo</h2>
+          <div class="mp-cf-field">
+            <label for="cf-privacy-name">Nome completo</label>
+            <input id="cf-privacy-name" name="name" type="text" placeholder="Nome e cognome" required autocomplete="name">
+          </div>
+          <div class="mp-cf-row">
+            <div class="mp-cf-field">
+              <label for="cf-privacy-email">Email</label>
+              <input id="cf-privacy-email" name="email" type="email" placeholder="nome@esempio.it" required autocomplete="email">
+            </div>
+            <div class="mp-cf-field">
+              <label for="cf-privacy-phone">Telefono</label>
+              <input id="cf-privacy-phone" name="phone" type="tel" placeholder="+39 ___ ___ ____" autocomplete="tel">
+            </div>
+          </div>
+          <div class="mp-cf-field">
+            <label for="cf-privacy-msg">Messaggio</label>
+            <textarea id="cf-privacy-msg" name="message" rows="4" placeholder="Che mezzo hai e cosa devi trasportare?" required></textarea>
+          </div>
+          <button class="mp-cf-submit" type="submit"><span>Invia</span> <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></button>
+          <p class="mp-cf-status" role="status" aria-live="polite"></p>
+        </form>
+        <div class="mp-cf-aside">
+          <p class="mp-label" data-index="[ ✱ ]">Parliamone</p>
+          <h2 class="mp-cf-kicker" data-reveal>Se hai in mente un progetto</h2>
+          <p class="mp-cf-shout" data-reveal data-delay=".08s">CONTATTACI</p>
+          <ul class="mp-cf-contacts">
+            <li><a href="tel:+393408427538">+39 340 842 7538</a></li>
+            <li><a href="mailto:startruck@outlook.it">startruck@outlook.it</a></li>
+            <li class="mp-cf-addr">Str. Boschi — 46045 Pozzolo sul Mincio (MN)</li>
+          </ul>
+          <a class="mp-cf-cfg" href="#configuratore" data-prefill="Privacy">Configura Privacy <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></a>
+        </div>
+      </div>
     </div>
   </section>
 </div>
 <!-- ============ /PRIVACY ============ -->
 
 <!-- ============ TYPE H ============ -->
-<div id="view-type-h" class="page-view" hidden>
-  <div class="wrap breadcrumb"><a href="#home">Home</a> / <a href="#modelli">Modelli</a> / <span>Type H</span></div>
-
-  <section class="model-hero">
-    <video class="hero-video" autoplay muted loop playsinline poster="https://static.wixstatic.com/media/d56fb4_272e847b30894699b412d3ce24f79a13~mv2.jpg/v1/crop/x_0,y_66,w_1600,h_920/fill/w_1450,h_820,al_c,q_90,enc_avif,quality_auto/typeh_industrial.jpg">
-      <source src="https://sampoai67.github.io/Startruck/video/typeh-hero.mp4" type="video/mp4">
-    </video>
-    <div class="hero-overlay"></div>
-    <div class="wrap model-hero-inner">
-      <span class="model-tag-lg">Allestimento vintage</span>
-      <h1>Type H</h1>
-      <p>Un allestimento unico nel suo genere, dallo stile industrial, pensato per chi recupera e trasporta auto d'epoca con carattere.</p>
+<div id="view-type-h" class="page-view mp" hidden>
+  <!-- 01 · hero (nero) -->
+  <section class="mp-vb mp-dark mp-vb-full mp-vb-first">
+    <div class="mp-vb-media" data-parallax>
+      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/typeh-hero.webp" muted loop playsinline preload="none" aria-hidden="true">
+        
+        <source src="https://sampoai67.github.io/Startruck/video/typeh-hero.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="mp-vb-scrim"></div>
+    <div class="mp-container mp-vb-content">
+      <p class="mp-label" data-index="[ 01 ]" data-reveal>Aspetto vintage</p>
+      <h1 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Type H</span></span></h1>
+      <p class="mp-vb-text" data-reveal data-delay=".18s">La linea del Type H, la meccanica di oggi. Un mezzo che nessuno smette di guardare mentre lavora.</p>
+      
+    </div>
+    <div class="mp-vb-cue" aria-hidden="true"><span>SCROLL</span><i></i></div>
+  </section>
+  <!-- dotazione che scorre -->
+  <div class="mp-mq">
+    <div class="mp-mq-track">
+      <span class="mp-mq-seq"><span class="mp-mq-cell"><span class="mp-mq-word">Pianale</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Rampe a scomparsa</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Verricello traslabile</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fune sintetica</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fari LED notturni</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Luci ingombro laterali LED</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Set 4 cinghie</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span></span><span class="mp-mq-seq" aria-hidden="true"><span class="mp-mq-cell"><span class="mp-mq-word">Pianale</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Rampe a scomparsa</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Verricello traslabile</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fune sintetica</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fari LED notturni</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Luci ingombro laterali LED</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Set 4 cinghie</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span></span>
+    </div>
+  </div>
+  <!-- 02 · identità + numeri (bianco) -->
+  <section class="mp-light mp-pad">
+    <div class="mp-container">
+      <p class="mp-label" data-index="[ 02 ]" data-reveal>L'allestimento</p>
+      
+      <div class="mp-intro">
+        <h2 class="mp-display-2" data-reveal>
+          <span class="mp-mask"><span>Costruito attorno</span></span>
+          <span class="mp-mask"><span style="--d:.08s">alle tue auto,</span></span>
+          <span class="mp-mask"><span style="--d:.16s" class="mp-intro-dim">non al catalogo.</span></span>
+        </h2>
+        <p class="mp-intro-text mp-soft" data-reveal data-delay=".2s">Type H è l’allestimento per chi vuole che il trasporto faccia parte del racconto: le nervature e le proporzioni dell’originale, costruite su un telaio moderno e affidabile. Nato per showroom, eventi, club e collezioni — dove il mezzo che arriva conta quanto l’auto che scarica.</p>
+      </div>
+      <ul class="mp-sr">
+        
+        <li class="mp-sr-item mp-rule" data-reveal data-delay="0.00s">
+          <span class="mp-sr-value" data-count="Su misura">Su misura</span>
+          <span class="mp-sr-label">Carrozzeria</span>
+          <span class="mp-sr-note mp-soft">Ogni pannello è costruito e rifinito a mano.</span>
+        </li>
+        <li class="mp-sr-item mp-rule" data-reveal data-delay="0.08s">
+          <span class="mp-sr-value" data-count="Telaio moderno">Telaio moderno</span>
+          <span class="mp-sr-label">Meccanica</span>
+          <span class="mp-sr-note mp-soft">L’estetica è d’epoca, l’affidabilità è di oggi.</span>
+        </li>
+        <li class="mp-sr-item mp-rule" data-reveal data-delay="0.16s">
+          <span class="mp-sr-value" data-count="B">B</span>
+          <span class="mp-sr-label">Patente</span>
+          <span class="mp-sr-note mp-soft">Progettato per restare nei 3,5 t.</span>
+        </li>
+        <li class="mp-sr-item mp-rule" data-reveal data-delay="0.24s">
+          <span class="mp-sr-value" data-count="1 di 1">1 di 1</span>
+          <span class="mp-sr-label">Personalizzazione</span>
+          <span class="mp-sr-note mp-soft">Colori e finiture scelti insieme, pezzo unico.</span>
+        </li>
+      </ul>
     </div>
   </section>
-
-  <section class="section">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="sec-eyebrow">Caratteristiche tecniche</span>
-        <h2>Carattere industriale, spirito d'epoca</h2>
-        <p>Dati indicativi di riferimento — verranno confermati e personalizzati in base al telaio e alla configurazione scelta.</p>
-      </div>
-      <div class="spec-note">I valori seguenti sono orientativi: da confermare con il team tecnico Startruck prima della pubblicazione definitiva.</div>
-      <div class="spec-grid">
-        <div class="spec-item"><span class="k">Stile</span><span class="v">Industrial / vintage</span></div>
-        <div class="spec-item"><span class="k">Configurazione</span><span class="v">Rollbar + pianale rinforzato</span></div>
-        <div class="spec-item"><span class="k">Compatibilità</span><span class="v">Patente B / C</span></div>
-        <div class="spec-item"><span class="k">Capacità indicativa</span><span class="v">1–2 vetture</span></div>
-        <div class="spec-item"><span class="k">Uso consigliato</span><span class="v">Auto d'epoca, recupero</span></div>
-        <div class="spec-item"><span class="k">Finitura</span><span class="v">Metallo a vista / verniciato</span></div>
-      </div>
-      <div class="feature-list">
-        <div class="feature-item"><span class="dot"></span><p>Struttura robusta pensata anche per il recupero e il trasporto di veicoli non perfettamente funzionanti.</p></div>
-        <div class="feature-item"><span class="dot"></span><p>Estetica industrial che valorizza il carattere del mezzo, ideale per club e appassionati.</p></div>
-        <div class="feature-item"><span class="dot"></span><p>Rampe e ancoraggi rinforzati, pensati per carichi delicati o non standard.</p></div>
-        <div class="feature-item"><span class="dot"></span><p>Compatibile con porta ruote da corsa, faro di retromarcia e cassone portautensili.</p></div>
-      </div>
+  <!-- 03 · il mezzo da vicino (nero) -->
+  <section class="mp-vb mp-dark mp-vb-tall">
+    <div class="mp-vb-media" data-parallax>
+      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/typeh-detail.webp" muted loop playsinline preload="none" aria-hidden="true">
+        
+        <source src="https://sampoai67.github.io/Startruck/video/typeh-detail.mp4" type="video/mp4">
+      </video>
     </div>
+    <div class="mp-vb-scrim"></div>
+    <div class="mp-container mp-vb-content">
+      <p class="mp-label" data-index="[ 03 ]" data-reveal>Il mezzo da vicino</p>
+      <h2 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Ogni dettaglio</span></span><span class="mp-mask"><span style="--d:0.09s">è una decisione.</span></span></h2>
+      <p class="mp-vb-text" data-reveal data-delay=".18s">Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.</p>
+      <div data-reveal data-delay=".26s"><a class="mp-vb-cta" href="#" data-scrollto="dotazione-type-h">Guarda la dotazione <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></a></div>
+    </div>
+    
   </section>
-
-  <section class="section alt">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="sec-eyebrow">Galleria</span>
-        <h2>Type H sul campo</h2>
-      </div>
-      <div class="gallery">
-        <div class="gallery-main"><img src="https://static.wixstatic.com/media/d56fb4_272e847b30894699b412d3ce24f79a13~mv2.jpg/v1/crop/x_0,y_66,w_1600,h_920/fill/w_1160,h_1160,al_c,q_90,enc_avif,quality_auto/typeh_industrial.jpg" alt="Type H industrial"></div>
-        <div class="gallery-col">
-          <img src="https://static.wixstatic.com/media/d56fb4_272e847b30894699b412d3ce24f79a13~mv2.jpg/v1/crop/x_0,y_66,w_1600,h_920/fill/w_980,h_564,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/typeh_industrial.jpg" alt="Dettaglio Type H">
-          <img src="https://static.wixstatic.com/media/d56fb4_272e847b30894699b412d3ce24f79a13~mv2.jpg/v1/crop/x_0,y_66,w_1600,h_920/fill/w_980,h_564,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/typeh_industrial.jpg" alt="Type H vintage">
+  <!-- 04 · dotazione / optionals (nero) -->
+  <section class="mp-dark mp-pad" id="dotazione-type-h">
+    <div class="mp-container">
+      <p class="mp-label" data-index="[ 04 ]" data-reveal>Cosa c'è a bordo</p>
+      
+      <div class="mp-st">
+        <div class="mp-st-head" role="tablist">
+          
+          <button class="mp-st-tab is-active" type="button" role="tab" data-tab="dotazione" aria-selected="true">
+            <span class="mp-st-tablabel">Dotazione</span>
+            <span class="mp-st-count">07</span>
+          </button>
+          <button class="mp-st-tab" type="button" role="tab" data-tab="optionals" aria-selected="false">
+            <span class="mp-st-tablabel">Optionals</span>
+            <span class="mp-st-count">06</span>
+          </button>
+        </div>
+        <div class="mp-st-body">
+          <div class="mp-st-lists">
+            
+            <ul class="mp-st-list is-active" data-panel="dotazione">
+              
+              <li class="mp-st-item">
+                <button class="mp-st-row is-open" type="button">
+                  <span class="mp-st-num">01</span>
+                  <span class="mp-st-title">Pianale</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Il piano di carico di Type H: alluminio estruso, superficie antiscivolo e punti di ancoraggio distribuiti su tutta la lunghezza.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">02</span>
+                  <span class="mp-st-title">Rampe a scomparsa</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Si sfilano da sotto il pianale e rientrano a filo: nessun ingombro esterno, nessun pezzo da caricare a parte.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">03</span>
+                  <span class="mp-st-title">Verricello traslabile</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Scorre lateralmente per allinearsi all’auto invece di costringere l’auto ad allinearsi a lui. Tiro sempre dritto.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">04</span>
+                  <span class="mp-st-title">Fune sintetica</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Più leggera dell’acciaio e più sicura in caso di rottura: non frusta. Si maneggia a mani nude.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">05</span>
+                  <span class="mp-st-title">Fari LED notturni</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Illuminano l’area di lavoro dietro al mezzo. Carico e scarico al buio senza torce né improvvisazione.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">06</span>
+                  <span class="mp-st-title">Luci ingombro laterali LED</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Profilo del mezzo sempre leggibile agli altri, anche con poca luce e in manovra.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">07</span>
+                  <span class="mp-st-title">Set 4 cinghie</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Quattro cinghie a cricchetto con ganci dedicati agli ancoraggi del pianale. Incluse, non un accessorio.</p>
+                </div></div>
+              </li>
+            </ul>
+            <ul class="mp-st-list" data-panel="optionals">
+              
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">01</span>
+                  <span class="mp-st-title">Verniciatura bicolore d’epoca</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Palette storiche o colore su campione: il tono giusto cambia tutto il mezzo.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">02</span>
+                  <span class="mp-st-title">Fari e cornici cromate</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Dettagli a vista rifiniti a mano, dove l’occhio cade per primo.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">03</span>
+                  <span class="mp-st-title">Allestimento interno espositivo</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Per showroom ed eventi: il vano diventa spazio di presentazione.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">04</span>
+                  <span class="mp-st-title">Cassetta porta-attrezzi integrata</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Ricavata nel sottopianale, chiusa a chiave. Cinghie e attrezzi restano a bordo senza rubare spazio al carico.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">05</span>
+                  <span class="mp-st-title">Illuminazione perimetrale supplementare</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Barre LED aggiuntive lungo il pianale: carichi e scarichi di notte con la stessa sicurezza del giorno.</p>
+                </div></div>
+              </li>
+              <li class="mp-st-item">
+                <button class="mp-st-row" type="button">
+                  <span class="mp-st-num">06</span>
+                  <span class="mp-st-title">Ruota di scorta con supporto dedicato</span>
+                  <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+                </button>
+                <div class="mp-st-panel"><div class="mp-st-inner">
+                  
+                  <p class="mp-st-desc">Alloggiamento sotto telaio, fuori dalla vista e fuori dall’area di carico.</p>
+                </div></div>
+              </li>
+            </ul>
+          </div>
+          
+          <figure class="mp-st-figure" data-reveal>
+            <img src="https://sampoai67.github.io/Startruck/img/typeh-03.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+            <figcaption class="mp-st-hint"><span class="mp-st-dot"></span>Click</figcaption>
+          </figure>
         </div>
       </div>
     </div>
   </section>
-
-  <section class="cta-band">
-    <div class="wrap">
-      <h2>Configura il tuo Type H</h2>
-      <p>Scegli categoria, autocarro e accessori: la richiesta arriva direttamente al nostro team.</p>
-      <a href="#configuratore" class="btn-primary" onclick="prefillModel('Type H')">Vai al configuratore →</a>
+  <!-- 05 · i progetti (bianco) -->
+  <section class="mp-light mp-pad">
+    <div class="mp-container">
+      <p class="mp-label" data-index="[ 05 ]" data-reveal>Più iconici</p>
+      
+      <h2 class="mp-display-2 mp-gal-title" data-reveal>I progetti</h2>
+      <div class="mp-gal mp-gal-feature">
+        
+        <figure class="mp-gal-item" data-reveal data-delay="0.00s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-01.webp" alt="Type H — profilo" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Type H — profilo</figcaption>
+        </figure>
+        <figure class="mp-gal-item" data-reveal data-delay="0.08s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-02.webp" alt="Dettaglio frontale" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Dettaglio frontale</figcaption>
+        </figure>
+        <figure class="mp-gal-item" data-reveal data-delay="0.16s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-03.webp" alt="Vano di carico" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Vano di carico</figcaption>
+        </figure>
+        <figure class="mp-gal-item" data-reveal data-delay="0.00s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-04.webp" alt="Finiture" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Finiture</figcaption>
+        </figure>
+        <figure class="mp-gal-item" data-reveal data-delay="0.08s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-05.webp" alt="Interni" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Interni</figcaption>
+        </figure>
+        <figure class="mp-gal-item" data-reveal data-delay="0.16s">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-06.webp" alt="Retro" loading="lazy" decoding="async" width="1600" height="1067"></div>
+          <figcaption>Retro</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  <!-- 06 · clienti (grigio) -->
+  <section class="mp-surface mp-pad-tight">
+    <div class="mp-container">
+      
+      
+      <div class="mp-cl">
+        <h2 class="mp-cl-title" data-reveal>Chi ha scelto Type H</h2>
+        <ul class="mp-cl-grid">
+          
+          <li data-reveal data-delay="0.00s"><img src="https://sampoai67.github.io/Startruck/logos/iveco.webp" alt="Iveco" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.05s"><img src="https://sampoai67.github.io/Startruck/logos/mercedes.webp" alt="Mercedes-Benz" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.10s"><img src="https://sampoai67.github.io/Startruck/logos/man.webp" alt="MAN" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.15s"><img src="https://sampoai67.github.io/Startruck/logos/ww.webp" alt="Volkswagen" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.20s"><img src="https://sampoai67.github.io/Startruck/logos/renault.webp" alt="Renault" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.25s"><img src="https://sampoai67.github.io/Startruck/logos/peugeot.webp" alt="Peugeot" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.30s"><img src="https://sampoai67.github.io/Startruck/logos/citroen.webp" alt="Citroën" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.35s"><img src="https://sampoai67.github.io/Startruck/logos/fiat.webp" alt="Fiat" width="160" height="80" loading="lazy" decoding="async"></li>
+          <li data-reveal data-delay="0.40s"><img src="https://sampoai67.github.io/Startruck/logos/ford.webp" alt="Ford" width="160" height="80" loading="lazy" decoding="async"></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <!-- 07 · domande frequenti (bianco) -->
+  <section class="mp-light mp-pad">
+    <div class="mp-container">
+      <p class="mp-label" data-index="[ 06 ]" data-reveal>Domande frequenti</p>
+      
+      <div class="mp-faq-wrap">
+        <div class="mp-faq-side">
+          <h2 class="mp-display-3" data-reveal>Abbiamo già risposto</h2>
+          <p class="mp-soft" data-reveal data-delay=".08s">Le domande che ci fanno più spesso. Se non trovi la tua, chiamaci: rispondiamo noi, non un centralino.</p>
+        </div>
+      <ul class="mp-faq">
+        
+        <li class="mp-faq-item" data-reveal data-delay="0.00s">
+          <details name="faq-type-h">
+            <summary><span class="mp-faq-q">Su quali veicoli potete montare un allestimento?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>Lavoriamo sui principali telai in commercio: Iveco, Mercedes, MAN, Volkswagen, Renault, Peugeot, Citroën, Fiat, Nissan, Ford e Maxus. Se il tuo mezzo non è in elenco scrivici: nella maggior parte dei casi troviamo comunque la soluzione.</p></div></div>
+          </details>
+        </li>
+        <li class="mp-faq-item" data-reveal data-delay="0.04s">
+          <details name="faq-type-h">
+            <summary><span class="mp-faq-q">Serve la patente C per guidarlo?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>No. Le Mans è progettato attorno al limite delle 3,5 tonnellate: struttura interamente in alluminio, peso contenuto e carico utile fino a 1,5 tonnellate. Si guida con la patente B.</p></div></div>
+          </details>
+        </li>
+        <li class="mp-faq-item" data-reveal data-delay="0.08s">
+          <details name="faq-type-h">
+            <summary><span class="mp-faq-q">Quanto tempo serve per la consegna?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>Dipende dall’allestimento e dalla disponibilità del telaio. Dopo il sopralluogo ti diamo una finestra di consegna precisa e la manteniamo: preferiamo dire una data vera piuttosto che una comoda.</p></div></div>
+          </details>
+        </li>
+        <li class="mp-faq-item" data-reveal data-delay="0.12s">
+          <details name="faq-type-h">
+            <summary><span class="mp-faq-q">Posso portare il mio veicolo o lo procurate voi?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>Entrambe le cose. Puoi portarci il tuo telaio oppure ce ne occupiamo noi, seguendo l’ordine e la pratica dal primo all’ultimo passaggio.</p></div></div>
+          </details>
+        </li>
+        <li class="mp-faq-item" data-reveal data-delay="0.16s">
+          <details name="faq-type-h">
+            <summary><span class="mp-faq-q">L’allestimento è omologato?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>Sì. Ogni mezzo esce dalla nostra officina con la pratica di omologazione completa e i documenti pronti per la circolazione.</p></div></div>
+          </details>
+        </li>
+        <li class="mp-faq-item" data-reveal data-delay="0.20s">
+          <details name="faq-type-h">
+            <summary><span class="mp-faq-q">Fate assistenza dopo la consegna?</span><span class="mp-plus" aria-hidden="true"><i></i><i></i></span></summary>
+            <div class="mp-faq-panel"><div class="mp-faq-inner"><p>Sì, e non è un servizio a parte: chi ha costruito il tuo allestimento è la stessa persona che risponde al telefono se un anno dopo hai bisogno di un ricambio o di una regolazione.</p></div></div>
+          </details>
+        </li>
+      </ul>
+      </div>
+    </div>
+  </section>
+  <!-- 08 · le altre linee (grigio) -->
+  <section class="mp-surface mp-pad">
+    <div class="mp-container">
+      <p class="mp-label" data-index="[ 07 ]" data-reveal>Le altre linee</p>
+      
+      <div class="mp-others">
+        
+        <a class="mp-ol" href="#le-mans" data-reveal>
+          <img src="https://sampoai67.github.io/Startruck/img/lemans-hero.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+          <span class="mp-ol-scrim"></span>
+          <span class="mp-ol-body"><span class="mp-ol-tag">Performance &amp; racing</span><span class="mp-ol-name">Le Mans</span></span>
+          <span class="mp-ol-go" aria-hidden="true">→</span>
+        </a>
+        <a class="mp-ol" href="#privacy" data-reveal>
+          <img src="https://sampoai67.github.io/Startruck/img/privacy-hero.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+          <span class="mp-ol-scrim"></span>
+          <span class="mp-ol-body"><span class="mp-ol-tag">Trasporto confidenziale</span><span class="mp-ol-name">Privacy</span></span>
+          <span class="mp-ol-go" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+  <!-- 09 · contatti (nero) -->
+  <section class="mp-dark mp-pad">
+    <div class="mp-container">
+      
+      
+      <div class="mp-cf">
+        <form class="mp-cf-form" data-mailto="startruck@outlook.it" data-model="Type H" novalidate>
+          <h2 class="mp-cf-formtitle">Richiedi un preventivo</h2>
+          <div class="mp-cf-field">
+            <label for="cf-type-h-name">Nome completo</label>
+            <input id="cf-type-h-name" name="name" type="text" placeholder="Nome e cognome" required autocomplete="name">
+          </div>
+          <div class="mp-cf-row">
+            <div class="mp-cf-field">
+              <label for="cf-type-h-email">Email</label>
+              <input id="cf-type-h-email" name="email" type="email" placeholder="nome@esempio.it" required autocomplete="email">
+            </div>
+            <div class="mp-cf-field">
+              <label for="cf-type-h-phone">Telefono</label>
+              <input id="cf-type-h-phone" name="phone" type="tel" placeholder="+39 ___ ___ ____" autocomplete="tel">
+            </div>
+          </div>
+          <div class="mp-cf-field">
+            <label for="cf-type-h-msg">Messaggio</label>
+            <textarea id="cf-type-h-msg" name="message" rows="4" placeholder="Che mezzo hai e cosa devi trasportare?" required></textarea>
+          </div>
+          <button class="mp-cf-submit" type="submit"><span>Invia</span> <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></button>
+          <p class="mp-cf-status" role="status" aria-live="polite"></p>
+        </form>
+        <div class="mp-cf-aside">
+          <p class="mp-label" data-index="[ ✱ ]">Parliamone</p>
+          <h2 class="mp-cf-kicker" data-reveal>Se hai in mente un progetto</h2>
+          <p class="mp-cf-shout" data-reveal data-delay=".08s">CONTATTACI</p>
+          <ul class="mp-cf-contacts">
+            <li><a href="tel:+393408427538">+39 340 842 7538</a></li>
+            <li><a href="mailto:startruck@outlook.it">startruck@outlook.it</a></li>
+            <li class="mp-cf-addr">Str. Boschi — 46045 Pozzolo sul Mincio (MN)</li>
+          </ul>
+          <a class="mp-cf-cfg" href="#configuratore" data-prefill="Type H">Configura Type H <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></a>
+        </div>
+      </div>
     </div>
   </section>
 </div>
 <!-- ============ /TYPE H ============ -->
+<!-- MODELLI:FINE -->
 
 <footer class="site-footer">
   <div class="wrap foot-grid">
@@ -1777,6 +3178,188 @@
     addEventListener('resize', function () { if (innerWidth > 860) set(false); });
   })();
 
+  /* ===== Pagine modello ==================================================
+     Il comportamento dei componenti Astro, portato in JS semplice e limitato
+     alle tre viste .mp. Le viste nascono nascoste (hidden): gli osservatori
+     le guardano comunque, e scattano quando il router le mostra. */
+  (function () {
+    var views = document.querySelectorAll('.page-view.mp');
+    if (!views.length) return;
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* --- comparsa allo scroll (Base.astro) ------------------------------- */
+    var countUp = function (el) {
+      var raw = el.getAttribute('data-count') || '';
+      var m = raw.match(/([\d.,]+)/);
+      if (!m || reduce) return;
+      var numText = m[1];
+      var decimals = (numText.split(',')[1] || '').length;
+      var target = parseFloat(numText.replace(/\./g, '').replace(',', '.'));
+      if (!isFinite(target)) return;
+      var parts = raw.split(numText), pre = parts[0], post = parts[1];
+      var fmt = function (v) {
+        return v.toLocaleString('it-IT', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+      };
+      var t0 = performance.now(), DUR = 1100;
+      el.textContent = pre + fmt(0) + post;
+      var tick = function (now) {
+        var p = Math.min((now - t0) / DUR, 1);
+        el.textContent = pre + fmt(target * (1 - Math.pow(1 - p, 3))) + post;
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    var revealer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        if (el.dataset.delay) el.style.animationDelay = el.dataset.delay;
+        el.classList.add('is-in');
+        revealer.unobserve(el);
+        var n = el.querySelector('.mp-sr-value[data-count]');
+        if (n) countUp(n);
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+
+    document.querySelectorAll('.mp [data-reveal]').forEach(function (el) {
+      if (reduce) el.classList.add('is-in');
+      else revealer.observe(el);
+    });
+
+    /* --- video: partono solo quando si vedono --------------------------- */
+    // Tre viste = sei video. Nessuno ha autoplay/preload: altrimenti la pagina
+    // di casa li scaricherebbe tutti anche se nessuno apre un modello.
+    var player = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var v = e.target;
+        if (e.isIntersecting) {
+          if (v.preload === 'none') { v.preload = 'auto'; v.load(); }
+          var p = v.play(); if (p) p.catch(function () {});
+        } else {
+          v.pause();
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.mp-vb-video').forEach(function (v) { player.observe(v); });
+
+    /* --- parallasse dello sfondo dei banner ----------------------------- */
+    if (!reduce) {
+      var ticking = false;
+      var parallax = function () {
+        ticking = false;
+        var vh = innerHeight;
+        document.querySelectorAll('.page-view.mp:not([hidden]) [data-parallax]').forEach(function (l) {
+          var r = l.getBoundingClientRect();
+          if (r.bottom < 0 || r.top > vh) return;
+          var progress = (r.top + r.height / 2 - vh / 2) / vh;
+          l.style.transform = 'translate3d(0,' + (progress * 7).toFixed(2) + '%,0)';
+        });
+      };
+      addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(parallax); }
+      }, { passive: true });
+      addEventListener('resize', parallax, { passive: true });
+      addEventListener('hashchange', function () { setTimeout(parallax, 60); });
+    }
+
+    /* --- dotazione / optionals ------------------------------------------ */
+    document.querySelectorAll('.mp-st').forEach(function (root) {
+      var tabs = Array.prototype.slice.call(root.querySelectorAll('.mp-st-tab'));
+      var lists = Array.prototype.slice.call(root.querySelectorAll('.mp-st-list'));
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          var id = tab.getAttribute('data-tab');
+          tabs.forEach(function (t) {
+            var on = t === tab;
+            t.classList.toggle('is-active', on);
+            t.setAttribute('aria-selected', String(on));
+          });
+          lists.forEach(function (l) { l.classList.toggle('is-active', l.getAttribute('data-panel') === id); });
+        });
+      });
+      lists.forEach(function (list) {
+        var rows = Array.prototype.slice.call(list.querySelectorAll('.mp-st-row'));
+        rows.forEach(function (row) {
+          row.addEventListener('click', function () {
+            var open = row.classList.contains('is-open');
+            rows.forEach(function (r) { r.classList.remove('is-open'); });
+            row.classList.toggle('is-open', !open);
+          });
+        });
+      });
+    });
+
+    /* --- domande: una aperta per volta dove details[name] non c'e' ------- */
+    if (!('name' in document.createElement('details'))) {
+      document.querySelectorAll('.mp-faq').forEach(function (faq) {
+        var all = Array.prototype.slice.call(faq.querySelectorAll('details'));
+        all.forEach(function (d) {
+          d.addEventListener('toggle', function () {
+            if (d.open) all.forEach(function (o) { if (o !== d) o.open = false; });
+          });
+        });
+      });
+    }
+
+    /* --- ancore interne ------------------------------------------------- */
+    // Il router legge OGNI cambio di hash come un cambio di pagina: un
+    // href="#dotazione" riporterebbe a casa. Le ancore dentro le viste
+    // scorrono senza toccare l'indirizzo.
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('.mp [data-scrollto]');
+      if (!a) return;
+      var t = document.getElementById(a.getAttribute('data-scrollto'));
+      if (!t) return;
+      e.preventDefault();
+      t.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    });
+
+    /* --- al configuratore col modello gia' scelto ------------------------ */
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('.mp [data-prefill]');
+      if (a && typeof prefillModel === 'function') prefillModel(a.getAttribute('data-prefill'));
+    });
+
+    /* --- modulo contatti (ContactForm) ---------------------------------- */
+    // Sito statico: niente endpoint, quindi il modulo apre la mail gia'
+    // compilata invece di fingere di aver inviato.
+    document.querySelectorAll('.mp-cf-form').forEach(function (form) {
+      var status = form.querySelector('.mp-cf-status');
+      var markInvalid = function () {
+        var first = null;
+        form.querySelectorAll('input, textarea').forEach(function (el) {
+          var ok = el.checkValidity();
+          el.closest('.mp-cf-field').classList.toggle('is-invalid', !ok);
+          if (!ok && !first) first = el;
+        });
+        return first;
+      };
+      form.addEventListener('input', function (e) {
+        if (e.target.checkValidity()) e.target.closest('.mp-cf-field').classList.remove('is-invalid');
+      });
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var bad = markInvalid();
+        if (bad) { status.textContent = 'Controlla i campi evidenziati.'; bad.focus(); return; }
+        var data = new FormData(form);
+        var get = function (k) { return String(data.get(k) || ''); };
+        var body = [
+          'Nome: ' + get('name'),
+          'Email: ' + get('email'),
+          'Telefono: ' + (get('phone') || '—'),
+          'Allestimento: ' + form.getAttribute('data-model'),
+          '',
+          get('message')
+        ].join('\n');
+        location.href = 'mailto:' + form.getAttribute('data-mailto')
+          + '?subject=' + encodeURIComponent('Richiesta preventivo — ' + form.getAttribute('data-model') + ' — ' + get('name'))
+          + '&body=' + encodeURIComponent(body);
+        status.textContent = 'Ti apriamo il client di posta con il messaggio già pronto.';
+      });
+    });
+  })();
+
   /* ===== Rotaia dei lavori ==============================================
      Trascinamento col mouse: il dito sul telefono scorre gia' da solo. Si
      distingue il trascinamento dal clic con una soglia di pochi pixel,
@@ -2024,7 +3607,7 @@
   (function () {
     var lastY = window.scrollY, ticking = false;
     function heroDepth() {
-      var el = document.querySelector('#view-home:not([hidden]) .hero, .page-view:not([hidden]) .model-hero');
+      var el = document.querySelector('#view-home:not([hidden]) .hero, .page-view:not([hidden]) .mp-vb-first');
       return el ? el.getBoundingClientRect().height - 85 : 0;
     }
     function update() {
