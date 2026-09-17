@@ -1,0 +1,36 @@
+---
+const steps = [
+  { t: 'Consulenza', d: 'Ci racconti le tue auto, le tue rotte, le tue esigenze. Ascoltiamo prima di disegnare.' },
+  { t: 'Progettazione', d: "Disegniamo l'allestimento su misura: layout, materiali, finiture, optional." },
+  { t: 'Costruzione', d: 'Lo costruiamo a mano nella nostra officina di Pozzolo sul Mincio.' },
+  { t: 'Consegna', d: 'Te lo consegniamo pronto, collaudato, e restiamo al tuo fianco nel tempo.' },
+];
+---
+<section class="section alt route-clip" id="processo">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-eyebrow">Come lavoriamo</span>
+        <h2>Dal tuo garage alla<br />nostra officina, e ritorno.</h2>
+      </div>
+      <p class="sec-desc">Quattro fasi, un solo interlocutore. Dalla prima telefonata alla consegna sei sempre seguito — e lo restiamo anche dopo.</p>
+    </div>
+    <div class="route-wrap">
+      <!-- il tracciato non si vede: lo legge tread-route.js per disegnare la
+           traccia di pneumatico sul canvas -->
+      <svg class="route-src" viewBox="0 0 1098 477" aria-hidden="true" focusable="false">
+        <path id="routePath" fill="none" d="M0 6C212 6 240.5 58.02 265 109.5C289.5 160.98 265 342 265 342C265 385.98 320.2 478.3 447 469.5C605.5 458.5 552 357.5 541 342C541 342 514.5 292.98 510 226.98C505.5 160.98 541 109.5 541 109.5C559 71.3333 615.642 5.99997 700.5 6C879.5 6.00006 828 293.52 847 342C866 390.48 1004 525.48 1092 327.48" />
+      </svg>
+      <canvas class="route-canvas" aria-hidden="true"></canvas>
+      <div class="process-grid">
+        {steps.map((s, i) => (
+          <div class="process-item"><span class="pnum">{String(i + 1).padStart(2, '0')}</span><h3>{s.t}</h3><p>{s.d}</p></div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../../scripts/tread-route.js';
+</script>

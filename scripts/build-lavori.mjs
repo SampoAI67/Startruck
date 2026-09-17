@@ -15,8 +15,10 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 
-const OUT_DIR = 'Remake/Archivio/lavori';
-const OUT_JSON = 'Remake/Archivio/lavori.json';
+// Le immagini le serve il sito cosi' come sono; l'indice lo legge
+// src/components/home/Works.astro al build.
+const OUT_DIR = 'public/lavori';
+const OUT_JSON = 'src/data/lavori.json';
 const CELL = 760;                       // 2x della cella a 1116px di griglia
 const ACTOR = 'apify~instagram-scraper';
 

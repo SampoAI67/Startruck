@@ -134,13 +134,21 @@ function specTabs(dotazione, optionals, image) {
       </div>`;
 }
 
-function gallery(images, captions = []) {
+function gallery(images, captions = [], notes = []) {
   const feature = images.length === 6;
+  // Ogni foto porta con se' i suoi optional: la striscia si vede solo quando la
+  // foto sta nel riquadro grande (su telefono, dove sono tutte larghe, sempre).
+  const info = (list) => (list && list.length ? `
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list">${list.map((n) => `<li>${esc(n)}</li>`).join('')}</ul>
+            </div>` : '');
   return `
       <div class="mp-gal${feature ? ' mp-gal-feature' : ''}">
         ${images.map((src, i) => `
-        <figure class="mp-gal-item" data-reveal data-delay="${((i % 3) * 0.08).toFixed(2)}s">
-          <div class="mp-gal-frame"><img src="${url(src)}" alt="${esc(captions[i])}" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="${((i % 3) * 0.08).toFixed(2)}s"${feature ? ` tabindex="0" role="button" aria-label="Mostra in grande: ${esc(captions[i])}"` : ''}>
+          <div class="mp-gal-frame"><img src="${url(src)}" alt="${esc(captions[i])}" loading="lazy" decoding="async" width="1600" height="1067">${info(notes[i])}
+          </div>
           ${captions[i] ? `<figcaption>${esc(captions[i])}</figcaption>` : ''}
         </figure>`).join('')}
       </div>`;
@@ -226,12 +234,22 @@ function contactForm(line) {
       </div>`;
 }
 
+// Le locandine degli hero Astro sono quasi nere (il mezzo emerge dal buio
+// solo a video avviato). Le card "le altre linee" usano gli stessi fotogrammi
+// delle card "allestimenti" di casa, scelti dove il mezzo si vede: sono file
+// del prototipo, quindi percorso relativo e non l'indirizzo del sito Astro.
+const CARD_POSTER = {
+  'le-mans': 'poster-lemans.webp',
+  privacy: 'poster-privacy.webp',
+  'type-h': 'poster-typeh.webp',
+};
+
 function otherLines(others) {
   return `
       <div class="mp-others">
         ${others.map((o) => `
         <a class="mp-ol" href="#${o.slug}" data-reveal>
-          <img src="${url(o.hero.poster)}" alt="" width="1600" height="900" loading="lazy" decoding="async">
+          <img src="${CARD_POSTER[o.slug] ?? url(o.hero.poster)}" alt="" width="1280" height="638" loading="lazy" decoding="async">
           <span class="mp-ol-scrim"></span>
           <span class="mp-ol-body"><span class="mp-ol-tag">${esc(o.tagline)}</span><span class="mp-ol-name">${esc(o.name)}</span></span>
           <span class="mp-ol-go" aria-hidden="true">→</span>
@@ -247,11 +265,11 @@ function page(line) {
   return `
 <!-- ============ ${line.name.toUpperCase()} ============ -->
 <div id="view-${line.slug}" class="page-view mp" hidden>
-  <!-- 01 · apertura: il mezzo da vicino (nero). Scambiato col banner del
-       modello su indicazione, e senza sopratitolo. Il posto (altezza piena,
-       h1, invito a scorrere) resta all'apertura: cambia il contenuto. -->${videoBanner({
+  <!-- 01 · apertura (nero): video e testo del mezzo da vicino, senza
+       sopratitolo, ma col NOME del modello come titolo — da hero ha piu' senso
+       leggere subito che pagina e'. -->${videoBanner({
     video: line.detail.video, poster: line.detail.poster,
-    title: 'Ogni dettaglio\nè una decisione.',
+    title: line.name,
     text: 'Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.',
     cta: { label: 'Guarda la dotazione', target: dot },
     heading: 'h1', first: true, scrollCue: true,
@@ -260,9 +278,10 @@ function page(line) {
   <!-- 02 · i numeri che contano (bianco): solo i punti di forza, niente testo -->${section({
     tone: 'light', body: statRow(line.stats, true),
   })}
-  <!-- 03 · il modello (nero), dove prima stava il mezzo da vicino -->${videoBanner({
+  <!-- 03 · il modello (nero): il suo titolo e' passato all'apertura, qui va
+       quello del mezzo da vicino -->${videoBanner({
     video: line.hero.video, videoMobile: line.hero.videoMobile, poster: line.hero.poster,
-    eyebrow: line.tagline, index: '[ 03 ]', title: line.name, text: line.intro,
+    eyebrow: line.tagline, index: '[ 03 ]', title: 'Ogni dettaglio\nè una decisione.', text: line.intro,
     height: 'tall',
   })}
   <!-- 04 · dotazione / optionals (nero) -->${section({
@@ -272,7 +291,7 @@ function page(line) {
   <!-- 05 · i progetti (bianco) -->${section({
     tone: 'light', label: 'Più iconici', index: '[ 05 ]',
     body: `
-      <h2 class="mp-display-2 mp-gal-title" data-reveal>I progetti</h2>${gallery(line.gallery, line.captions)}`,
+      <h2 class="mp-display-2 mp-gal-title" data-reveal>I progetti</h2>${gallery(line.gallery, line.captions, line.galleryOptionals)}`,
   })}
   <!-- 06 · clienti (grigio) -->${section({
     tone: 'surface', pad: 'tight', body: clientLogos(`Chi ha scelto ${line.name}`),
@@ -308,6 +327,8 @@ if (a === -1 || b === -1 || b < a) {
   process.exit(1);
 }
 const headEnd = html.indexOf('-->', a) + 3;       // conserva il commento d'apertura
-const out = html.slice(0, headEnd) + '\n' + lines.map(page).join('') + html.slice(b);
+const eol = html.includes('\r\n') ? '\r\n' : '\n';
+const block = ('\n' + lines.map(page).join('')).replace(/\r?\n/g, eol);
+const out = html.slice(0, headEnd) + block + html.slice(b);
 await fs.writeFile(FILE, out);
 console.log(`${lines.length} pagine modello scritte in ${FILE}`);

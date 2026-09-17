@@ -9,21 +9,10 @@
     "preview": "astro preview",
     "astro": "astro",
     "lavori": "node scripts/build-lavori.mjs --apify --limit 18",
-    "lavori:local": "node scripts/build-lavori.mjs --local public/img --limit 18",
-    "prebuild": "node scripts/sync-remake.mjs",
-    "remake": "node scripts/sync-remake.mjs"
+    "lavori:local": "node scripts/build-lavori.mjs --local public/img --limit 18"
   },
   "dependencies": {
-    "@astrojs/react": "^4.4.2",
-    "@fontsource-variable/manrope": "^5.2.8",
-    "@fontsource-variable/sora": "^5.2.8",
-    "@tailwindcss/vite": "^4.3.0",
-    "@types/react": "^19.2.15",
-    "@types/react-dom": "^19.2.3",
     "astro": "^5.18.2",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "tailwindcss": "^4.3.0",
     "typescript": "^6.0.3"
   },
   "devDependencies": {

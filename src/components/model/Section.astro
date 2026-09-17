@@ -1,0 +1,17 @@
+---
+// Ritmo bianco / grigio / nero delle pagine modello.
+interface Props {
+  tone: 'light' | 'surface' | 'dark';
+  label?: string;
+  index?: string;
+  id?: string;
+  pad?: 'normal' | 'tight';
+}
+const { tone, label, index, id, pad = 'normal' } = Astro.props;
+---
+<section class:list={[`mp-${tone}`, pad === 'tight' ? 'mp-pad-tight' : 'mp-pad']} id={id}>
+  <div class="mp-container">
+    {label && <p class="mp-label" data-index={index} data-reveal>{label}</p>}
+    <slot />
+  </div>
+</section>

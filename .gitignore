@@ -33,6 +33,10 @@ VIdeo AI Startruck/
 !public/video/*.mp4
 !public/og-*.webp
 !public/og-*.jpg
+!public/lavori/*.webp
+!public/clienti/*.webp
+!public/optionals/*.webp
+!public/tread.png
 
 # --- OS / editor cruft ---
 Thumbs.db
@@ -71,6 +75,6 @@ dist/
 # Archivio compresso: e la stessa roba della cartella, 16 MB in piu per nulla
 *.zip
 
-# Copia pubblicata del prototipo: la genera scripts/sync-remake.mjs a ogni
-# build. La sorgente e Remake/Archivio, questa non va versionata.
+# Vecchia copia pubblicata del prototipo (scripts/sync-remake.mjs, ora in
+# archive/): se ne resta una in locale, non va versionata.
 public/remake/

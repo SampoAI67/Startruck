@@ -1,0 +1,23 @@
+---
+import { base } from '../../lib/base';
+
+interface Props { title: string }
+const { title } = Astro.props;
+
+// I marchi dei telai su cui si allestisce: file bianchi su trasparenza,
+// invertiti dal CSS perche' qui il fondo e' chiaro.
+const brands = [
+  ['iveco', 'Iveco'], ['mercedes', 'Mercedes-Benz'], ['man', 'MAN'], ['ww', 'Volkswagen'],
+  ['renault', 'Renault'], ['peugeot', 'Peugeot'], ['citroen', 'Citroën'], ['fiat', 'Fiat'], ['ford', 'Ford'],
+];
+---
+<div class="mp-cl">
+  <h2 class="mp-cl-title" data-reveal>{title}</h2>
+  <ul class="mp-cl-grid">
+    {brands.map(([f, n], i) => (
+      <li data-reveal data-delay={`${(i * 0.05).toFixed(2)}s`}>
+        <img src={base(`logos/${f}.webp`)} alt={n} width="160" height="80" loading="lazy" decoding="async" />
+      </li>
+    ))}
+  </ul>
+</div>

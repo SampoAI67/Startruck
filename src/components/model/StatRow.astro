@@ -1,0 +1,17 @@
+---
+interface Props {
+  stats: { value: string; label: string; note?: string }[];
+  /** la riga sta da sola nella sezione, senza un titolo da cui staccarsi */
+  solo?: boolean;
+}
+const { stats, solo = false } = Astro.props;
+---
+<ul class:list={['mp-sr', { 'mp-sr-solo': solo }]}>
+  {stats.map((s, i) => (
+    <li class="mp-sr-item mp-rule" data-reveal data-delay={`${(i * 0.08).toFixed(2)}s`}>
+      <span class="mp-sr-value" data-count={s.value}>{s.value}</span>
+      <span class="mp-sr-label">{s.label}</span>
+      {s.note && <span class="mp-sr-note mp-soft">{s.note}</span>}
+    </li>
+  ))}
+</ul>

@@ -1,0 +1,55 @@
+---
+import { base } from '../../lib/base';
+
+// Le card restano ferme su richiesta del cliente: al passaggio parte solo il
+// video, dal fotogramma del poster (data-start) per non staccare sul buio.
+const models = [
+  {
+    slug: 'le-mans', name: 'Le Mans', tag: 'Performance & racing', start: '3.4',
+    poster: 'img/poster-lemans.webp', video: 'video/lemans-hero.mp4',
+    text: 'Progettato per offrire una struttura leggera, carico massimo e versatilità senza pari, pensato per chi non vuole rinunciare a nulla.',
+  },
+  {
+    slug: 'privacy', name: 'Privacy', tag: 'Trasporto confidenziale', start: '1.8',
+    poster: 'img/poster-privacy.webp', video: 'video/privacy-hero.mp4',
+    text: 'Furgonato chiuso, nessuna vetrina. Quello che trasporti resta una cosa fra te e il destinatario.',
+  },
+  {
+    slug: 'type-h', name: 'Type H', tag: 'Aspetto vintage', start: '3.4',
+    poster: 'img/poster-typeh.webp', video: 'video/typeh-hero.mp4',
+    text: 'La linea del Type H, la meccanica di oggi. Un mezzo che nessuno smette di guardare mentre lavora.',
+  },
+];
+---
+<section class="section" id="modelli">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-eyebrow">I nostri modelli</span>
+        <h2>Tre allestimenti.<br />Un solo standard.</h2>
+      </div>
+      <p class="sec-desc">Ogni modello nasce per un uso specifico: dalla pista al trasporto riservato, fino al recupero d'epoca.</p>
+    </div>
+  </div>
+  <div class="model-grid">
+    {models.map((m) => (
+      <article class="model-card">
+        <div class="model-img">
+          <span class="model-tag">{m.tag}</span>
+          <video muted loop playsinline preload="auto" data-start={m.start} poster={base(m.poster)}>
+            <source src={base(m.video)} type="video/mp4" />
+          </video>
+        </div>
+        <div class="model-body">
+          <h3>{m.name}</h3>
+          <p>{m.text}</p>
+          <a href={base(`/allestimenti/${m.slug}/`)} class="model-link">Scopri {m.name} →</a>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<script>
+  import '../../scripts/model-cards.js';
+</script>

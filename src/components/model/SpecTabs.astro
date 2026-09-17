@@ -1,0 +1,53 @@
+---
+import { base } from '../../lib/base';
+import type { SpecItem } from '../../data/lines';
+
+interface Props {
+  dotazione: SpecItem[];
+  optionals: SpecItem[];
+  image?: string;
+}
+const { dotazione, optionals, image } = Astro.props;
+const groups = [
+  { id: 'dotazione', label: 'Dotazione', items: dotazione },
+  { id: 'optionals', label: 'Optionals', items: optionals },
+];
+const pad2 = (n: number) => String(n).padStart(2, '0');
+---
+<div class="mp-st">
+  <div class="mp-st-head" role="tablist">
+    {groups.map((g, i) => (
+      <button class:list={['mp-st-tab', { 'is-active': i === 0 }]} type="button" role="tab" data-tab={g.id} aria-selected={String(i === 0)}>
+        <span class="mp-st-tablabel">{g.label}</span>
+        <span class="mp-st-count">{pad2(g.items.length)}</span>
+      </button>
+    ))}
+  </div>
+  <div class="mp-st-body">
+    <div class="mp-st-lists">
+      {groups.map((g, gi) => (
+        <ul class:list={['mp-st-list', { 'is-active': gi === 0 }]} data-panel={g.id}>
+          {g.items.map((it, i) => (
+            <li class="mp-st-item">
+              <button class:list={['mp-st-row', { 'is-open': gi === 0 && i === 0 }]} type="button">
+                <span class="mp-st-num">{pad2(i + 1)}</span>
+                <span class="mp-st-title">{it.title}</span>
+                <span class="mp-plus" aria-hidden="true"><i></i><i></i></span>
+              </button>
+              <div class="mp-st-panel"><div class="mp-st-inner">
+                {it.spec && <p class="mp-st-spec">{it.spec}</p>}
+                <p class="mp-st-desc">{it.desc}</p>
+              </div></div>
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
+    {image && (
+      <figure class="mp-st-figure" data-reveal>
+        <img src={base(image)} alt="" width="1600" height="900" loading="lazy" decoding="async" />
+        <figcaption class="mp-st-hint"><span class="mp-st-dot"></span>Click</figcaption>
+      </figure>
+    )}
+  </div>
+</div>

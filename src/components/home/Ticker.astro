@@ -1,0 +1,10 @@
+---
+const words = ['Bisarche su misura', 'Trasporto auto di lusso', 'Alluminio aeronautico', 'Discrezione', 'Made in Italy', 'Racing-grade', 'Collezioni private'];
+---
+<!-- la lista e' scritta due volte: la traccia scorre del 50% e riparte senza salto -->
+<div class="ticker-band">
+  <div class="ticker-track">
+    {words.map((w) => <span>{w}</span>)}
+    {words.map((w) => <span aria-hidden="true">{w}</span>)}
+  </div>
+</div>

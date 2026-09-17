@@ -1,0 +1,209 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import '../styles/configurator.css';
+import { base } from '../lib/base';
+
+// Le fototessere degli optional che esistono davvero, lette al build: il
+// browser non deve tentare file che non ci sono (e riempire la console di 404).
+let photos: string[] = [];
+try {
+  photos = fs.readdirSync(path.join(process.cwd(), 'public/optionals'))
+    .filter((f) => f.endsWith('.webp'))
+    .map((f) => f.slice(0, -'.webp'.length));
+} catch { /* cartella assente: nessuna foto */ }
+---
+<!-- CONFIGURATORE — SOGLIA
+     La categoria del veicolo e' l'unica scelta che si fa restando in pagina:
+     e' la porta. Il resto avviene nel palco a schermo pieno qui sotto. -->
+<section class="configurator" id="configuratore">
+  <div class="wrap">
+    <div class="cfg-head">
+      <span class="sec-eyebrow">Richiedi un preventivo</span>
+      <h2>Configura il tuo allestimento</h2>
+      <p>5 passaggi. Alla fine invii la richiesta direttamente al nostro team — nessun account necessario.</p>
+    </div>
+
+    <div class="cfg-gate" id="cfgGate">
+      <div class="ramp-gauge">
+        <div class="ramp-top">
+          <span class="mono">STEP 1 / 5</span>
+          <span class="step-label">Categoria veicolo</span>
+        </div>
+        <div class="ramp-track"><div class="ramp-fill" style="left:0%"></div></div>
+        <div class="ramp-ticks">
+          <span class="done">Categoria</span>
+          <span>Autocarro</span>
+          <span>Allestimento</span>
+          <span>Accessori</span>
+          <span>Contatti</span>
+        </div>
+      </div>
+      <div class="cfg-body" id="cfgGateBody">
+      <div class="step active" data-step="1">
+        <h3>Categoria del veicolo</h3>
+        <p class="step-sub">In base al peso complessivo cambia la patente necessaria per la guida.</p>
+        <div class="option-grid" id="grid-categoria">
+          <div class="opt-card" data-group="categoria" data-value="Patente B — fino a 3,5t">
+            <h4>Patente B</h4>
+            <p>Fino a 3,5 t di massa complessiva. Guidabile con patente auto standard.</p>
+          </div>
+          <div class="opt-card" data-group="categoria" data-value="Patente C — superiore a 3,5t">
+            <h4>Superiore a 3,5t</h4>
+            <p>Richiede patente C. Maggiore portata e più veicoli trasportabili.</p>
+          </div>
+        </div>
+      </div>
+      <div class="cfg-nav">
+        <button class="btn-next" id="gateNext" type="button" disabled>Continua →</button>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONFIGURATORE — PALCO A SCHERMO PIENO
+     Si apre scegliendo la categoria e si chiude solo con "Esci dalla
+     configurazione" o inviando: lo scroll della pagina resta bloccato. -->
+<div class="cfg-stage" id="cfgStage" role="dialog" aria-modal="true" aria-label="Configuratore Startruck">
+
+  <header class="cfg-bar">
+    <span class="cfg-mark">Startruck</span>
+    <div class="ramp-gauge">
+      <div class="ramp-top">
+        <span class="step-label" id="stepLabel">Categoria veicolo</span>
+        <span class="mono" id="stepCounter">STEP 1 / 5</span>
+      </div>
+      <div class="ramp-ticks">
+        <span class="done" id="tick1">Categoria</span>
+        <span id="tick2">Autocarro</span>
+        <span id="tick3">Allestimento</span>
+        <span id="tick4">Accessori</span>
+        <span id="tick5">Contatti</span>
+      </div>
+      <div class="ramp-track"><div class="ramp-fill" id="rampFill" style="left:0%"></div></div>
+    </div>
+    <button class="cfg-exit" id="btnExit" type="button"><i>✕</i> Esci dalla configurazione</button>
+  </header>
+
+  <div class="cfg-main">
+
+    <!-- Il mezzo: un MP4 di 10 s che copre 360 gradi, ruotare = spostare
+         currentTime. Resta visibile per tutta la compilazione, non solo
+         al passo degli accessori. -->
+    <div class="cfg-visual">
+      <div class="tt" id="accViewer" data-duration="10">
+        <div class="tt-viewport" role="group" aria-label="Vista a 360 gradi dell'allestimento">
+          <div class="tt-plate">
+            <video class="tt-video" poster={base('orbit/lemans/poster.webp')}
+                   muted loop playsinline preload="none" aria-hidden="true"
+                   src={base('orbit/lemans/orbit.mp4')}></video>
+            <img class="tt-still" alt="" decoding="async">
+          </div>
+          <div class="tt-markers" aria-hidden="true"></div>
+          <div class="tt-loading"><span class="tt-bar"><i></i></span><span class="tt-pct">0%</span></div>
+        </div>
+        <div class="tt-cap">
+          <span>Trascina per ruotare</span>
+          <span class="tt-what" aria-live="polite">Vista completa</span>
+        </div>
+      </div>
+      <div class="cfg-alt" id="cfgAlt"><img alt="" decoding="async"><span></span></div>
+    </div>
+
+    <div class="cfg-panel" id="cfgPanel">
+
+      <div class="step" data-step="2">
+        <h3>Marca dell'autocarro</h3>
+        <p class="step-sub">Su quale telaio verrà realizzato l'allestimento?</p>
+        <div class="option-grid cols-3" id="grid-marca">
+          <div class="opt-card" data-group="marca" data-value="Fiat"><h4>Fiat</h4></div>
+          <div class="opt-card" data-group="marca" data-value="Mercedes"><h4>Mercedes</h4></div>
+          <div class="opt-card" data-group="marca" data-value="Ford"><h4>Ford</h4></div>
+          <div class="opt-card" data-group="marca" data-value="Iveco"><h4>Iveco</h4></div>
+          <div class="opt-card" data-group="marca" data-value="MAN"><h4>MAN</h4></div>
+          <div class="opt-card" data-group="marca" data-value="Citroën"><h4>Citroën</h4></div>
+        </div>
+        <div style="margin-top:22px;">
+          <label for="marcaAltro">Altro / non so ancora</label>
+          <input type="text" id="marcaAltro" placeholder="Indica il modello, oppure lascia vuoto">
+        </div>
+      </div>
+
+      <div class="step" data-step="3">
+        <h3>Modello di allestimento</h3>
+        <p class="step-sub">Scegli lo stile più adatto al tuo utilizzo.</p>
+        <div class="option-grid cols-3" id="grid-allestimento">
+          <div class="opt-card" data-group="allestimento" data-value="Le Mans">
+            <img src="https://static.wixstatic.com/media/d56fb4_b701ef5030114b05a9e77d921e1283da~mv2.jpg/v1/fill/w_980,h_735,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/lemans_urus.jpg" alt="Le Mans">
+            <div><h4>Le Mans</h4><p>Aperto, rapido, versatile.</p></div>
+          </div>
+          <div class="opt-card" data-group="allestimento" data-value="Privacy">
+            <img src="https://static.wixstatic.com/media/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg/v1/fill/w_1024,h_580,q_90,enc_avif,quality_auto/d56fb4_9a8c5dbce5944d9599f9adf6665a5954~mv2.jpg" alt="Privacy">
+            <div><h4>Privacy</h4><p>Chiuso, riservato, protetto.</p></div>
+          </div>
+          <div class="opt-card" data-group="allestimento" data-value="Type H">
+            <img src="https://static.wixstatic.com/media/d56fb4_272e847b30894699b412d3ce24f79a13~mv2.jpg/v1/crop/x_0,y_66,w_1600,h_920/fill/w_980,h_564,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/typeh_industrial.jpg" alt="Type H">
+            <div><h4>Type H</h4><p>Stile vintage industrial.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step" data-step="4">
+        <h3>Accessori e optional</h3>
+        <p class="step-sub">Seleziona tutto ciò che ti serve: dove possiamo, ti mostriamo il pezzo sul mezzo. Puoi aggiungere altro nelle note al passo successivo.</p>
+        <div class="accessori-grid" id="grid-accessori" data-photos={JSON.stringify(photos)}>
+          <label class="acc-item" data-spot="verricello"><input type="checkbox" value="Verricello traslabile"> Verricello traslabile</label>
+          <label class="acc-item"><input type="checkbox" value="Balestra con soffioni ad aria posteriori"> Balestra con soffioni ad aria posteriori</label>
+          <label class="acc-item"><input type="checkbox" value="Solo soffioni posteriori ad aria"> Solo soffioni posteriori ad aria</label>
+          <label class="acc-item"><input type="checkbox" value="Rollbar alto dietro cabina"> Rollbar alto dietro cabina</label>
+          <label class="acc-item"><input type="checkbox" value="Lampeggiante soccorso"> Lampeggiante soccorso</label>
+          <label class="acc-item"><input type="checkbox" value="Carenatura laterale chiusa"> Carenatura laterale chiusa</label>
+          <label class="acc-item" data-spot="rampe"><input type="checkbox" value="Rampe di carico più larghe"> Rampe di carico più larghe</label>
+          <label class="acc-item" data-spot="rampe"><input type="checkbox" value="Rampe per supercar con cassetta dedicata"> Rampe per supercar con cassetta dedicata</label>
+          <label class="acc-item"><input type="checkbox" value="Porta ruote auto da corsa"> Porta ruote auto da corsa</label>
+          <label class="acc-item" data-spot="fari"><input type="checkbox" value="Faro di retromarcia aggiuntivo"> Faro di retromarcia aggiuntivo</label>
+          <label class="acc-item" data-spot="pianale"><input type="checkbox" value="LED sul pianale"> LED sul pianale</label>
+          <label class="acc-item"><input type="checkbox" value="Retrocamera per le manovre"> Retrocamera per le manovre</label>
+          <label class="acc-item"><input type="checkbox" value="Cassone portautensili"> Cassone portautensili <span class="tag-new">proposta</span></label>
+          <label class="acc-item" data-spot="cinghie"><input type="checkbox" value="Ancoraggi a cricchetto supplementari"> Ancoraggi a cricchetto supplementari <span class="tag-new">proposta</span></label>
+          <label class="acc-item"><input type="checkbox" value="Predisposizione GPS/localizzatore"> Predisposizione GPS/localizzatore <span class="tag-new">proposta</span></label>
+          <label class="acc-item" data-spot="full"><input type="checkbox" value="Verniciatura personalizzata / livrea"> Verniciatura personalizzata / livrea <span class="tag-new">proposta</span></label>
+        </div>
+      </div>
+
+      <div class="step" data-step="5">
+        <h3>I tuoi dati</h3>
+        <p class="step-sub">Ultimo passaggio: ti ricontattiamo per confermare i dettagli del preventivo.</p>
+        <div class="summary-box" id="summaryBox"></div>
+        <div class="form-grid">
+          <div><label for="nome">Nome e cognome *</label><input type="text" id="nome" required></div>
+          <div><label for="azienda">Azienda</label><input type="text" id="azienda"></div>
+          <div><label for="telefono">Telefono *</label><input type="tel" id="telefono" required></div>
+          <div><label for="email">Email *</label><input type="email" id="email" required></div>
+          <div class="full"><label for="note">Note aggiuntive</label><textarea id="note" placeholder="Altri accessori, tempistiche, quantità mezzi..."></textarea></div>
+        </div>
+      </div>
+
+      <div class="step" data-step="6">
+        <div class="confirm-icon"><span>—</span></div>
+        <h3 class="confirm-title">Configurazione pronta</h3>
+        <p class="step-sub" style="text-align:center;">Cliccando "Invia configurazione" si aprirà il tuo client email con tutti i dettagli già compilati, pronti per essere inviati a <strong>startruck@outlook.it</strong>.</p>
+        <div class="summary-box" id="summaryBox2"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="cfg-foot">
+    <div class="cfg-recap" id="cfgRecap"></div>
+    <div class="cfg-actions">
+      <button class="btn-back" id="btnBack" type="button" style="visibility:hidden;">← Indietro</button>
+      <button class="btn-next" id="btnNext" type="button" disabled>Continua →</button>
+    </div>
+  </footer>
+</div>
+
+<script>
+  import '../scripts/configurator.js';
+</script>

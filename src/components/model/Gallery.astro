@@ -1,0 +1,38 @@
+---
+import { base } from '../../lib/base';
+
+interface Props {
+  images: string[];
+  captions?: string[];
+  /** optional montati sul mezzo di ciascuna foto, stesso ordine di images */
+  notes?: string[][];
+}
+const { images, captions = [], notes = [] } = Astro.props;
+// Con sei foto la prima e' il riquadro grande, e cliccarne un'altra la porta
+// li' (model-page.js). La striscia degli optional si vede solo sul grande
+// (su telefono, dove sono tutte larghe, sempre).
+const feature = images.length === 6;
+---
+<div class:list={['mp-gal', { 'mp-gal-feature': feature }]}>
+  {images.map((src, i) => (
+    <figure
+      class="mp-gal-item"
+      data-reveal
+      data-delay={`${((i % 3) * 0.08).toFixed(2)}s`}
+      tabindex={feature ? '0' : undefined}
+      role={feature ? 'button' : undefined}
+      aria-label={feature ? `Mostra in grande: ${captions[i] ?? ''}` : undefined}
+    >
+      <div class="mp-gal-frame">
+        <img src={base(src)} alt={captions[i] ?? ''} loading="lazy" decoding="async" width="1600" height="1067" />
+        {notes[i]?.length ? (
+          <div class="mp-gal-info">
+            <span class="mp-gal-info-label">Optional installati</span>
+            <ul class="mp-gal-info-list">{notes[i].map((n) => <li>{n}</li>)}</ul>
+          </div>
+        ) : null}
+      </div>
+      {captions[i] && <figcaption>{captions[i]}</figcaption>}
+    </figure>
+  ))}
+</div>

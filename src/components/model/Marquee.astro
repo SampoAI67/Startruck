@@ -1,0 +1,16 @@
+---
+interface Props { items: string[] }
+const { items } = Astro.props;
+---
+<!-- due copie identiche: la traccia scorre del 50% e riparte senza salto -->
+<div class="mp-mq">
+  <div class="mp-mq-track">
+    {[false, true].map((copy) => (
+      <span class="mp-mq-seq" aria-hidden={copy ? 'true' : undefined}>
+        {items.map((w) => (
+          <span class="mp-mq-cell"><span class="mp-mq-word">{w}</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span>
+        ))}
+      </span>
+    ))}
+  </div>
+</div>

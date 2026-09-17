@@ -357,6 +357,10 @@
   @keyframes mp-kenburns{from{transform:scale(1.08);} to{transform:scale(1.18);}}
   .mp [data-reveal]{opacity:0;}
   .mp [data-reveal].is-in{animation:mp-reveal-up .9s cubic-bezier(.22,1,.36,1) forwards;}
+  /* Comparsa finita: si ferma li'. Un elemento spostato nel DOM riparte da
+     capo con le sue animazioni CSS, e lo scambio della galleria rifarebbe la
+     comparsa a ogni clic (il secondo lampo). */
+  .mp [data-reveal].is-in.is-done{animation:none; opacity:1;}
   .mp-mask{display:block; overflow:hidden; padding-bottom:.14em; margin-bottom:-.14em;}
   .mp-mask > span{display:block; transform:translateY(105%); transition:transform 1s cubic-bezier(.22,1,.36,1); transition-delay:var(--d,0s);}
   .mp .is-in .mp-mask > span{transform:none;}
@@ -500,6 +504,32 @@
     transition:transform .9s cubic-bezier(.22,1,.36,1), filter .6s;
   }
   .mp-gal-item:hover .mp-gal-frame img{transform:scale(1.06); filter:grayscale(0);}
+  /* La foto cliccata passa nel riquadro grande, e quella grande prende il suo
+     posto: nessun progetto resta per sempre il "principale". Il grande porta
+     in fondo la striscia degli optional montati su quel mezzo. */
+  .mp-gal-frame{position:relative;}
+  .mp-gal-feature .mp-gal-item{cursor:pointer;}
+  .mp-gal-feature .mp-gal-item:first-child{cursor:default;}
+  .mp-gal-item:focus-visible{outline:2px solid var(--mp-ink); outline-offset:4px; border-radius:var(--mp-r-md);}
+  .mp-gal-info{
+    position:absolute; left:0; right:0; bottom:0; padding:3.5rem 1.25rem 1.1rem;
+    background:linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,0)); color:#fff;
+    opacity:0; transform:translateY(8px); pointer-events:none;
+    transition:opacity .45s ease, transform .45s ease;
+  }
+  .mp-gal-feature .mp-gal-item:first-child .mp-gal-info{opacity:1; transform:none;}
+  .mp-gal-info-label{display:block; margin-bottom:.55rem; font-size:.66rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; opacity:.7;}
+  .mp-gal-info-list{display:flex; flex-wrap:wrap; gap:.4rem;}
+  .mp-gal-info-list li{padding:.3rem .75rem; border:1px solid rgba(255,255,255,.38); border-radius:999px; font-size:.78rem;}
+  /* fra 640 e 1023 la griglia e' a due colonne: il grande occupa la riga */
+  @media(min-width:640px) and (max-width:1023.98px){
+    .mp-gal-feature .mp-gal-item:first-child{grid-column:span 2;}
+  }
+  /* sotto i 640 sono tutte larghe uguali: niente scambio, striscia su ognuna */
+  @media(max-width:639.98px){
+    .mp-gal-feature .mp-gal-item{cursor:default;}
+    .mp-gal-info{opacity:1; transform:none; padding-top:2.6rem;}
+  }
   .mp-gal figcaption{margin-top:.75rem; font-size:.72rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; opacity:.5;}
   .mp-gal-title{margin-bottom:3.5rem;}
 
@@ -1391,9 +1421,9 @@
 
 <!-- ============ LE MANS ============ -->
 <div id="view-le-mans" class="page-view mp" hidden>
-  <!-- 01 · apertura: il mezzo da vicino (nero). Scambiato col banner del
-       modello su indicazione, e senza sopratitolo. Il posto (altezza piena,
-       h1, invito a scorrere) resta all'apertura: cambia il contenuto. -->
+  <!-- 01 · apertura (nero): video e testo del mezzo da vicino, senza
+       sopratitolo, ma col NOME del modello come titolo — da hero ha piu' senso
+       leggere subito che pagina e'. -->
   <section class="mp-vb mp-dark mp-vb-full mp-vb-first">
     <div class="mp-vb-media" data-parallax>
       <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/lemans-detail.webp" muted loop playsinline preload="none" aria-hidden="true">
@@ -1404,7 +1434,7 @@
     <div class="mp-vb-scrim"></div>
     <div class="mp-container mp-vb-content">
       
-      <h1 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Ogni dettaglio</span></span><span class="mp-mask"><span style="--d:0.09s">è una decisione.</span></span></h1>
+      <h1 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Le Mans</span></span></h1>
       <p class="mp-vb-text" data-reveal data-delay=".18s">Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.</p>
       <div data-reveal data-delay=".26s"><a class="mp-vb-cta" href="#" data-scrollto="dotazione-le-mans">Guarda la dotazione <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></a></div>
     </div>
@@ -1446,7 +1476,8 @@
       </ul>
     </div>
   </section>
-  <!-- 03 · il modello (nero), dove prima stava il mezzo da vicino -->
+  <!-- 03 · il modello (nero): il suo titolo e' passato all'apertura, qui va
+       quello del mezzo da vicino -->
   <section class="mp-vb mp-dark mp-vb-tall">
     <div class="mp-vb-media" data-parallax>
       <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/lemans-hero.webp" muted loop playsinline preload="none" aria-hidden="true">
@@ -1457,7 +1488,7 @@
     <div class="mp-vb-scrim"></div>
     <div class="mp-container mp-vb-content">
       <p class="mp-label" data-index="[ 03 ]" data-reveal>Performance &amp; racing</p>
-      <h2 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Le Mans</span></span></h2>
+      <h2 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Ogni dettaglio</span></span><span class="mp-mask"><span style="--d:0.09s">è una decisione.</span></span></h2>
       <p class="mp-vb-text" data-reveal data-delay=".18s">Progettato per offrire una struttura leggera, carico massimo e versatilità senza pari, pensato per chi non vuole rinunciare a nulla.</p>
       
     </div>
@@ -1650,28 +1681,58 @@
       <h2 class="mp-display-2 mp-gal-title" data-reveal>I progetti</h2>
       <div class="mp-gal mp-gal-feature">
         
-        <figure class="mp-gal-item" data-reveal data-delay="0.00s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-01.webp" alt="Peugeot Boxer" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.00s" tabindex="0" role="button" aria-label="Mostra in grande: Peugeot Boxer">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-01.webp" alt="Peugeot Boxer" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Peugeot Boxer</figcaption>
         </figure>
-        <figure class="mp-gal-item" data-reveal data-delay="0.08s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-02.webp" alt="Mercedes Sprinter" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.08s" tabindex="0" role="button" aria-label="Mostra in grande: Mercedes Sprinter">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-02.webp" alt="Mercedes Sprinter" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Mercedes Sprinter</figcaption>
         </figure>
-        <figure class="mp-gal-item" data-reveal data-delay="0.16s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-03.webp" alt="MAN TGE" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.16s" tabindex="0" role="button" aria-label="Mostra in grande: MAN TGE">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-03.webp" alt="MAN TGE" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>MAN TGE</figcaption>
         </figure>
-        <figure class="mp-gal-item" data-reveal data-delay="0.00s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-04.webp" alt="Iveco Daily" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.00s" tabindex="0" role="button" aria-label="Mostra in grande: Iveco Daily">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-04.webp" alt="Iveco Daily" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Iveco Daily</figcaption>
         </figure>
-        <figure class="mp-gal-item" data-reveal data-delay="0.08s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-05.webp" alt="Mercedes — dettaglio" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.08s" tabindex="0" role="button" aria-label="Mostra in grande: Mercedes — dettaglio">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-05.webp" alt="Mercedes — dettaglio" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Mercedes — dettaglio</figcaption>
         </figure>
-        <figure class="mp-gal-item" data-reveal data-delay="0.16s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-06.webp" alt="Peugeot — vista drone" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.16s" tabindex="0" role="button" aria-label="Mostra in grande: Peugeot — vista drone">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/lemans-06.webp" alt="Peugeot — vista drone" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Peugeot — vista drone</figcaption>
         </figure>
       </div>
@@ -1759,13 +1820,13 @@
       <div class="mp-others">
         
         <a class="mp-ol" href="#privacy" data-reveal>
-          <img src="https://sampoai67.github.io/Startruck/img/privacy-hero.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+          <img src="poster-privacy.webp" alt="" width="1280" height="638" loading="lazy" decoding="async">
           <span class="mp-ol-scrim"></span>
           <span class="mp-ol-body"><span class="mp-ol-tag">Trasporto confidenziale</span><span class="mp-ol-name">Privacy</span></span>
           <span class="mp-ol-go" aria-hidden="true">→</span>
         </a>
         <a class="mp-ol" href="#type-h" data-reveal>
-          <img src="https://sampoai67.github.io/Startruck/img/typeh-hero.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+          <img src="poster-typeh.webp" alt="" width="1280" height="638" loading="lazy" decoding="async">
           <span class="mp-ol-scrim"></span>
           <span class="mp-ol-body"><span class="mp-ol-tag">Aspetto vintage</span><span class="mp-ol-name">Type H</span></span>
           <span class="mp-ol-go" aria-hidden="true">→</span>
@@ -1821,9 +1882,9 @@
 
 <!-- ============ PRIVACY ============ -->
 <div id="view-privacy" class="page-view mp" hidden>
-  <!-- 01 · apertura: il mezzo da vicino (nero). Scambiato col banner del
-       modello su indicazione, e senza sopratitolo. Il posto (altezza piena,
-       h1, invito a scorrere) resta all'apertura: cambia il contenuto. -->
+  <!-- 01 · apertura (nero): video e testo del mezzo da vicino, senza
+       sopratitolo, ma col NOME del modello come titolo — da hero ha piu' senso
+       leggere subito che pagina e'. -->
   <section class="mp-vb mp-dark mp-vb-full mp-vb-first">
     <div class="mp-vb-media" data-parallax>
       <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/privacy-detail.webp" muted loop playsinline preload="none" aria-hidden="true">
@@ -1834,7 +1895,7 @@
     <div class="mp-vb-scrim"></div>
     <div class="mp-container mp-vb-content">
       
-      <h1 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Ogni dettaglio</span></span><span class="mp-mask"><span style="--d:0.09s">è una decisione.</span></span></h1>
+      <h1 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Privacy</span></span></h1>
       <p class="mp-vb-text" data-reveal data-delay=".18s">Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.</p>
       <div data-reveal data-delay=".26s"><a class="mp-vb-cta" href="#" data-scrollto="dotazione-privacy">Guarda la dotazione <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></a></div>
     </div>
@@ -1876,7 +1937,8 @@
       </ul>
     </div>
   </section>
-  <!-- 03 · il modello (nero), dove prima stava il mezzo da vicino -->
+  <!-- 03 · il modello (nero): il suo titolo e' passato all'apertura, qui va
+       quello del mezzo da vicino -->
   <section class="mp-vb mp-dark mp-vb-tall">
     <div class="mp-vb-media" data-parallax>
       <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/privacy-hero.webp" muted loop playsinline preload="none" aria-hidden="true">
@@ -1887,7 +1949,7 @@
     <div class="mp-vb-scrim"></div>
     <div class="mp-container mp-vb-content">
       <p class="mp-label" data-index="[ 03 ]" data-reveal>Trasporto confidenziale</p>
-      <h2 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Privacy</span></span></h2>
+      <h2 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Ogni dettaglio</span></span><span class="mp-mask"><span style="--d:0.09s">è una decisione.</span></span></h2>
       <p class="mp-vb-text" data-reveal data-delay=".18s">Furgonato chiuso, nessuna vetrina. Quello che trasporti resta una cosa fra te e il destinatario.</p>
       
     </div>
@@ -2080,28 +2142,58 @@
       <h2 class="mp-display-2 mp-gal-title" data-reveal>I progetti</h2>
       <div class="mp-gal mp-gal-feature">
         
-        <figure class="mp-gal-item" data-reveal data-delay="0.00s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-01.webp" alt="Peugeot Boxer" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.00s" tabindex="0" role="button" aria-label="Mostra in grande: Peugeot Boxer">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-01.webp" alt="Peugeot Boxer" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Peugeot Boxer</figcaption>
         </figure>
-        <figure class="mp-gal-item" data-reveal data-delay="0.08s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-02.webp" alt="Citroën Jumper" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.08s" tabindex="0" role="button" aria-label="Mostra in grande: Citroën Jumper">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-02.webp" alt="Citroën Jumper" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Citroën Jumper</figcaption>
         </figure>
-        <figure class="mp-gal-item" data-reveal data-delay="0.16s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-03.webp" alt="Iveco Daily" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.16s" tabindex="0" role="button" aria-label="Mostra in grande: Iveco Daily">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-03.webp" alt="Iveco Daily" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Iveco Daily</figcaption>
         </figure>
-        <figure class="mp-gal-item" data-reveal data-delay="0.00s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-04.webp" alt="Fiat Ducato" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.00s" tabindex="0" role="button" aria-label="Mostra in grande: Fiat Ducato">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-04.webp" alt="Fiat Ducato" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Fiat Ducato</figcaption>
         </figure>
-        <figure class="mp-gal-item" data-reveal data-delay="0.08s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-05.webp" alt="Dettaglio interno" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.08s" tabindex="0" role="button" aria-label="Mostra in grande: Dettaglio interno">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-05.webp" alt="Dettaglio interno" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Dettaglio interno</figcaption>
         </figure>
-        <figure class="mp-gal-item" data-reveal data-delay="0.16s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-06.webp" alt="Vano di carico" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.16s" tabindex="0" role="button" aria-label="Mostra in grande: Vano di carico">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/privacy-06.webp" alt="Vano di carico" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Vano di carico</figcaption>
         </figure>
       </div>
@@ -2189,13 +2281,13 @@
       <div class="mp-others">
         
         <a class="mp-ol" href="#le-mans" data-reveal>
-          <img src="https://sampoai67.github.io/Startruck/img/lemans-hero.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+          <img src="poster-lemans.webp" alt="" width="1280" height="638" loading="lazy" decoding="async">
           <span class="mp-ol-scrim"></span>
           <span class="mp-ol-body"><span class="mp-ol-tag">Performance &amp; racing</span><span class="mp-ol-name">Le Mans</span></span>
           <span class="mp-ol-go" aria-hidden="true">→</span>
         </a>
         <a class="mp-ol" href="#type-h" data-reveal>
-          <img src="https://sampoai67.github.io/Startruck/img/typeh-hero.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+          <img src="poster-typeh.webp" alt="" width="1280" height="638" loading="lazy" decoding="async">
           <span class="mp-ol-scrim"></span>
           <span class="mp-ol-body"><span class="mp-ol-tag">Aspetto vintage</span><span class="mp-ol-name">Type H</span></span>
           <span class="mp-ol-go" aria-hidden="true">→</span>
@@ -2251,9 +2343,9 @@
 
 <!-- ============ TYPE H ============ -->
 <div id="view-type-h" class="page-view mp" hidden>
-  <!-- 01 · apertura: il mezzo da vicino (nero). Scambiato col banner del
-       modello su indicazione, e senza sopratitolo. Il posto (altezza piena,
-       h1, invito a scorrere) resta all'apertura: cambia il contenuto. -->
+  <!-- 01 · apertura (nero): video e testo del mezzo da vicino, senza
+       sopratitolo, ma col NOME del modello come titolo — da hero ha piu' senso
+       leggere subito che pagina e'. -->
   <section class="mp-vb mp-dark mp-vb-full mp-vb-first">
     <div class="mp-vb-media" data-parallax>
       <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/typeh-detail.webp" muted loop playsinline preload="none" aria-hidden="true">
@@ -2264,7 +2356,7 @@
     <div class="mp-vb-scrim"></div>
     <div class="mp-container mp-vb-content">
       
-      <h1 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Ogni dettaglio</span></span><span class="mp-mask"><span style="--d:0.09s">è una decisione.</span></span></h1>
+      <h1 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Type H</span></span></h1>
       <p class="mp-vb-text" data-reveal data-delay=".18s">Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.</p>
       <div data-reveal data-delay=".26s"><a class="mp-vb-cta" href="#" data-scrollto="dotazione-type-h">Guarda la dotazione <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></a></div>
     </div>
@@ -2306,7 +2398,8 @@
       </ul>
     </div>
   </section>
-  <!-- 03 · il modello (nero), dove prima stava il mezzo da vicino -->
+  <!-- 03 · il modello (nero): il suo titolo e' passato all'apertura, qui va
+       quello del mezzo da vicino -->
   <section class="mp-vb mp-dark mp-vb-tall">
     <div class="mp-vb-media" data-parallax>
       <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/typeh-hero.webp" muted loop playsinline preload="none" aria-hidden="true">
@@ -2317,7 +2410,7 @@
     <div class="mp-vb-scrim"></div>
     <div class="mp-container mp-vb-content">
       <p class="mp-label" data-index="[ 03 ]" data-reveal>Aspetto vintage</p>
-      <h2 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Type H</span></span></h2>
+      <h2 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Ogni dettaglio</span></span><span class="mp-mask"><span style="--d:0.09s">è una decisione.</span></span></h2>
       <p class="mp-vb-text" data-reveal data-delay=".18s">La linea del Type H, la meccanica di oggi. Un mezzo che nessuno smette di guardare mentre lavora.</p>
       
     </div>
@@ -2510,28 +2603,58 @@
       <h2 class="mp-display-2 mp-gal-title" data-reveal>I progetti</h2>
       <div class="mp-gal mp-gal-feature">
         
-        <figure class="mp-gal-item" data-reveal data-delay="0.00s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-01.webp" alt="Type H — profilo" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.00s" tabindex="0" role="button" aria-label="Mostra in grande: Type H — profilo">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-01.webp" alt="Type H — profilo" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Type H — profilo</figcaption>
         </figure>
-        <figure class="mp-gal-item" data-reveal data-delay="0.08s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-02.webp" alt="Dettaglio frontale" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.08s" tabindex="0" role="button" aria-label="Mostra in grande: Dettaglio frontale">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-02.webp" alt="Dettaglio frontale" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Dettaglio frontale</figcaption>
         </figure>
-        <figure class="mp-gal-item" data-reveal data-delay="0.16s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-03.webp" alt="Vano di carico" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.16s" tabindex="0" role="button" aria-label="Mostra in grande: Vano di carico">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-03.webp" alt="Vano di carico" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Vano di carico</figcaption>
         </figure>
-        <figure class="mp-gal-item" data-reveal data-delay="0.00s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-04.webp" alt="Finiture" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.00s" tabindex="0" role="button" aria-label="Mostra in grande: Finiture">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-04.webp" alt="Finiture" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Finiture</figcaption>
         </figure>
-        <figure class="mp-gal-item" data-reveal data-delay="0.08s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-05.webp" alt="Interni" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.08s" tabindex="0" role="button" aria-label="Mostra in grande: Interni">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-05.webp" alt="Interni" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Interni</figcaption>
         </figure>
-        <figure class="mp-gal-item" data-reveal data-delay="0.16s">
-          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-06.webp" alt="Retro" loading="lazy" decoding="async" width="1600" height="1067"></div>
+        <figure class="mp-gal-item" data-reveal data-delay="0.16s" tabindex="0" role="button" aria-label="Mostra in grande: Retro">
+          <div class="mp-gal-frame"><img src="https://sampoai67.github.io/Startruck/img/typeh-06.webp" alt="Retro" loading="lazy" decoding="async" width="1600" height="1067">
+            <div class="mp-gal-info">
+              <span class="mp-gal-info-label">Optional installati</span>
+              <ul class="mp-gal-info-list"><li>Optional da confermare</li><li>Optional da confermare</li><li>Optional da confermare</li></ul>
+            </div>
+          </div>
           <figcaption>Retro</figcaption>
         </figure>
       </div>
@@ -2619,13 +2742,13 @@
       <div class="mp-others">
         
         <a class="mp-ol" href="#le-mans" data-reveal>
-          <img src="https://sampoai67.github.io/Startruck/img/lemans-hero.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+          <img src="poster-lemans.webp" alt="" width="1280" height="638" loading="lazy" decoding="async">
           <span class="mp-ol-scrim"></span>
           <span class="mp-ol-body"><span class="mp-ol-tag">Performance &amp; racing</span><span class="mp-ol-name">Le Mans</span></span>
           <span class="mp-ol-go" aria-hidden="true">→</span>
         </a>
         <a class="mp-ol" href="#privacy" data-reveal>
-          <img src="https://sampoai67.github.io/Startruck/img/privacy-hero.webp" alt="" width="1600" height="900" loading="lazy" decoding="async">
+          <img src="poster-privacy.webp" alt="" width="1280" height="638" loading="lazy" decoding="async">
           <span class="mp-ol-scrim"></span>
           <span class="mp-ol-body"><span class="mp-ol-tag">Trasporto confidenziale</span><span class="mp-ol-name">Privacy</span></span>
           <span class="mp-ol-go" aria-hidden="true">→</span>
@@ -3194,6 +3317,7 @@
         var el = e.target;
         if (el.dataset.delay) el.style.animationDelay = el.dataset.delay;
         el.classList.add('is-in');
+        el.addEventListener('animationend', function () { el.classList.add('is-done'); }, { once: true });
         revealer.unobserve(el);
         var n = el.querySelector('.mp-sr-value[data-count]');
         if (n) countUp(n);
@@ -3266,6 +3390,60 @@
           });
         });
       });
+    });
+
+    /* --- galleria: la foto scelta passa nel riquadro grande -------------- */
+    // Lo scambio e' uno scambio di posto nel DOM: il riquadro grande e' sempre
+    // il primo figlio, quindi il CSS non deve sapere niente di cosa e' stato
+    // scelto. La dissolvenza usa animate() e non una classe, perche' la
+    // comparsa allo scroll lascia gia' un'animazione CSS sull'opacita' e una
+    // regola normale non la batterebbe.
+    document.querySelectorAll('.mp-gal.mp-gal-feature').forEach(function (gal) {
+      var wide = matchMedia('(min-width: 640px)');
+      var busy = false;
+      var sync = function () {
+        Array.prototype.forEach.call(gal.children, function (it, i) {
+          it.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+        });
+      };
+      var swap = function (a, b) {
+        var mark = document.createComment('');
+        gal.replaceChild(mark, a);
+        gal.replaceChild(a, b);
+        gal.replaceChild(b, mark);
+        sync();
+      };
+      var fade = function (el, from, to) {
+        return el.animate([{ opacity: from }, { opacity: to }], { duration: 220, easing: 'ease', fill: 'forwards' });
+      };
+      var promote = function (item) {
+        var big = gal.firstElementChild;
+        if (busy || item === big || !wide.matches) return;
+        // se si clicca prima che la comparsa sia finita, la si chiude qui
+        big.classList.add('is-done'); item.classList.add('is-done');
+        if (reduce) { swap(big, item); return; }
+        busy = true;
+        var out = [fade(big, 1, 0), fade(item, 1, 0)];
+        Promise.all(out.map(function (a) { return a.finished; })).then(function () {
+          swap(big, item);
+          var back = [fade(big, 0, 1), fade(item, 0, 1)];
+          return Promise.all(back.map(function (a) { return a.finished; })).then(function () {
+            out.concat(back).forEach(function (a) { a.cancel(); });
+          });
+        }).then(function () { busy = false; }, function () { busy = false; });
+      };
+      gal.addEventListener('click', function (e) {
+        var it = e.target.closest('.mp-gal-item');
+        if (it) promote(it);
+      });
+      gal.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var it = e.target.closest('.mp-gal-item');
+        if (!it) return;
+        e.preventDefault();
+        promote(it);
+      });
+      sync();
     });
 
     /* --- domande: una aperta per volta dove details[name] non c'e' ------- */

@@ -1,0 +1,26 @@
+---
+import { base } from '../../lib/base';
+import type { Line } from '../../data/lines';
+
+interface Props { others: Line[] }
+const { others } = Astro.props;
+
+// Le locandine degli hero sono quasi nere (il mezzo emerge dal buio solo a
+// video avviato): le card usano gli stessi fotogrammi delle card "modelli"
+// della pagina di casa, scelti dove il mezzo si vede.
+const CARD_POSTER: Record<string, string> = {
+  'le-mans': 'img/poster-lemans.webp',
+  privacy: 'img/poster-privacy.webp',
+  'type-h': 'img/poster-typeh.webp',
+};
+---
+<div class="mp-others">
+  {others.map((o) => (
+    <a class="mp-ol" href={base(`/allestimenti/${o.slug}/`)} data-reveal>
+      <img src={base(CARD_POSTER[o.slug] ?? o.hero.poster)} alt="" width="1280" height="638" loading="lazy" decoding="async" />
+      <span class="mp-ol-scrim"></span>
+      <span class="mp-ol-body"><span class="mp-ol-tag">{o.tagline}</span><span class="mp-ol-name">{o.name}</span></span>
+      <span class="mp-ol-go" aria-hidden="true">→</span>
+    </a>
+  ))}
+</div>

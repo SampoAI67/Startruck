@@ -1,0 +1,32 @@
+---
+import { base } from '../../lib/base';
+
+// I marchi dei clienti, ripresi dal sito del cliente. Ogni fila e' scritta
+// due volte: l'animazione trasla di meta' esatta e il giro non si vede.
+const clients = [
+  ['ercolani', 'Ercolani'],
+  ['tomasi', 'Tomasi Auto'],
+  ['san-matteo', 'San Matteo Garage'],
+  ['novarent', 'Novarent'],
+  ['motor-team', 'Motor Team'],
+  ['kimera', 'Kimera Automobili'],
+  ['ftm-group', 'FTM Group'],
+  ['basic', 'Basic'],
+];
+const rows = [clients, [...clients].reverse()];
+---
+<section class="clients" id="clienti">
+  <div class="clients-in">
+    <h2>Chi ha scelto<br />Startruck Italia</h2>
+    <div class="clients-rows">
+      {rows.map((row, r) => (
+        <div class={r ? 'cl-row rtl' : 'cl-row'}>
+          <div class="cl-track">
+            {row.map(([f, n]) => <img src={base(`clienti/${f}.webp`)} alt={n} loading="lazy" decoding="async" />)}
+            {row.map(([f, n]) => <img src={base(`clienti/${f}.webp`)} alt={n} aria-hidden="true" loading="lazy" decoding="async" />)}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

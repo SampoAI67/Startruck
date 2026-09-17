@@ -28,6 +28,9 @@ export interface Line {
   optionals: SpecItem[];
   gallery: string[];
   captions: string[];
+  /** Optional montati sul mezzo di ciascuna foto, stesso ordine di gallery:
+   *  la striscia "Optional installati" della galleria. */
+  galleryOptionals?: string[][];
   faq?: { q: string; a: string }[];
 }
 
@@ -51,6 +54,12 @@ const commonOptionals: SpecItem[] = [
   { title: 'Ruota di scorta con supporto dedicato', desc: 'Alloggiamento sotto telaio, fuori dalla vista e fuori dall’area di carico.' },
   { title: 'Livrea e personalizzazione grafica', desc: 'Il mezzo diventa il tuo biglietto da visita: colori, logo e finiture studiati con te.' },
 ];
+
+// SEGNAPOSTO: gli optional montati su ogni mezzo fotografato vanno
+// confermati con il cliente, foto per foto. Finche' non arrivano, ogni foto
+// dice onestamente che il dato manca.
+const optionalsDaConfermare = (n: number): string[][] =>
+  Array.from({ length: n }, () => ['Optional da confermare', 'Optional da confermare', 'Optional da confermare']);
 
 const detailFor = (name: string): Record<string, string> => ({
   Pianale: `Il piano di carico di ${name}: alluminio estruso, superficie antiscivolo e punti di ancoraggio distribuiti su tutta la lunghezza.`,
@@ -99,6 +108,7 @@ export const lines: Line[] = [
       'img/lemans-04.webp', 'img/lemans-05.webp', 'img/lemans-06.webp',
     ],
     captions: ['Peugeot Boxer', 'Mercedes Sprinter', 'MAN TGE', 'Iveco Daily', 'Mercedes — dettaglio', 'Peugeot — vista drone'],
+    galleryOptionals: optionalsDaConfermare(6),
   },
 
   {
@@ -135,6 +145,7 @@ export const lines: Line[] = [
       'img/privacy-04.webp', 'img/privacy-05.webp', 'img/privacy-06.webp',
     ],
     captions: ['Peugeot Boxer', 'Citroën Jumper', 'Iveco Daily', 'Fiat Ducato', 'Dettaglio interno', 'Vano di carico'],
+    galleryOptionals: optionalsDaConfermare(6),
   },
 
   {
@@ -167,6 +178,7 @@ export const lines: Line[] = [
       'img/typeh-04.webp', 'img/typeh-05.webp', 'img/typeh-06.webp',
     ],
     captions: ['Type H — profilo', 'Dettaglio frontale', 'Vano di carico', 'Finiture', 'Interni', 'Retro'],
+    galleryOptionals: optionalsDaConfermare(6),
   },
 ];
 

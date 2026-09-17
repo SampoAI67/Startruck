@@ -1,0 +1,44 @@
+---
+import { base } from '../../lib/base';
+import Arrow from './Arrow.astro';
+
+interface Props {
+  video: string;
+  videoMobile?: string;
+  poster: string;
+  eyebrow?: string;
+  index?: string;
+  /** "\n" spezza il titolo in righe, ognuna con la sua maschera */
+  title: string;
+  text?: string;
+  cta?: { label: string; href: string };
+  height?: 'full' | 'tall';
+  /** il primo banner scivola sotto la barra trasparente, come l'hero di casa */
+  first?: boolean;
+  heading?: 'h1' | 'h2';
+  scrollCue?: boolean;
+}
+const {
+  video, videoMobile, poster, eyebrow, index, title, text, cta,
+  height = 'full', first = false, heading: Heading = 'h2', scrollCue = false,
+} = Astro.props;
+const titleLines = title.split('\n');
+---
+<section class:list={['mp-vb mp-dark', `mp-vb-${height}`, { 'mp-vb-first': first }]}>
+  <div class="mp-vb-media" data-parallax>
+    <video class="mp-vb-video" poster={base(poster)} muted loop playsinline preload="none" aria-hidden="true">
+      {videoMobile && <source src={base(videoMobile)} media="(max-width: 760px)" type="video/mp4" />}
+      <source src={base(video)} type="video/mp4" />
+    </video>
+  </div>
+  <div class="mp-vb-scrim"></div>
+  <div class="mp-container mp-vb-content">
+    {eyebrow && <p class="mp-label" data-index={index} data-reveal>{eyebrow}</p>}
+    <Heading class="mp-vb-title" data-reveal>
+      {titleLines.map((l, i) => <span class="mp-mask"><span style={`--d:${(i * 0.09).toFixed(2)}s`}>{l}</span></span>)}
+    </Heading>
+    {text && <p class="mp-vb-text" data-reveal data-delay=".18s">{text}</p>}
+    {cta && <div data-reveal data-delay=".26s"><a class="mp-vb-cta" href={cta.href}>{cta.label} <Arrow /></a></div>}
+  </div>
+  {scrollCue && <div class="mp-vb-cue" aria-hidden="true"><span>SCROLL</span><i></i></div>}
+</section>

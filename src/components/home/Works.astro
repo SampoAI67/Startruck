@@ -1,0 +1,42 @@
+---
+import { base } from '../../lib/base';
+import data from '../../data/lavori.json';
+
+// I post arrivano da scripts/build-lavori.mjs (workflow "Ultimi lavori"):
+// ogni commit del workflow ridistribuisce il sito, quindi la griglia si
+// scrive al build e non serve piu' caricarla dal browser.
+// Il conteggio si tronca a multiplo di 6: la rotaia e' alta due righe e ogni
+// lavoro e' una terna di post, quindi servono due righe di terne intere.
+const posts = data.posts.slice(0, Math.floor(data.posts.length / 6) * 6);
+const cols = posts.length / 2;
+---
+<section class="section alt" id="lavori">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-eyebrow">Dal cantiere alla strada</span>
+        <h2>Ultimi lavori</h2>
+      </div>
+    </div>
+  </div>
+  <div class="work-rail" id="workRail">
+    <div class="work-strip" style={`--cols:${cols}`}>
+      {posts.map((p) => (
+        <a class="work-cell" href={p.permalink || undefined} target={p.permalink ? '_blank' : undefined} rel={p.permalink ? 'noopener' : undefined}>
+          <img src={base(p.img)} alt={p.caption ?? ''} loading="lazy" decoding="async" />
+          {p.caption && <span class="work-cap">{p.caption}</span>}
+        </a>
+      ))}
+    </div>
+  </div>
+  <div class="wrap">
+    <p class="work-hint">Trascina per vedere gli altri</p>
+    <p class="work-more">
+      Per vederne altri, <a href="https://www.instagram.com/startruckitalia/" target="_blank" rel="noopener">@startruckitalia</a> su Instagram
+    </p>
+  </div>
+</section>
+
+<script>
+  import '../../scripts/work-rail.js';
+</script>

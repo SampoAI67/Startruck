@@ -1,0 +1,177 @@
+/* Stile comune: colori, tipografia, barra, sezioni, footer.
+   Portato dal prototipo del cliente (Remake/Archivio/startruck-remake-work.html). */
+
+:root{
+  --bg:#e4e3e0;
+  --bg-2:#d6d5d1;
+  --ink:#1c1f24;
+  --ink-soft:#2c2f34;
+  --charcoal-dim:#6f6f68;
+  --bronze:#3d3f42;
+  --bronze-deep:#1c1d1f;
+  --bronze-pale:#d3d2ce;
+  --white:#fffdf8;
+  --line:rgba(28,31,36,0.13);
+  --line-soft:rgba(28,31,36,0.08);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Barlow', sans-serif;
+  font-weight:300;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{
+  font-family:'Archivo Black', sans-serif;
+  font-weight:400;
+  line-height:1.05;
+  letter-spacing:-0.005em;
+  text-transform:uppercase;
+  color:var(--ink);
+}
+h3, h4{font-family:'Barlow Condensed'; font-weight:700; text-transform:uppercase; letter-spacing:0.01em;}
+.mono{font-family:'JetBrains Mono', monospace;}
+a{color:inherit; text-decoration:none;}
+img{max-width:100%; display:block;}
+button{font-family:inherit; cursor:pointer;}
+:focus-visible{outline:1px solid var(--bronze); outline-offset:4px;}
+[hidden]{display:none !important;}
+
+.wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+
+/* NAV */
+/* Tre stati della barra:
+   - sull'hero e' trasparente e il video le passa sotto (l'hero e' tirato su
+     di 85px con un margine negativo: la barra resta sticky, non fixed, cosi'
+     le pagine senza hero non ci finiscono sotto);
+   - superato l'hero diventa piena e CHIARA, come nella versione del cliente;
+   - scorrendo in giu' si ritira, risalendo torna. */
+header.site{
+  position:sticky; top:0; z-index:50;
+  background:transparent;
+  border-bottom:1px solid transparent;
+  transition:transform .45s cubic-bezier(.22,1,.36,1), background .35s ease,
+             border-color .35s ease, backdrop-filter .35s ease;
+}
+/* Sopra al video la barra e' trasparente e allora il marchio e i testi
+   devono schiarirsi per restare leggibili: il marchio e' nero di suo, qui
+   viene invertito. Appena la barra diventa chiara torna nero da solo. */
+header.site .logo-img img{filter:invert(1); transition:filter .35s ease;}
+header.site .navlinks a{color:rgba(253,252,249,0.72);}
+header.site .navlinks a:hover{color:#fdfcf9;}
+header.site .navcta{color:#fdfcf9; border-color:rgba(253,252,249,0.55);}
+header.site .navcta:hover{background:#fdfcf9; color:var(--ink); border-color:#fdfcf9;}
+header.site .navtoggle{color:#fdfcf9;}
+/* Passato l'hero: la barra chiara dell'originale del cliente. */
+body.nav-solid header.site{
+  background:rgba(228,227,224,0.9);
+  backdrop-filter:blur(10px);
+  border-bottom-color:var(--line);
+}
+body.nav-solid header.site .logo-img img{filter:none;}
+body.nav-solid header.site .navlinks a{color:var(--charcoal-dim);}
+body.nav-solid header.site .navlinks a:hover{color:var(--ink);}
+body.nav-solid header.site .navcta{color:var(--ink); border-color:var(--ink);}
+body.nav-solid header.site .navcta:hover{background:var(--ink); color:var(--white); border-color:var(--ink);}
+body.nav-solid header.site .navtoggle{color:var(--ink);}
+body.nav-hidden:not(.nav-open) header.site{transform:translateY(-100%);}
+nav.wrap{display:flex; align-items:center; justify-content:space-between; height:84px; position:relative;}
+.logo-img{display:flex; align-items:center;}
+.logo-img img{height:34px; width:auto; display:block;}
+.navlinks{display:flex; gap:40px; align-items:center;}
+.navlinks a{
+  font-size:0.78rem; text-transform:uppercase; letter-spacing:0.12em; font-weight:400;
+  color:var(--charcoal-dim); position:relative; padding:6px 0;
+  transition:color .2s;
+}
+.navlinks a:hover{color:var(--ink);}
+.navcta{
+  border:1px solid var(--ink); color:var(--ink); padding:11px 24px;
+  font-size:0.76rem; font-weight:400; text-transform:uppercase; letter-spacing:0.1em;
+  transition:background .2s, color .2s, border-color .2s;
+}
+.navcta:hover{background:var(--ink); color:var(--white);}
+.navtoggle{display:none; background:none; border:none; color:var(--ink); font-size:1.6rem; line-height:1; padding:6px 4px;}
+/* Il pulsante c'era ma non apriva niente: su telefono i link sono nascosti e
+   la barra restava senza navigazione. Il pannello scende da sotto la barra. */
+.navpanel{
+  position:absolute; left:0; right:0; top:100%;
+  background:rgba(228,227,224,0.97); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  display:grid; padding:6px 32px 18px;
+  max-height:0; overflow:hidden; visibility:hidden;
+  transition:max-height .38s cubic-bezier(.22,1,.36,1), visibility .38s;
+}
+body.nav-open .navpanel{max-height:60vh; visibility:visible;}
+.navpanel a{
+  padding:15px 0; border-bottom:1px solid var(--line);
+  font-size:0.86rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--ink);
+}
+.navpanel a:last-child{border-bottom:none;}
+header.site{transition:transform .45s cubic-bezier(.22,1,.36,1);}
+
+
+@keyframes ticker{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+
+/* SECTIONS */
+.section{padding:110px 0;}
+.section.alt{background:var(--bg-2);}
+.sec-head{display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:64px; flex-wrap:wrap;}
+.sec-eyebrow{font-family:'JetBrains Mono'; font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--bronze-deep); margin-bottom:14px; display:block;}
+.sec-head h2{font-size:clamp(2rem,3.4vw,2.8rem);}
+.sec-desc{max-width:400px; color:var(--charcoal-dim); font-size:0.95rem; font-weight:300;}
+
+/* ===================== FOOTER ===========================================
+   Portato dal nostro remake in Astro: tre colonne (marchio, allestimenti,
+   contatti), poi il wordmark ufficiale a tutta larghezza, poi la riga
+   legale. Le etichette portano l'indice editoriale [ A ] / [ C ] come
+   nell'originale, scritto con ::before da data-index. */
+.site-footer{border-top:1px solid var(--line); background:var(--bg);}
+.foot-grid{display:grid; grid-template-columns:1.6fr 1fr 1fr; gap:40px; padding:80px 32px 90px;}
+.foot-mark{display:flex; align-items:center; gap:12px; margin-bottom:16px;}
+.foot-mark img{height:18px; width:auto;}
+.foot-mark span{font-family:'Archivo Black'; font-size:1.1rem; letter-spacing:-0.01em; text-transform:uppercase;}
+.foot-brand p{max-width:21rem; font-size:0.88rem; color:var(--charcoal-dim); font-weight:300;}
+
+.foot-label{
+  display:inline-flex; align-items:center; gap:.6em; margin-bottom:20px;
+  font-family:'Barlow'; font-size:0.72rem; font-weight:600; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--charcoal-dim);
+}
+.foot-label::before{content:attr(data-index); color:var(--ink); font-variant-numeric:tabular-nums;}
+.foot-list{list-style:none; display:grid; gap:10px; font-size:0.88rem; color:var(--charcoal-dim); font-weight:300;}
+.foot-list a{transition:color .2s;}
+.foot-list a:hover{color:var(--ink);}
+
+/* Il wordmark e' decorativo (il nome e' gia' scritto sopra): sta fuori
+   dall'albero accessibile e non ha testo alternativo. */
+.foot-wordmark{border-top:1px solid var(--line); padding:34px 0 38px;}
+.foot-wordmark img{width:100%; height:auto; max-width:56rem; margin:0 auto;}
+
+.foot-legal-bar{border-top:1px solid var(--line);}
+.foot-legal{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:20px 32px; font-size:0.72rem; color:var(--charcoal-dim); letter-spacing:0.02em;
+}
+.foot-legal .foot-policies{display:flex; gap:20px;}
+.foot-legal a{transition:color .2s;}
+.foot-legal a:hover{color:var(--ink);}
+
+@media(max-width:860px){
+  .foot-grid{grid-template-columns:1fr; gap:38px; padding:56px 32px 60px;}
+  .foot-wordmark{padding:26px 0 28px;}
+  .foot-legal{flex-direction:column; align-items:flex-start; gap:8px;}
+}
+
+@media(max-width:860px){
+  .navlinks{display:none;}
+  .navtoggle{display:block;}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important;}
+}

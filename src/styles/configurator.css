@@ -1,0 +1,262 @@
+/* Configuratore: soglia in pagina e palco a schermo pieno.
+   Portato dal prototipo del cliente (Remake/Archivio/startruck-remake-work.html). */
+
+/* ===================== CONFIGURATORE ====================================
+   Impianto alla Porsche. La categoria del veicolo e' la SOGLIA: finche' non
+   e' scelta si e' in pagina, appena lo e' il configuratore prende tutto lo
+   schermo e si chiude solo con i due pulsanti dichiarati (esci / invia).
+   Niente uscita con lo scroll, niente uscita con Esc: e' una richiesta
+   esplicita, ed e' anche cio' che permette al passo "indietro" di restare
+   dentro al palco invece di sputare fuori chi sta configurando.
+   Telefono e scrivania condividono la STESSA struttura (mezzo sopra, scelte
+   sotto, barra azioni fissa): cambia il taglio, non l'impianto. */
+
+/* ---- 1. la soglia, in pagina ---------------------------------------- */
+.configurator{background:var(--bg-2); min-height:100vh; min-height:100dvh; display:flex; align-items:center; padding:120px 0;}
+.cfg-head{text-align:center; max-width:620px; margin:0 auto 46px;}
+.cfg-head .sec-eyebrow{justify-content:center; text-align:center;}
+.cfg-head h2{font-size:clamp(2rem,3.6vw,2.9rem);}
+.cfg-head p{color:var(--charcoal-dim); margin-top:16px; font-weight:300;}
+
+/* Base delle schede-scelta: la soglia le usa grandi, il pannello le
+   stringe a righe. Le regole comuni stanno qui una volta sola. */
+.option-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
+.option-grid.cols-3{grid-template-columns:repeat(3,1fr);}
+.opt-card{position:relative; border:1px solid var(--line); background:var(--white); padding:22px 20px; cursor:pointer; transition:border-color .2s, background .2s;}
+.opt-card:hover{border-color:var(--ink);}
+.opt-card.selected{border-color:var(--ink); background:var(--bronze-pale);}
+.opt-card h4{font-family:'Barlow Condensed'; text-transform:uppercase; font-size:1.15rem; font-weight:700; margin-bottom:5px; letter-spacing:0.01em;}
+.opt-card p{font-size:0.8rem; color:var(--charcoal-dim); font-weight:300;}
+.opt-card img{width:100%; height:120px; object-fit:cover; margin-bottom:14px;}
+
+/* La soglia e' la scheda originale del cliente, intatta: intestazione scura
+   con la scala dei passi, il primo passo dentro, e "Continua" in fondo.
+   Cambia solo cosa fa quel pulsante: invece di girare la pagina successiva
+   dentro alla scheda, apre il palco a schermo pieno. */
+.cfg-gate{
+  max-width:760px; margin:0 auto; background:var(--white); border:1px solid var(--line);
+  box-shadow:0 30px 70px -35px rgba(28,31,36,0.28);
+}
+.cfg-gate .ramp-gauge{padding:34px 40px 26px; border-bottom:1px solid var(--line); background:var(--ink); flex:none;}
+.cfg-gate .ramp-top{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:20px; gap:16px;}
+.cfg-gate .ramp-top .mono{font-size:0.7rem; letter-spacing:0.12em; color:#c7c6c2;}
+.cfg-gate .ramp-top .step-label{color:#fdfcf9; font-family:'Barlow Condensed'; font-weight:600; text-transform:uppercase; letter-spacing:0.03em; font-size:1.05rem;}
+.cfg-gate .ramp-track{height:1px; background:rgba(255,255,255,0.18); margin:0;}
+.cfg-gate .ramp-fill{top:-4px; width:9px; height:9px; background:#c7c6c2; box-shadow:0 0 0 4px var(--ink), 0 0 0 5px #c7c6c2;}
+.cfg-gate .ramp-ticks{margin:16px 0 0;}
+.cfg-gate .ramp-ticks span{font-size:0.62rem; letter-spacing:0.04em; color:#8a8d92;}
+.cfg-gate .ramp-ticks span.done{color:#c7c6c2;}
+.cfg-gate .cfg-body{padding:46px 46px 36px;}
+.cfg-gate .step h3{font-size:1.9rem; margin-bottom:8px; font-weight:700;}
+.cfg-gate .step .step-sub{color:var(--charcoal-dim); font-size:0.9rem; margin-bottom:32px; font-weight:300;}
+.cfg-gate .cfg-nav{display:flex; justify-content:flex-end; padding-top:26px;}
+@media(max-width:860px){
+  .cfg-gate .ramp-gauge{padding:26px 22px 20px;}
+  .cfg-gate .ramp-ticks{display:none;}
+  .cfg-gate .cfg-body{padding:30px 22px 26px;}
+  .cfg-gate .step h3{font-size:1.45rem;}
+}
+
+/* ---- 2. il palco a schermo pieno ------------------------------------- */
+/* Il blocco dello scroll e' il trucco classico col body fisso: si memorizza
+   la posizione e si rimette all'uscita, altrimenti iOS riparte da capo. */
+body.cfg-locked{position:fixed; left:0; right:0; width:100%; overflow:hidden;}
+.cfg-stage{
+  position:fixed; inset:0; z-index:200; display:none;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  height:100vh; height:100dvh; background:var(--white);
+}
+body.cfg-locked .cfg-stage{display:grid;}
+
+.cfg-bar{display:flex; align-items:center; gap:28px; height:66px; padding:0 24px; border-bottom:1px solid var(--line); background:var(--white);}
+.cfg-mark{font-family:'Archivo Black'; text-transform:uppercase; font-size:0.86rem; letter-spacing:-0.01em; flex:none;}
+.cfg-exit{
+  flex:none; display:inline-flex; align-items:center; gap:10px; background:none;
+  border:1px solid var(--line); padding:10px 16px;
+  font-family:'JetBrains Mono'; font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--charcoal-dim); transition:border-color .2s, color .2s;
+}
+.cfg-exit:hover{border-color:var(--ink); color:var(--ink);}
+.cfg-exit i{font-style:normal; font-size:0.85rem; line-height:1;}
+
+/* passi: etichette su schermo largo, contatore su telefono */
+.ramp-gauge{flex:1; min-width:0;}
+.ramp-top{display:none;}
+.ramp-top .step-label{font-family:'Barlow Condensed'; font-weight:600; text-transform:uppercase; letter-spacing:0.03em; font-size:1rem;}
+.ramp-top .mono{font-size:0.62rem; letter-spacing:0.1em; color:var(--charcoal-dim); flex:none;}
+.ramp-ticks{display:flex; justify-content:space-between; margin-bottom:9px;}
+.ramp-ticks span{font-family:'JetBrains Mono'; font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase; color:#a5a49e; transition:color .3s;}
+.ramp-ticks span.done{color:var(--ink);}
+.ramp-track{position:relative; height:1px; background:var(--line); margin:0 4px;}
+.ramp-fill{position:absolute; top:-3px; left:0; width:7px; height:7px; border-radius:50%; background:var(--ink); transition:left .45s cubic-bezier(.22,1,.36,1);}
+
+.cfg-main{display:grid; grid-template-columns:minmax(0,1.5fr) minmax(370px,0.8fr); min-height:0;}
+
+/* Il mezzo sta in una scatola scura: e' il fondo del girato, e sullo schermo
+   chiaro del pannello fa da fuoco visivo senza bisogno di cornici. */
+.cfg-visual{position:relative; background:#0d0d0d; display:flex; flex-direction:column; min-height:0; overflow:hidden;}
+.cfg-visual .tt{position:static; display:flex; flex-direction:column; flex:1; min-height:0; background:transparent; margin:0; padding:0;}
+.cfg-visual .tt-viewport{flex:1; height:auto; min-height:0;}
+.cfg-visual .tt-cap{padding:13px 22px; color:#8a8d92; border-top:1px solid rgba(255,255,255,0.08); flex:none;}
+.cfg-visual .tt-what{color:#e8e7e3;}
+.cfg-visual .tt-what.is-muted{color:#8a8d92;}
+
+/* Non c'e' un girato a 360 per ogni allestimento: quando non c'e' si mette
+   la foto di studio e lo si dice, invece di far girare il mezzo sbagliato. */
+.cfg-alt{position:absolute; inset:0; z-index:5; display:none; background:#0d0d0d;}
+.cfg-alt.is-shown{display:block;}
+.cfg-alt img{width:100%; height:100%; object-fit:cover;}
+.cfg-alt span{
+  position:absolute; left:0; right:0; bottom:0; padding:44px 22px 15px;
+  background:linear-gradient(transparent, rgba(0,0,0,0.78));
+  font-family:'JetBrains Mono'; font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; color:#d6d3ca;
+}
+
+.cfg-panel{
+  border-left:1px solid var(--line); background:var(--white);
+  overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch;
+  min-height:0; padding:34px 32px 40px;
+}
+.cfg-panel .step{display:none;}
+.cfg-panel .step.active{display:block; animation:fadein .35s ease;}
+@keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+.cfg-panel .step h3{font-size:1.45rem; margin-bottom:7px; font-weight:700;}
+.cfg-panel .step .step-sub{color:var(--charcoal-dim); font-size:0.84rem; margin-bottom:26px; font-weight:300; line-height:1.5;}
+
+/* Dentro al pannello ogni scelta e' una RIGA, non una piastrella: la colonna
+   e' stretta e le righe si leggono in verticale come il listino Porsche. */
+.cfg-panel .option-grid, .cfg-panel .option-grid.cols-3{grid-template-columns:1fr; gap:1px; background:var(--line); border:1px solid var(--line);}
+.cfg-panel .opt-card{
+  display:flex; align-items:center; gap:15px; border:none; background:var(--white);
+  padding:13px 44px 13px 15px; min-height:58px;
+}
+.cfg-panel .opt-card:hover{border:none; background:var(--bronze-pale);}
+.cfg-panel .opt-card.selected{border:none; background:var(--bronze-pale);}
+.cfg-panel .opt-card img{width:86px; height:56px; margin:0; flex:none; object-fit:cover;}
+.cfg-panel .opt-card h4{font-size:1.05rem; margin-bottom:0;}
+.cfg-panel .opt-card p{font-size:0.76rem; margin-top:2px;}
+.cfg-panel .opt-card::after{
+  content:""; position:absolute; top:50%; right:16px; translate:0 -50%;
+  width:17px; height:17px; border:1px solid var(--line); border-radius:50%;
+  color:transparent; font-size:0; transition:background .2s, border-color .2s;
+}
+.cfg-panel .opt-card.selected::after{
+  content:"✓"; background:var(--ink); border-color:var(--ink); color:#fdfcf9;
+  font-size:0.6rem; display:grid; place-items:center; font-weight:600;
+}
+
+.accessori-grid{display:grid; grid-template-columns:1fr; gap:1px; background:var(--line); border:1px solid var(--line);}
+.acc-item{display:flex; align-items:center; gap:12px; margin:0; background:var(--white); padding:11px 52px 11px 14px; cursor:pointer; transition:background .2s; position:relative; min-height:52px;
+  font-family:'Barlow'; font-size:0.86rem; font-weight:400; line-height:1.35; letter-spacing:0; text-transform:none; color:var(--ink);}
+.acc-item:hover{background:var(--bronze-pale);}
+.acc-item.selected{background:var(--bronze-pale);}
+.acc-item input{flex:none; accent-color:var(--ink);}
+/* ---- fototessere degli optional ---------------------------------------
+   Le immagini non sono nel markup: il nome del file si ricava dal nome
+   dell'optional (minuscolo, senza accenti, spazi in trattini) e il riquadro
+   compare SOLO se il file esiste davvero. Per aggiungerne uno basta
+   lasciarlo cadere in  public/optionals/<slug>.webp  — nessuna
+   riga di HTML da toccare, e senza file non resta un buco grigio. */
+.acc-thumb{flex:none; width:58px; height:40px; background-size:cover; background-position:center; background-color:var(--bg-2);}
+.acc-item[data-spot]::after{content:"vedi"; position:absolute; right:14px; top:50%; translate:0 -50%; font-family:'JetBrains Mono'; font-size:.58rem; letter-spacing:.1em; text-transform:uppercase; color:var(--charcoal-dim); opacity:0; transition:opacity .2s;}
+.acc-item[data-spot]:hover::after{opacity:1;}
+.acc-item.is-looking{box-shadow:inset 3px 0 0 var(--ink);}   /* spuntato = fondo pieno, in visione = filetto: due stati distinti */
+.acc-item .tag-new{font-family:'JetBrains Mono'; font-size:0.58rem; color:var(--bronze-deep); border:1px solid var(--line); padding:1px 5px; margin-left:6px; letter-spacing:0.03em; flex:none;}
+
+/* ---- visore a 360 (motore invariato) --------------------------------- */
+.tt-viewport{position:relative; overflow:hidden; background:#0d0d0d; cursor:grab; touch-action:pan-y;}
+.tt-viewport.is-dragging{cursor:grabbing;}
+.tt-plate{position:absolute; inset:0; transform-origin:center; transition:transform 1.05s cubic-bezier(.22,1,.36,1); will-change:transform;}
+.tt-video, .tt-still{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; user-select:none; -webkit-user-drag:none;}
+.tt-still{opacity:0; transition:opacity .35s ease;}
+.tt-still.is-shown{opacity:1;}
+.tt-markers{position:absolute; inset:0; pointer-events:none; transform-origin:center; transition:transform 1.05s cubic-bezier(.22,1,.36,1);}
+.tt-marker{position:absolute; translate:-50% -50%; scale:calc(1 / var(--tt-s,1)); width:26px; height:26px; display:grid; place-items:center; opacity:0; transition:opacity .45s ease;}
+.tt-marker.is-shown{opacity:1;}
+.tt-dot{width:9px; height:9px; border-radius:999px; background:#fff; box-shadow:0 0 0 1.5px rgba(0,0,0,.45);}
+.tt-ping{position:absolute; inset:0; border:1.5px solid rgba(255,255,255,.85); border-radius:999px; animation:tt-ping 2s cubic-bezier(.22,1,.36,1) infinite;}
+@keyframes tt-ping{0%{transform:scale(.35); opacity:0;} 35%{opacity:1;} 100%{transform:scale(1); opacity:0;}}
+.tt-loading{position:absolute; inset:auto 0 0 0; display:flex; align-items:center; gap:.8rem; padding:14px 18px; color:rgba(255,255,255,.75); font-family:'JetBrains Mono'; font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; transition:opacity .5s;}
+.tt-loading.is-done{opacity:0; pointer-events:none;}
+.tt-bar{flex:1; height:1.5px; background:rgba(255,255,255,.2); overflow:hidden;}
+.tt-bar i{display:block; height:100%; width:0; background:#fff; transition:width .25s;}
+.tt-cap{display:flex; align-items:baseline; justify-content:space-between; gap:14px; font-family:'JetBrains Mono'; font-size:.64rem; letter-spacing:.08em; text-transform:uppercase; color:var(--charcoal-dim);}
+.tt-what{text-align:right;}
+.tt-what.is-muted{text-transform:none; font-family:'Barlow'; letter-spacing:0; font-size:.76rem;}
+
+/* ---- modulo e riepilogo ---------------------------------------------- */
+.form-grid{display:grid; grid-template-columns:1fr; gap:20px;}
+.form-grid .full{grid-column:1/-1;}
+label{display:block; font-family:'JetBrains Mono'; font-size:0.66rem; text-transform:uppercase; letter-spacing:0.08em; color:#8a8a83; margin-bottom:7px;}
+input[type=text], input[type=email], input[type=tel], textarea{
+  width:100%; border:none; border-bottom:1px solid var(--line); background:transparent; padding:8px 2px 10px;
+  font-family:'Barlow'; font-weight:300; font-size:1rem; color:var(--ink);
+}
+input:focus, textarea:focus{border-color:var(--ink); outline:none;}
+textarea{resize:vertical; min-height:80px;}
+
+.summary-box{background:var(--bg-2); border:1px solid var(--line); padding:22px 24px; margin-bottom:28px;}
+.summary-box h4{font-family:'JetBrains Mono'; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--bronze-deep); margin-bottom:14px;}
+.summary-row{display:flex; justify-content:space-between; gap:18px; font-size:0.86rem; padding:8px 0; border-bottom:1px solid var(--line); font-weight:300;}
+.summary-row:last-child{border-bottom:none;}
+.summary-row .k{color:#8a8a83; flex:none;}
+.summary-row .v{font-weight:500; text-align:right;}
+
+.confirm-icon{width:52px; height:52px; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; margin:0 auto 24px; border-radius:50%;}
+.confirm-icon span{font-size:1.3rem; color:var(--bronze-deep);}
+.confirm-title{text-align:center;}
+
+/* ---- barra azioni ----------------------------------------------------- */
+.cfg-foot{
+  display:flex; align-items:center; gap:22px; background:var(--white);
+  border-top:1px solid var(--line);
+  padding:15px 24px; padding-bottom:calc(15px + env(safe-area-inset-bottom));
+}
+.cfg-recap{display:flex; flex-wrap:wrap; gap:6px 22px; min-width:0; font-family:'JetBrains Mono'; font-size:0.61rem; letter-spacing:0.07em; text-transform:uppercase; color:#a5a49e;}
+.cfg-recap b{font-weight:500; color:var(--ink);}
+.cfg-actions{margin-left:auto; display:flex; align-items:center; gap:20px; flex:none;}
+.btn-back{background:none; border:none; color:#8a8a83; font-family:'Barlow'; text-transform:uppercase; font-size:0.76rem; letter-spacing:0.06em;}
+.btn-back:hover{color:var(--ink);}
+.btn-next{
+  background:var(--ink); color:#fdfcf9; padding:15px 32px; border:1px solid var(--ink);
+  font-family:'Barlow'; font-weight:500; text-transform:uppercase; font-size:0.76rem; letter-spacing:0.08em;
+  transition:background .2s, color .2s;
+}
+.btn-next:hover{background:transparent; color:var(--ink);}
+.btn-next:disabled{background:#d8d5c9; border-color:#d8d5c9; color:#a3a196; cursor:not-allowed;}
+.btn-submit{background:var(--bronze); border-color:var(--bronze); color:#fdfcf9;}
+.btn-submit:hover{background:transparent; color:var(--bronze-deep);}
+
+/* ---- 3. telefono: stessa impalcatura, tagliata ------------------------ */
+@media(max-width:900px){
+  .cfg-bar{height:56px; padding:0 14px; gap:14px;}
+  .cfg-mark{display:none;}
+  .cfg-exit{padding:8px 11px; font-size:0; gap:0; border-color:var(--line);}
+  .cfg-exit i{font-size:0.95rem;}
+  .ramp-top{display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:8px;}
+  .ramp-ticks{display:none;}
+
+  .cfg-main{grid-template-columns:1fr; grid-template-rows:auto minmax(0,1fr);}
+  .cfg-visual{height:40vh; height:40dvh; min-height:190px;}
+  .cfg-visual .tt-cap{padding:10px 16px; font-size:.58rem;}
+  .cfg-panel{border-left:none; border-top:1px solid var(--line); padding:22px 18px 34px;}
+  .cfg-panel .step h3{font-size:1.25rem;}
+  .cfg-panel .step .step-sub{margin-bottom:20px;}
+
+  .cfg-foot{padding:11px 14px; padding-bottom:calc(11px + env(safe-area-inset-bottom)); gap:12px;}
+  .cfg-recap{display:none;}
+  .cfg-actions{margin-left:0; width:100%; gap:12px;}
+  .btn-next{flex:1; padding:15px 18px;}
+  .btn-back{flex:none; padding:0 4px;}
+
+  /* La soglia si impila: due lastre una sopra l'altra, non due colonne da 3cm. */
+  .configurator{padding:100px 0 90px;}
+  .cfg-gate .opt-card{min-height:auto; padding:28px 22px;}
+  .cfg-gate .opt-card h4{font-size:1.35rem;}
+}
+
+@media(max-width:860px){
+  .option-grid, .option-grid.cols-3{grid-template-columns:1fr;}
+  .form-grid{grid-template-columns:1fr;}
+  .accessori-grid{grid-template-columns:1fr;}
+}

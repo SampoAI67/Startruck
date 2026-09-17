@@ -1,0 +1,47 @@
+---
+import { base } from '../../lib/base';
+import Arrow from './Arrow.astro';
+
+interface Props { model: string }
+const { model } = Astro.props;
+const mail = 'startruck@outlook.it';
+// Sito statico: niente endpoint, il modulo apre la mail gia' compilata
+// (model-page.js). "Configura" porta al configuratore col modello scelto.
+const configure = base(`/?modello=${encodeURIComponent(model)}#configuratore`);
+---
+<div class="mp-cf">
+  <form class="mp-cf-form" data-mailto={mail} data-model={model} novalidate>
+    <h2 class="mp-cf-formtitle">Richiedi un preventivo</h2>
+    <div class="mp-cf-field">
+      <label for="cf-name">Nome completo</label>
+      <input id="cf-name" name="name" type="text" placeholder="Nome e cognome" required autocomplete="name" />
+    </div>
+    <div class="mp-cf-row">
+      <div class="mp-cf-field">
+        <label for="cf-email">Email</label>
+        <input id="cf-email" name="email" type="email" placeholder="nome@esempio.it" required autocomplete="email" />
+      </div>
+      <div class="mp-cf-field">
+        <label for="cf-phone">Telefono</label>
+        <input id="cf-phone" name="phone" type="tel" placeholder="+39 ___ ___ ____" autocomplete="tel" />
+      </div>
+    </div>
+    <div class="mp-cf-field">
+      <label for="cf-msg">Messaggio</label>
+      <textarea id="cf-msg" name="message" rows="4" placeholder="Che mezzo hai e cosa devi trasportare?" required></textarea>
+    </div>
+    <button class="mp-cf-submit" type="submit"><span>Invia</span> <Arrow /></button>
+    <p class="mp-cf-status" role="status" aria-live="polite"></p>
+  </form>
+  <div class="mp-cf-aside">
+    <p class="mp-label" data-index="[ ✱ ]">Parliamone</p>
+    <h2 class="mp-cf-kicker" data-reveal>Se hai in mente un progetto</h2>
+    <p class="mp-cf-shout" data-reveal data-delay=".08s">CONTATTACI</p>
+    <ul class="mp-cf-contacts">
+      <li><a href="tel:+393408427538">+39 340 842 7538</a></li>
+      <li><a href={`mailto:${mail}`}>{mail}</a></li>
+      <li class="mp-cf-addr">Str. Boschi — 46045 Pozzolo sul Mincio (MN)</li>
+    </ul>
+    <a class="mp-cf-cfg" href={configure}>Configura {model} <Arrow /></a>
+  </div>
+</div>

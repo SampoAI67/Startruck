@@ -1,0 +1,348 @@
+/* Pagine modello (/allestimenti/<slug>/): tutto sotto .mp.
+   Portato dal prototipo del cliente (Remake/Archivio/startruck-remake-work.html). */
+
+/* ===================== PAGINE MODELLO ====================================
+   Il loro sistema (Sora + Manrope, bianco, angoli arrotondati) NON e' quello
+   del resto del sito: e' voluto, l'adattamento si fa a mano.
+   Tutto e' racchiuso sotto .mp, cosi' niente di questo esce dalla pagina
+   modello e niente delle regole globali di site.css (titoli in Archivo) ci
+   entra senza essere stato annullato qui. */
+.mp{
+  --mp-bg:#ffffff;
+  --mp-surface:#f4f4f4;
+  --mp-ink:#161616;
+  --mp-ink-soft:#5e5e5e;
+  --mp-muted:#6e6e6e;
+  --mp-hairline:#d8d8d8;
+  --mp-error:#b00020;
+  --mp-display:"Sora", ui-sans-serif, system-ui, sans-serif;
+  --mp-sans:"Manrope", ui-sans-serif, system-ui, sans-serif;
+  --mp-r-md:8px;
+  --mp-r-lg:14px;
+  background:var(--mp-bg); color:var(--mp-ink);
+  font-family:var(--mp-sans); font-weight:400; line-height:1.6;
+}
+/* annulla le regole globali di site.css */
+.mp h1, .mp h2, .mp h3, .mp h4{
+  font-family:var(--mp-display); font-weight:700; text-transform:none;
+  color:inherit; line-height:1.02; letter-spacing:-0.025em; text-wrap:balance;
+}
+.mp ul{list-style:none;}
+/* Senza questa regola l'attributo height="1067" vince su aspect-ratio e
+   allunga le foto della galleria a oltre mille pixel. */
+.mp img{height:auto;}
+.mp label{
+  font-family:var(--mp-sans); font-size:0.7rem; font-weight:600; letter-spacing:0.18em;
+  text-transform:uppercase; color:inherit; opacity:0.6; margin-bottom:0.6rem;
+}
+
+.mp-container{width:100%; max-width:1280px; margin-inline:auto; padding-inline:1.5rem;}
+@media(min-width:1024px){ .mp-container{padding-inline:2.5rem;} }
+
+/* ---- ritmo bianco / grigio / nero ------------------------------------ */
+.mp-light  {background:var(--mp-bg);      color:var(--mp-ink);}
+.mp-surface{background:var(--mp-surface); color:var(--mp-ink);}
+.mp-dark   {background:var(--mp-ink);     color:#fff;}
+.mp-dark + .mp-dark{margin-top:-1px;}
+.mp-pad      {padding-block:6rem;}
+.mp-pad-tight{padding-block:3.5rem;}
+@media(min-width:768px){ .mp-pad{padding-block:8rem;} .mp-pad-tight{padding-block:5rem;} }
+
+.mp-label{
+  display:inline-flex; align-items:center; gap:.6em; margin-bottom:2.5rem;
+  font-family:var(--mp-sans); font-size:.72rem; font-weight:600; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--mp-muted);
+}
+.mp-label::before{content:attr(data-index); color:var(--mp-ink); font-variant-numeric:tabular-nums;}
+.mp-dark .mp-label{color:rgba(255,255,255,.55);}
+.mp-dark .mp-label::before{color:#fff;}
+.mp-light .mp-soft, .mp-surface .mp-soft{color:var(--mp-ink-soft);}
+.mp-dark .mp-soft{color:rgba(255,255,255,.72);}
+.mp-light .mp-rule, .mp-surface .mp-rule{border-color:var(--mp-hairline);}
+.mp-dark .mp-rule{border-color:rgba(255,255,255,.16);}
+
+.mp-display-2{font-size:clamp(2rem, 5.5vw, 4.5rem);}
+.mp-display-3{font-size:clamp(1.6rem, 3vw, 2.6rem);}
+
+/* ---- movimento -------------------------------------------------------- */
+@keyframes mp-reveal-up{from{opacity:0; transform:translateY(28px);} to{opacity:1; transform:none;}}
+@keyframes mp-kenburns{from{transform:scale(1.08);} to{transform:scale(1.18);}}
+.mp [data-reveal]{opacity:0;}
+.mp [data-reveal].is-in{animation:mp-reveal-up .9s cubic-bezier(.22,1,.36,1) forwards;}
+/* Comparsa finita: si ferma li'. Un elemento spostato nel DOM riparte da
+   capo con le sue animazioni CSS, e lo scambio della galleria rifarebbe la
+   comparsa a ogni clic (il secondo lampo). */
+.mp [data-reveal].is-in.is-done{animation:none; opacity:1;}
+.mp-mask{display:block; overflow:hidden; padding-bottom:.14em; margin-bottom:-.14em;}
+.mp-mask > span{display:block; transform:translateY(105%); transition:transform 1s cubic-bezier(.22,1,.36,1); transition-delay:var(--d,0s);}
+.mp .is-in .mp-mask > span{transform:none;}
+/* site.css spegne TUTTE le animazioni con "riduci movimento": senza questa
+   regola i blocchi resterebbero a opacita' zero per sempre. */
+@media(prefers-reduced-motion:reduce){
+  .mp [data-reveal]{opacity:1;}
+  .mp-mask > span{transform:none;}
+}
+
+/* ---- 01 / 03 · banner video (VideoBanner) ----------------------------- */
+.mp-vb{position:relative; width:100%; overflow:hidden; background:var(--mp-ink); color:#fff;}
+.mp-vb-full{height:100vh; height:100svh; min-height:600px;}
+.mp-vb-tall{height:86vh; height:86svh; min-height:520px;}
+/* il primo banner scivola sotto la barra trasparente, come l'hero di casa */
+.mp-vb-first{margin-top:-85px;}
+.mp-vb-media{position:absolute; inset:-8% 0; will-change:transform;}
+.mp-vb-video{width:100%; height:100%; object-fit:cover; animation:mp-kenburns 26s ease-out forwards;}
+.mp-vb-scrim{
+  position:absolute; inset:0;
+  background:
+    linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.2) 52%, rgba(0,0,0,.5) 100%),
+    linear-gradient(to right, rgba(0,0,0,.62) 0%, rgba(0,0,0,0) 60%);
+}
+.mp-vb-content{
+  position:relative; height:100%; display:flex; flex-direction:column; justify-content:flex-end;
+  padding-block:clamp(6rem, 12vh, 9rem);
+}
+.mp-vb .mp-label{margin-bottom:1.5rem;}
+.mp-vb-title{font-size:clamp(2.6rem, 8vw, 6.5rem); line-height:.94; letter-spacing:-0.035em; max-width:16ch;}
+.mp-vb-text{margin-top:1.6rem; max-width:46ch; font-size:clamp(1rem, 1.3vw, 1.15rem); color:rgba(255,255,255,.78);}
+.mp-vb-cta{
+  display:inline-flex; align-items:center; gap:.75rem; margin-top:2.2rem; padding:.95rem 1.6rem;
+  border-radius:var(--mp-r-md); background:#fff; color:var(--mp-ink);
+  font-family:var(--mp-display); font-weight:600; font-size:.88rem;
+  transition:gap .25s, background .2s;
+}
+.mp-vb-cta svg{width:24px; height:12px;}
+.mp-vb-cta:hover{gap:1.15rem; background:rgba(255,255,255,.86);}
+.mp-vb-cue{
+  position:absolute; left:50%; bottom:1.75rem; translate:-50% 0;
+  display:flex; flex-direction:column; align-items:center; gap:.6rem;
+  font-size:.62rem; letter-spacing:.3em; color:rgba(255,255,255,.55);
+}
+.mp-vb-cue i{
+  width:1px; height:40px; transform-origin:top;
+  background:linear-gradient(to bottom, rgba(255,255,255,.7), transparent);
+  animation:mp-cue 2.2s ease-in-out infinite;
+}
+@keyframes mp-cue{
+  0%  {transform:scaleY(0); opacity:0;}
+  35% {transform:scaleY(1); opacity:1;}
+  100%{transform:scaleY(1) translateY(40px); opacity:0;}
+}
+
+/* ---- striscia della dotazione (Marquee) ------------------------------- */
+.mp-mq{overflow:hidden; padding-block:1rem; border-block:1px solid var(--mp-hairline); background:var(--mp-bg); color:var(--mp-ink);}
+.mp-mq-track{display:inline-flex; white-space:nowrap; animation:ticker 42s linear infinite;}
+.mp-mq-seq, .mp-mq-cell{display:inline-flex; align-items:center;}
+.mp-mq-word{
+  padding-inline:1.75rem; white-space:nowrap;
+  font-family:var(--mp-display); font-size:.82rem; font-weight:600;
+  letter-spacing:.18em; text-transform:uppercase;
+}
+.mp-slashes{display:inline-flex; gap:.18em; font-size:.9rem; opacity:.35;}
+.mp-slashes i{display:block; width:.26em; height:1em; transform:skewX(-22deg); background:currentColor;}
+.mp-slashes i:nth-child(2){opacity:.55;}
+.mp-slashes i:nth-child(3){opacity:.28;}
+
+/* ---- 02 · i numeri che contano ---------------------------------------- */
+
+.mp-sr{display:grid; grid-template-columns:1fr; margin-top:4rem;}
+@media(min-width:640px) { .mp-sr{grid-template-columns:repeat(2, 1fr);} }
+@media(min-width:768px) { .mp-sr{margin-top:5rem;} }
+@media(min-width:1000px){ .mp-sr{grid-template-columns:repeat(4, 1fr);} }
+.mp-sr.mp-sr-solo{margin-top:0;}
+.mp-sr-item{display:flex; flex-direction:column; gap:.45rem; padding:1.75rem 0; border-top:1px solid;}
+@media(min-width:640px){ .mp-sr-item{padding-inline-end:2rem;} }
+.mp-sr-value{
+  font-family:var(--mp-display); font-weight:700; font-size:clamp(2.4rem, 5vw, 3.8rem);
+  line-height:1; letter-spacing:-0.035em; font-variant-numeric:tabular-nums;
+}
+.mp-sr-label{font-size:.72rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; opacity:.55;}
+.mp-sr-note{font-size:.9rem; max-width:26ch;}
+
+/* ---- 04 · dotazione / optionals (SpecTabs) ---------------------------- */
+.mp-st-head{display:flex; gap:2.5rem; border-bottom:1px solid rgba(255,255,255,.16);}
+.mp-st-tab{display:inline-flex; align-items:flex-start; gap:.45rem; padding:0 0 1.1rem; background:none; border:0; color:inherit; cursor:pointer; position:relative;}
+.mp-st-tablabel{font-family:var(--mp-display); font-weight:700; font-size:clamp(1.5rem, 3.4vw, 2.4rem); letter-spacing:-0.03em; opacity:.38; transition:opacity .3s;}
+.mp-st-count{font-size:.68rem; letter-spacing:.12em; opacity:.3; padding-top:.35em;}
+.mp-st-tab.is-active .mp-st-tablabel{opacity:1;}
+.mp-st-tab::after{
+  content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:currentColor;
+  transform:scaleX(0); transform-origin:left; transition:transform .5s cubic-bezier(.22,1,.36,1);
+}
+.mp-st-tab.is-active::after{transform:scaleX(1);}
+.mp-st-body{display:grid; gap:clamp(2rem, 5vw, 4rem); margin-top:clamp(2rem, 4vw, 3.25rem);}
+@media(min-width:960px){ .mp-st-body{grid-template-columns:1fr 1fr; align-items:start;} }
+.mp-st-lists{display:grid;}
+.mp-st-list{grid-area:1 / 1; opacity:0; visibility:hidden; transform:translateY(10px); transition:opacity .45s ease, transform .45s ease, visibility .45s;}
+.mp-st-list.is-active{opacity:1; visibility:visible; transform:none;}
+.mp-st-item{border-bottom:1px solid rgba(255,255,255,.14);}
+.mp-st-row{display:flex; align-items:center; gap:1.1rem; width:100%; padding:1.1rem 0; background:none; border:0; color:inherit; cursor:pointer; text-align:left; font-family:inherit;}
+.mp-st-num{font-size:.68rem; letter-spacing:.1em; opacity:.35; font-variant-numeric:tabular-nums;}
+.mp-st-title{flex:1; font-family:var(--mp-display); font-weight:600; font-size:clamp(.98rem, 1.5vw, 1.15rem); transition:opacity .25s;}
+.mp-st-row:hover .mp-st-title{opacity:.62;}
+.mp-plus{position:relative; width:13px; height:13px; flex:none; opacity:.6;}
+.mp-plus i{position:absolute; inset:50% 0 auto 0; height:1.5px; background:currentColor; transition:transform .4s cubic-bezier(.22,1,.36,1);}
+.mp-plus i:nth-child(2){transform:rotate(90deg);}
+.mp-st-row.is-open .mp-plus i:nth-child(2){transform:rotate(0);}
+.mp-st-panel{display:grid; grid-template-rows:0fr; transition:grid-template-rows .5s cubic-bezier(.22,1,.36,1);}
+.mp-st-row.is-open + .mp-st-panel{grid-template-rows:1fr;}
+.mp-st-inner{overflow:hidden;}
+.mp-st-spec{font-family:var(--mp-display); font-weight:600; font-size:.95rem; margin-bottom:.4rem; padding-left:2.1rem;}
+.mp-st-desc{font-size:.92rem; line-height:1.6; opacity:.68; max-width:46ch; padding:0 0 1.3rem 2.1rem;}
+.mp-st-figure{position:relative; overflow:hidden; border-radius:var(--mp-r-lg);}
+@media(min-width:960px){ .mp-st-figure{position:sticky; top:7rem;} }
+.mp-st-figure img{width:100%; height:100%; object-fit:cover; display:block;}
+.mp-st-hint{
+  position:absolute; left:1rem; bottom:1rem; display:inline-flex; align-items:center; gap:.5rem;
+  padding:.45rem .85rem; border-radius:999px; background:rgba(0,0,0,.55); backdrop-filter:blur(6px);
+  color:#fff; font-size:.66rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase;
+}
+.mp-st-dot{width:6px; height:6px; border-radius:999px; background:currentColor; animation:mp-pulse 1.8s ease-in-out infinite;}
+@keyframes mp-pulse{0%, 100%{opacity:1; transform:scale(1);} 50%{opacity:.3; transform:scale(.6);}}
+
+/* ---- 05 · i progetti (Gallery) ---------------------------------------- */
+.mp-gal{display:grid; gap:clamp(.75rem, 1.5vw, 1.25rem); grid-template-columns:1fr;}
+@media(min-width:640px) { .mp-gal{grid-template-columns:repeat(2, 1fr);} }
+@media(min-width:1024px){ .mp-gal{grid-template-columns:repeat(3, 1fr);} }
+/* sei immagini: la prima e' un riquadro 2x2 e la griglia a 3 si chiude esatta */
+@media(min-width:1024px){
+  .mp-gal-feature .mp-gal-item:first-child{grid-column:span 2; grid-row:span 2; display:flex; flex-direction:column; min-height:0;}
+  .mp-gal-feature .mp-gal-item:first-child .mp-gal-frame{flex:1; min-height:0;}
+  .mp-gal-feature .mp-gal-item:first-child img{aspect-ratio:auto; height:100%;}
+}
+.mp-gal-frame{overflow:hidden; border-radius:var(--mp-r-md); background:var(--mp-surface);}
+.mp-gal-frame img{
+  width:100%; aspect-ratio:3 / 2; object-fit:cover; display:block;
+  transform:scale(1.01); filter:grayscale(.15);
+  transition:transform .9s cubic-bezier(.22,1,.36,1), filter .6s;
+}
+.mp-gal-item:hover .mp-gal-frame img{transform:scale(1.06); filter:grayscale(0);}
+/* La foto cliccata passa nel riquadro grande, e quella grande prende il suo
+   posto: nessun progetto resta per sempre il "principale". Il grande porta
+   in fondo la striscia degli optional montati su quel mezzo. */
+.mp-gal-frame{position:relative;}
+.mp-gal-feature .mp-gal-item{cursor:pointer;}
+.mp-gal-feature .mp-gal-item:first-child{cursor:default;}
+.mp-gal-item:focus-visible{outline:2px solid var(--mp-ink); outline-offset:4px; border-radius:var(--mp-r-md);}
+.mp-gal-info{
+  position:absolute; left:0; right:0; bottom:0; padding:3.5rem 1.25rem 1.1rem;
+  background:linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,0)); color:#fff;
+  opacity:0; transform:translateY(8px); pointer-events:none;
+  transition:opacity .45s ease, transform .45s ease;
+}
+.mp-gal-feature .mp-gal-item:first-child .mp-gal-info{opacity:1; transform:none;}
+.mp-gal-info-label{display:block; margin-bottom:.55rem; font-size:.66rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; opacity:.7;}
+.mp-gal-info-list{display:flex; flex-wrap:wrap; gap:.4rem;}
+.mp-gal-info-list li{padding:.3rem .75rem; border:1px solid rgba(255,255,255,.38); border-radius:999px; font-size:.78rem;}
+/* fra 640 e 1023 la griglia e' a due colonne: il grande occupa la riga */
+@media(min-width:640px) and (max-width:1023.98px){
+  .mp-gal-feature .mp-gal-item:first-child{grid-column:span 2;}
+}
+/* sotto i 640 sono tutte larghe uguali: niente scambio, striscia su ognuna */
+@media(max-width:639.98px){
+  .mp-gal-feature .mp-gal-item{cursor:default;}
+  .mp-gal-info{opacity:1; transform:none; padding-top:2.6rem;}
+}
+.mp-gal figcaption{margin-top:.75rem; font-size:.72rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; opacity:.5;}
+.mp-gal-title{margin-bottom:3.5rem;}
+
+/* ---- 06 · clienti (ClientLogos) --------------------------------------- */
+.mp-cl-title{
+  font-family:var(--mp-display); font-size:clamp(1.1rem, 2vw, 1.5rem); font-weight:600;
+  letter-spacing:-0.015em; text-align:center; margin-bottom:clamp(2.5rem, 5vw, 4rem); opacity:.65;
+}
+.mp-cl-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:clamp(1.5rem, 4vw, 3.5rem); align-items:center; justify-items:center;}
+@media(min-width:700px) { .mp-cl-grid{grid-template-columns:repeat(5, 1fr);} }
+@media(min-width:1100px){ .mp-cl-grid{grid-template-columns:repeat(9, 1fr);} }
+/* i file sono loghi BIANCHI su trasparenza: sui fondi chiari vanno invertiti */
+.mp-cl-grid img{width:auto; height:clamp(30px, 4vw, 44px); object-fit:contain; opacity:.55; filter:invert(1); transition:opacity .35s;}
+.mp-cl-grid li:hover img{opacity:1;}
+
+/* ---- 07 · domande frequenti (Faq) ------------------------------------- */
+.mp-faq-wrap{display:grid; gap:2rem 4rem;}
+@media(min-width:1024px){
+  .mp-faq-wrap{grid-template-columns:.8fr 1.2fr;}
+  .mp-faq-side{position:sticky; top:7rem; align-self:start;}
+}
+.mp-faq-side h2{margin-bottom:1rem;}
+.mp-faq-side p{max-width:24rem;}
+.mp-faq{border-top:1px solid var(--mp-hairline);}
+.mp-faq-item{border-bottom:1px solid var(--mp-hairline);}
+.mp-faq details{--dur:.5s;}
+.mp-faq summary{display:flex; align-items:center; justify-content:space-between; gap:2rem; padding:1.5rem 0; cursor:pointer; list-style:none;}
+.mp-faq summary::-webkit-details-marker{display:none;}
+.mp-faq-q{font-family:var(--mp-display); font-weight:600; font-size:clamp(1.05rem, 1.7vw, 1.35rem); letter-spacing:-0.015em; transition:opacity .25s;}
+.mp-faq summary:hover .mp-faq-q{opacity:.6;}
+.mp-faq .mp-plus{width:15px; height:15px; opacity:1;}
+.mp-faq details[open] .mp-plus i:nth-child(2){transform:rotate(0deg);}
+.mp-faq-panel{display:grid; grid-template-rows:0fr; transition:grid-template-rows var(--dur) cubic-bezier(.22,1,.36,1);}
+.mp-faq details[open] .mp-faq-panel{grid-template-rows:1fr;}
+.mp-faq-inner{overflow:hidden;}
+.mp-faq-inner p{
+  max-width:62ch; padding-bottom:1.6rem; color:var(--mp-ink-soft);
+  opacity:0; transform:translateY(6px); transition:opacity .4s ease .1s, transform .4s ease .1s;
+}
+.mp-faq details[open] .mp-faq-inner p{opacity:1; transform:none;}
+
+/* ---- 08 · le altre linee ---------------------------------------------- */
+.mp-others{display:grid; gap:1.5rem;}
+@media(min-width:768px){ .mp-others{grid-template-columns:repeat(2, 1fr);} }
+.mp-ol{position:relative; display:block; overflow:hidden; border-radius:var(--mp-r-lg); aspect-ratio:16 / 9; color:#fff;}
+.mp-ol img{width:100%; height:100%; object-fit:cover; transition:transform 1s cubic-bezier(.22,1,.36,1);}
+.mp-ol:hover img{transform:scale(1.05);}
+.mp-ol-scrim{position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,.1) 65%);}
+.mp-ol-body{position:absolute; left:clamp(1.25rem, 3vw, 2rem); bottom:clamp(1.25rem, 3vw, 2rem); display:flex; flex-direction:column; gap:.3rem;}
+.mp-ol-tag{font-size:.66rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.65);}
+.mp-ol-name{font-family:var(--mp-display); font-weight:700; font-size:clamp(1.6rem, 3.4vw, 2.6rem); letter-spacing:-0.03em; line-height:1;}
+.mp-ol-go{position:absolute; right:clamp(1.25rem, 3vw, 2rem); bottom:clamp(1.25rem, 3vw, 2rem); font-size:1.5rem; transition:transform .4s cubic-bezier(.22,1,.36,1);}
+.mp-ol:hover .mp-ol-go{transform:translateX(7px);}
+
+/* ---- 09 · contatti (ContactForm) -------------------------------------- */
+.mp-cf{display:grid; gap:clamp(2.5rem, 6vw, 5rem); align-items:start;}
+@media(min-width:900px){ .mp-cf{grid-template-columns:1fr 1fr;} }
+.mp-cf-formtitle{font-size:1.05rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase; margin-bottom:2rem; opacity:.55;}
+.mp-cf-field{margin-bottom:1.5rem;}
+.mp-cf-row{display:grid; gap:1.5rem;}
+@media(min-width:560px){ .mp-cf-row{grid-template-columns:1fr 1fr;} }
+/* .mp davanti: sui fondi scuri qualunque regola generica sugli input
+   (quella del configuratore, per esempio) darebbe campi invisibili. */
+.mp .mp-cf input, .mp .mp-cf textarea{
+  width:100%; background:transparent; border:0; border-bottom:1.5px solid rgba(255,255,255,.28);
+  padding:.7rem 0; font-family:inherit; font-size:1rem; font-weight:400; color:inherit;
+  border-radius:0; transition:border-color .3s;
+}
+.mp .mp-cf input::placeholder, .mp .mp-cf textarea::placeholder{color:currentColor; opacity:.32;}
+.mp .mp-cf input:focus, .mp .mp-cf textarea:focus{outline:none; border-color:#fff;}
+.mp .mp-cf textarea{resize:vertical; min-height:3.5rem;}
+.mp .mp-cf-field.is-invalid input, .mp .mp-cf-field.is-invalid textarea{border-color:#ff8a9b;}
+.mp-cf-submit{
+  display:inline-flex; align-items:center; gap:.9rem; margin-top:.6rem; padding:.95rem 1.6rem;
+  border:1.5px solid currentColor; border-radius:var(--mp-r-md); background:transparent; color:inherit;
+  font-family:var(--mp-display); font-weight:600; font-size:.85rem; letter-spacing:.04em;
+  cursor:pointer; transition:background .25s, color .25s, gap .25s;
+}
+.mp-cf-submit svg{width:24px; height:12px; transition:transform .3s;}
+.mp-cf-submit:hover{gap:1.3rem; background:#fff; color:var(--mp-ink);}
+.mp-cf-submit:hover svg{transform:translateX(4px);}
+.mp-cf-submit[disabled]{opacity:.5; cursor:progress;}
+.mp-cf-status{margin-top:1rem; font-size:.88rem; min-height:1.3em; opacity:.75;}
+.mp-cf-aside .mp-label{margin-bottom:1.5rem;}
+.mp-cf-kicker{font-weight:400 !important; font-size:clamp(1.15rem, 2.4vw, 1.9rem); letter-spacing:-0.02em; opacity:.7;}
+.mp-cf-shout{font-family:var(--mp-display); font-weight:700; font-size:clamp(2.6rem, 8vw, 6rem); line-height:.92; letter-spacing:-0.035em; margin:.2em 0 1.2em;}
+.mp-cf-contacts{display:grid; gap:.7rem; font-size:.95rem;}
+.mp-cf-contacts a{transition:opacity .2s;}
+.mp-cf-contacts a:hover{opacity:.6;}
+.mp-cf-addr{opacity:.6;}
+/* Le vecchie pagine del cliente portavano al configuratore con il modello
+   gia' scelto, e quel percorso non si perde. */
+.mp-cf-cfg{
+  display:inline-flex; align-items:center; gap:.7rem; margin-top:2.2rem; padding:.95rem 1.6rem;
+  border-radius:var(--mp-r-md); background:#fff; color:var(--mp-ink);
+  font-family:var(--mp-display); font-weight:600; font-size:.85rem; transition:gap .25s;
+}
+.mp-cf-cfg svg{width:24px; height:12px; flex:none;}
+.mp-cf-cfg{white-space:nowrap;}
+.mp-cf-cfg:hover{gap:1.1rem;}
+
+@media(prefers-reduced-motion:reduce){
+  .mp-vb-video, .mp-vb-cue i, .mp-st-dot, .mp-mq-track{animation:none;}
+}

@@ -8,6 +8,10 @@
 # lo scraper fallisce il workflow trova comunque l'ultimo buono.
 #
 # Serve il secret APIFY_TOKEN nelle impostazioni del repo.
+#
+# La griglia si scrive al build: dopo il commit bisogna ridistribuire. Un push
+# fatto con GITHUB_TOKEN NON fa partire il workflow di deploy (GitHub lo
+# impedisce per evitare catene infinite), quindi lo si lancia a mano.
 
 name: Ultimi lavori
 
@@ -20,6 +24,7 @@ on:
 
 permissions:
   contents: write
+  actions: write       # per lanciare il deploy dopo il commit
 
 jobs:
   aggiorna:
@@ -40,10 +45,12 @@ jobs:
         run: node scripts/build-lavori.mjs --apify --limit 18
 
       - name: Committa solo se e' cambiato qualcosa
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name  "startruck-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add Remake/Archivio/lavori Remake/Archivio/lavori.json
+          git add public/lavori src/data/lavori.json
           # con una cadenza di post bassa la maggior parte dei run non trova
           # nulla di nuovo: in quel caso non si committa e non si ridistribuisce
           if git diff --staged --quiet; then
@@ -51,4 +58,5 @@ jobs:
           else
             git commit -m "Aggiorna la griglia Ultimi lavori dai post Instagram"
             git push
+            gh workflow run deploy-pages.yml --ref "${GITHUB_REF_NAME}"
           fi
