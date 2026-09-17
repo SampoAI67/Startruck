@@ -79,9 +79,11 @@ function section({ tone, label, index, id, pad = 'normal', body }) {
   </section>`;
 }
 
-function statRow(stats) {
+function statRow(stats, solo = false) {
+  // solo: la riga sta da sola nella sezione, senza un titolo sopra da cui
+  // staccarsi, quindi niente margine d'attacco
   return `
-      <ul class="mp-sr">
+      <ul class="mp-sr${solo ? ' mp-sr-solo' : ''}">
         ${stats.map((s, i) => `
         <li class="mp-sr-item mp-rule" data-reveal data-delay="${(i * 0.08).toFixed(2)}s">
           <span class="mp-sr-value" data-count="${esc(s.value)}">${esc(s.value)}</span>
@@ -245,30 +247,23 @@ function page(line) {
   return `
 <!-- ============ ${line.name.toUpperCase()} ============ -->
 <div id="view-${line.slug}" class="page-view mp" hidden>
-  <!-- 01 · hero (nero) -->${videoBanner({
-    video: line.hero.video, videoMobile: line.hero.videoMobile, poster: line.hero.poster,
-    eyebrow: line.tagline, index: '[ 01 ]', title: line.name, text: line.intro,
+  <!-- 01 · apertura: il mezzo da vicino (nero). Scambiato col banner del
+       modello su indicazione, e senza sopratitolo. Il posto (altezza piena,
+       h1, invito a scorrere) resta all'apertura: cambia il contenuto. -->${videoBanner({
+    video: line.detail.video, poster: line.detail.poster,
+    title: 'Ogni dettaglio\nè una decisione.',
+    text: 'Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.',
+    cta: { label: 'Guarda la dotazione', target: dot },
     heading: 'h1', first: true, scrollCue: true,
   })}
   <!-- dotazione che scorre -->${marquee(line.equipment)}
-  <!-- 02 · identità + numeri (bianco) -->${section({
-    tone: 'light', label: "L'allestimento", index: '[ 02 ]',
-    body: `
-      <div class="mp-intro">
-        <h2 class="mp-display-2" data-reveal>
-          <span class="mp-mask"><span>Costruito attorno</span></span>
-          <span class="mp-mask"><span style="--d:.08s">alle tue auto,</span></span>
-          <span class="mp-mask"><span style="--d:.16s" class="mp-intro-dim">non al catalogo.</span></span>
-        </h2>
-        <p class="mp-intro-text mp-soft" data-reveal data-delay=".2s">${esc(line.description)}</p>
-      </div>${statRow(line.stats)}`,
+  <!-- 02 · i numeri che contano (bianco): solo i punti di forza, niente testo -->${section({
+    tone: 'light', body: statRow(line.stats, true),
   })}
-  <!-- 03 · il mezzo da vicino (nero) -->${videoBanner({
-    video: line.detail.video, poster: line.detail.poster,
-    eyebrow: 'Il mezzo da vicino', index: '[ 03 ]',
-    title: 'Ogni dettaglio\nè una decisione.',
-    text: 'Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.',
-    height: 'tall', cta: { label: 'Guarda la dotazione', target: dot },
+  <!-- 03 · il modello (nero), dove prima stava il mezzo da vicino -->${videoBanner({
+    video: line.hero.video, videoMobile: line.hero.videoMobile, poster: line.hero.poster,
+    eyebrow: line.tagline, index: '[ 03 ]', title: line.name, text: line.intro,
+    height: 'tall',
   })}
   <!-- 04 · dotazione / optionals (nero) -->${section({
     tone: 'dark', id: dot, label: "Cosa c'è a bordo", index: '[ 04 ]',

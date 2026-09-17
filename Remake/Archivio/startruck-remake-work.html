@@ -426,17 +426,13 @@
   .mp-slashes i:nth-child(2){opacity:.55;}
   .mp-slashes i:nth-child(3){opacity:.28;}
 
-  /* ---- 02 · identita' + numeri ------------------------------------------ */
-  .mp-intro{display:grid; gap:2.5rem 4rem;}
-  @media(min-width:1024px){ .mp-intro{grid-template-columns:1.1fr 1fr;} }
-  .mp-intro-dim{color:rgba(22,22,22,.45);}
-  .mp-intro-text{font-size:1.125rem;}
-  @media(min-width:1024px){ .mp-intro-text{padding-top:.75rem;} }
+  /* ---- 02 · i numeri che contano ---------------------------------------- */
 
   .mp-sr{display:grid; grid-template-columns:1fr; margin-top:4rem;}
   @media(min-width:640px) { .mp-sr{grid-template-columns:repeat(2, 1fr);} }
   @media(min-width:768px) { .mp-sr{margin-top:5rem;} }
   @media(min-width:1000px){ .mp-sr{grid-template-columns:repeat(4, 1fr);} }
+  .mp-sr.mp-sr-solo{margin-top:0;}
   .mp-sr-item{display:flex; flex-direction:column; gap:.45rem; padding:1.75rem 0; border-top:1px solid;}
   @media(min-width:640px){ .mp-sr-item{padding-inline-end:2rem;} }
   .mp-sr-value{
@@ -1395,20 +1391,22 @@
 
 <!-- ============ LE MANS ============ -->
 <div id="view-le-mans" class="page-view mp" hidden>
-  <!-- 01 · hero (nero) -->
+  <!-- 01 · apertura: il mezzo da vicino (nero). Scambiato col banner del
+       modello su indicazione, e senza sopratitolo. Il posto (altezza piena,
+       h1, invito a scorrere) resta all'apertura: cambia il contenuto. -->
   <section class="mp-vb mp-dark mp-vb-full mp-vb-first">
     <div class="mp-vb-media" data-parallax>
-      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/lemans-hero.webp" muted loop playsinline preload="none" aria-hidden="true">
-        <source src="https://sampoai67.github.io/Startruck/video/lemans-hero-mobile.mp4" media="(max-width: 760px)" type="video/mp4">
-        <source src="https://sampoai67.github.io/Startruck/video/lemans-hero.mp4" type="video/mp4">
+      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/lemans-detail.webp" muted loop playsinline preload="none" aria-hidden="true">
+        
+        <source src="https://sampoai67.github.io/Startruck/video/lemans-detail.mp4" type="video/mp4">
       </video>
     </div>
     <div class="mp-vb-scrim"></div>
     <div class="mp-container mp-vb-content">
-      <p class="mp-label" data-index="[ 01 ]" data-reveal>Performance &amp; racing</p>
-      <h1 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Le Mans</span></span></h1>
-      <p class="mp-vb-text" data-reveal data-delay=".18s">Progettato per offrire una struttura leggera, carico massimo e versatilità senza pari, pensato per chi non vuole rinunciare a nulla.</p>
       
+      <h1 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Ogni dettaglio</span></span><span class="mp-mask"><span style="--d:0.09s">è una decisione.</span></span></h1>
+      <p class="mp-vb-text" data-reveal data-delay=".18s">Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.</p>
+      <div data-reveal data-delay=".26s"><a class="mp-vb-cta" href="#" data-scrollto="dotazione-le-mans">Guarda la dotazione <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></a></div>
     </div>
     <div class="mp-vb-cue" aria-hidden="true"><span>SCROLL</span><i></i></div>
   </section>
@@ -1418,20 +1416,12 @@
       <span class="mp-mq-seq"><span class="mp-mq-cell"><span class="mp-mq-word">Pianale</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Rampe a scomparsa</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Verricello traslabile</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fune sintetica</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fari LED notturni</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Luci ingombro laterali LED</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Set 4 cinghie</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span></span><span class="mp-mq-seq" aria-hidden="true"><span class="mp-mq-cell"><span class="mp-mq-word">Pianale</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Rampe a scomparsa</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Verricello traslabile</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fune sintetica</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fari LED notturni</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Luci ingombro laterali LED</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Set 4 cinghie</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span></span>
     </div>
   </div>
-  <!-- 02 · identità + numeri (bianco) -->
+  <!-- 02 · i numeri che contano (bianco): solo i punti di forza, niente testo -->
   <section class="mp-light mp-pad">
     <div class="mp-container">
-      <p class="mp-label" data-index="[ 02 ]" data-reveal>L'allestimento</p>
       
-      <div class="mp-intro">
-        <h2 class="mp-display-2" data-reveal>
-          <span class="mp-mask"><span>Costruito attorno</span></span>
-          <span class="mp-mask"><span style="--d:.08s">alle tue auto,</span></span>
-          <span class="mp-mask"><span style="--d:.16s" class="mp-intro-dim">non al catalogo.</span></span>
-        </h2>
-        <p class="mp-intro-text mp-soft" data-reveal data-delay=".2s">Grazie alla struttura interamente in alluminio, Le Mans garantisce una leggerezza eccezionale e un carico utile fino a 1,5 tonnellate: tutta la capacità che ti serve, con la semplice patente B. È compatibile con i principali marchi del settore e si adatta alle esigenze della tua flotta senza chiederti di cambiare abitudini.</p>
-      </div>
-      <ul class="mp-sr">
+      
+      <ul class="mp-sr mp-sr-solo">
         
         <li class="mp-sr-item mp-rule" data-reveal data-delay="0.00s">
           <span class="mp-sr-value" data-count="1,5 t">1,5 t</span>
@@ -1456,20 +1446,20 @@
       </ul>
     </div>
   </section>
-  <!-- 03 · il mezzo da vicino (nero) -->
+  <!-- 03 · il modello (nero), dove prima stava il mezzo da vicino -->
   <section class="mp-vb mp-dark mp-vb-tall">
     <div class="mp-vb-media" data-parallax>
-      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/lemans-detail.webp" muted loop playsinline preload="none" aria-hidden="true">
-        
-        <source src="https://sampoai67.github.io/Startruck/video/lemans-detail.mp4" type="video/mp4">
+      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/lemans-hero.webp" muted loop playsinline preload="none" aria-hidden="true">
+        <source src="https://sampoai67.github.io/Startruck/video/lemans-hero-mobile.mp4" media="(max-width: 760px)" type="video/mp4">
+        <source src="https://sampoai67.github.io/Startruck/video/lemans-hero.mp4" type="video/mp4">
       </video>
     </div>
     <div class="mp-vb-scrim"></div>
     <div class="mp-container mp-vb-content">
-      <p class="mp-label" data-index="[ 03 ]" data-reveal>Il mezzo da vicino</p>
-      <h2 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Ogni dettaglio</span></span><span class="mp-mask"><span style="--d:0.09s">è una decisione.</span></span></h2>
-      <p class="mp-vb-text" data-reveal data-delay=".18s">Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.</p>
-      <div data-reveal data-delay=".26s"><a class="mp-vb-cta" href="#" data-scrollto="dotazione-le-mans">Guarda la dotazione <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></a></div>
+      <p class="mp-label" data-index="[ 03 ]" data-reveal>Performance &amp; racing</p>
+      <h2 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Le Mans</span></span></h2>
+      <p class="mp-vb-text" data-reveal data-delay=".18s">Progettato per offrire una struttura leggera, carico massimo e versatilità senza pari, pensato per chi non vuole rinunciare a nulla.</p>
+      
     </div>
     
   </section>
@@ -1831,20 +1821,22 @@
 
 <!-- ============ PRIVACY ============ -->
 <div id="view-privacy" class="page-view mp" hidden>
-  <!-- 01 · hero (nero) -->
+  <!-- 01 · apertura: il mezzo da vicino (nero). Scambiato col banner del
+       modello su indicazione, e senza sopratitolo. Il posto (altezza piena,
+       h1, invito a scorrere) resta all'apertura: cambia il contenuto. -->
   <section class="mp-vb mp-dark mp-vb-full mp-vb-first">
     <div class="mp-vb-media" data-parallax>
-      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/privacy-hero.webp" muted loop playsinline preload="none" aria-hidden="true">
-        <source src="https://sampoai67.github.io/Startruck/video/privacy-hero-mobile.mp4" media="(max-width: 760px)" type="video/mp4">
-        <source src="https://sampoai67.github.io/Startruck/video/privacy-hero.mp4" type="video/mp4">
+      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/privacy-detail.webp" muted loop playsinline preload="none" aria-hidden="true">
+        
+        <source src="https://sampoai67.github.io/Startruck/video/privacy-detail.mp4" type="video/mp4">
       </video>
     </div>
     <div class="mp-vb-scrim"></div>
     <div class="mp-container mp-vb-content">
-      <p class="mp-label" data-index="[ 01 ]" data-reveal>Trasporto confidenziale</p>
-      <h1 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Privacy</span></span></h1>
-      <p class="mp-vb-text" data-reveal data-delay=".18s">Furgonato chiuso, nessuna vetrina. Quello che trasporti resta una cosa fra te e il destinatario.</p>
       
+      <h1 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Ogni dettaglio</span></span><span class="mp-mask"><span style="--d:0.09s">è una decisione.</span></span></h1>
+      <p class="mp-vb-text" data-reveal data-delay=".18s">Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.</p>
+      <div data-reveal data-delay=".26s"><a class="mp-vb-cta" href="#" data-scrollto="dotazione-privacy">Guarda la dotazione <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></a></div>
     </div>
     <div class="mp-vb-cue" aria-hidden="true"><span>SCROLL</span><i></i></div>
   </section>
@@ -1854,20 +1846,12 @@
       <span class="mp-mq-seq"><span class="mp-mq-cell"><span class="mp-mq-word">Pianale</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Rampe a scomparsa</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Verricello traslabile</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fune sintetica</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fari LED notturni</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Luci ingombro laterali LED</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Set 4 cinghie</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span></span><span class="mp-mq-seq" aria-hidden="true"><span class="mp-mq-cell"><span class="mp-mq-word">Pianale</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Rampe a scomparsa</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Verricello traslabile</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fune sintetica</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fari LED notturni</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Luci ingombro laterali LED</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Set 4 cinghie</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span></span>
     </div>
   </div>
-  <!-- 02 · identità + numeri (bianco) -->
+  <!-- 02 · i numeri che contano (bianco): solo i punti di forza, niente testo -->
   <section class="mp-light mp-pad">
     <div class="mp-container">
-      <p class="mp-label" data-index="[ 02 ]" data-reveal>L'allestimento</p>
       
-      <div class="mp-intro">
-        <h2 class="mp-display-2" data-reveal>
-          <span class="mp-mask"><span>Costruito attorno</span></span>
-          <span class="mp-mask"><span style="--d:.08s">alle tue auto,</span></span>
-          <span class="mp-mask"><span style="--d:.16s" class="mp-intro-dim">non al catalogo.</span></span>
-        </h2>
-        <p class="mp-intro-text mp-soft" data-reveal data-delay=".2s">Privacy nasce per chi sposta auto che non devono essere viste: prototipi, vetture da collezione, consegne che richiedono riservatezza. Il vano è completamente chiuso e coibentato, l’accesso è controllato e dall’esterno il mezzo non racconta nulla del suo contenuto. La stessa cura costruttiva di Le Mans, applicata alla discrezione.</p>
-      </div>
-      <ul class="mp-sr">
+      
+      <ul class="mp-sr mp-sr-solo">
         
         <li class="mp-sr-item mp-rule" data-reveal data-delay="0.00s">
           <span class="mp-sr-value" data-count="Vano chiuso">Vano chiuso</span>
@@ -1892,20 +1876,20 @@
       </ul>
     </div>
   </section>
-  <!-- 03 · il mezzo da vicino (nero) -->
+  <!-- 03 · il modello (nero), dove prima stava il mezzo da vicino -->
   <section class="mp-vb mp-dark mp-vb-tall">
     <div class="mp-vb-media" data-parallax>
-      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/privacy-detail.webp" muted loop playsinline preload="none" aria-hidden="true">
-        
-        <source src="https://sampoai67.github.io/Startruck/video/privacy-detail.mp4" type="video/mp4">
+      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/privacy-hero.webp" muted loop playsinline preload="none" aria-hidden="true">
+        <source src="https://sampoai67.github.io/Startruck/video/privacy-hero-mobile.mp4" media="(max-width: 760px)" type="video/mp4">
+        <source src="https://sampoai67.github.io/Startruck/video/privacy-hero.mp4" type="video/mp4">
       </video>
     </div>
     <div class="mp-vb-scrim"></div>
     <div class="mp-container mp-vb-content">
-      <p class="mp-label" data-index="[ 03 ]" data-reveal>Il mezzo da vicino</p>
-      <h2 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Ogni dettaglio</span></span><span class="mp-mask"><span style="--d:0.09s">è una decisione.</span></span></h2>
-      <p class="mp-vb-text" data-reveal data-delay=".18s">Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.</p>
-      <div data-reveal data-delay=".26s"><a class="mp-vb-cta" href="#" data-scrollto="dotazione-privacy">Guarda la dotazione <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></a></div>
+      <p class="mp-label" data-index="[ 03 ]" data-reveal>Trasporto confidenziale</p>
+      <h2 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Privacy</span></span></h2>
+      <p class="mp-vb-text" data-reveal data-delay=".18s">Furgonato chiuso, nessuna vetrina. Quello che trasporti resta una cosa fra te e il destinatario.</p>
+      
     </div>
     
   </section>
@@ -2267,20 +2251,22 @@
 
 <!-- ============ TYPE H ============ -->
 <div id="view-type-h" class="page-view mp" hidden>
-  <!-- 01 · hero (nero) -->
+  <!-- 01 · apertura: il mezzo da vicino (nero). Scambiato col banner del
+       modello su indicazione, e senza sopratitolo. Il posto (altezza piena,
+       h1, invito a scorrere) resta all'apertura: cambia il contenuto. -->
   <section class="mp-vb mp-dark mp-vb-full mp-vb-first">
     <div class="mp-vb-media" data-parallax>
-      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/typeh-hero.webp" muted loop playsinline preload="none" aria-hidden="true">
+      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/typeh-detail.webp" muted loop playsinline preload="none" aria-hidden="true">
         
-        <source src="https://sampoai67.github.io/Startruck/video/typeh-hero.mp4" type="video/mp4">
+        <source src="https://sampoai67.github.io/Startruck/video/typeh-detail.mp4" type="video/mp4">
       </video>
     </div>
     <div class="mp-vb-scrim"></div>
     <div class="mp-container mp-vb-content">
-      <p class="mp-label" data-index="[ 01 ]" data-reveal>Aspetto vintage</p>
-      <h1 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Type H</span></span></h1>
-      <p class="mp-vb-text" data-reveal data-delay=".18s">La linea del Type H, la meccanica di oggi. Un mezzo che nessuno smette di guardare mentre lavora.</p>
       
+      <h1 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Ogni dettaglio</span></span><span class="mp-mask"><span style="--d:0.09s">è una decisione.</span></span></h1>
+      <p class="mp-vb-text" data-reveal data-delay=".18s">Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.</p>
+      <div data-reveal data-delay=".26s"><a class="mp-vb-cta" href="#" data-scrollto="dotazione-type-h">Guarda la dotazione <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></a></div>
     </div>
     <div class="mp-vb-cue" aria-hidden="true"><span>SCROLL</span><i></i></div>
   </section>
@@ -2290,20 +2276,12 @@
       <span class="mp-mq-seq"><span class="mp-mq-cell"><span class="mp-mq-word">Pianale</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Rampe a scomparsa</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Verricello traslabile</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fune sintetica</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fari LED notturni</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Luci ingombro laterali LED</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Set 4 cinghie</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span></span><span class="mp-mq-seq" aria-hidden="true"><span class="mp-mq-cell"><span class="mp-mq-word">Pianale</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Rampe a scomparsa</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Verricello traslabile</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fune sintetica</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Fari LED notturni</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Luci ingombro laterali LED</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span><span class="mp-mq-cell"><span class="mp-mq-word">Set 4 cinghie</span><span class="mp-slashes" aria-hidden="true"><i></i><i></i><i></i></span></span></span>
     </div>
   </div>
-  <!-- 02 · identità + numeri (bianco) -->
+  <!-- 02 · i numeri che contano (bianco): solo i punti di forza, niente testo -->
   <section class="mp-light mp-pad">
     <div class="mp-container">
-      <p class="mp-label" data-index="[ 02 ]" data-reveal>L'allestimento</p>
       
-      <div class="mp-intro">
-        <h2 class="mp-display-2" data-reveal>
-          <span class="mp-mask"><span>Costruito attorno</span></span>
-          <span class="mp-mask"><span style="--d:.08s">alle tue auto,</span></span>
-          <span class="mp-mask"><span style="--d:.16s" class="mp-intro-dim">non al catalogo.</span></span>
-        </h2>
-        <p class="mp-intro-text mp-soft" data-reveal data-delay=".2s">Type H è l’allestimento per chi vuole che il trasporto faccia parte del racconto: le nervature e le proporzioni dell’originale, costruite su un telaio moderno e affidabile. Nato per showroom, eventi, club e collezioni — dove il mezzo che arriva conta quanto l’auto che scarica.</p>
-      </div>
-      <ul class="mp-sr">
+      
+      <ul class="mp-sr mp-sr-solo">
         
         <li class="mp-sr-item mp-rule" data-reveal data-delay="0.00s">
           <span class="mp-sr-value" data-count="Su misura">Su misura</span>
@@ -2328,20 +2306,20 @@
       </ul>
     </div>
   </section>
-  <!-- 03 · il mezzo da vicino (nero) -->
+  <!-- 03 · il modello (nero), dove prima stava il mezzo da vicino -->
   <section class="mp-vb mp-dark mp-vb-tall">
     <div class="mp-vb-media" data-parallax>
-      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/typeh-detail.webp" muted loop playsinline preload="none" aria-hidden="true">
+      <video class="mp-vb-video" poster="https://sampoai67.github.io/Startruck/img/typeh-hero.webp" muted loop playsinline preload="none" aria-hidden="true">
         
-        <source src="https://sampoai67.github.io/Startruck/video/typeh-detail.mp4" type="video/mp4">
+        <source src="https://sampoai67.github.io/Startruck/video/typeh-hero.mp4" type="video/mp4">
       </video>
     </div>
     <div class="mp-vb-scrim"></div>
     <div class="mp-container mp-vb-content">
-      <p class="mp-label" data-index="[ 03 ]" data-reveal>Il mezzo da vicino</p>
-      <h2 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Ogni dettaglio</span></span><span class="mp-mask"><span style="--d:0.09s">è una decisione.</span></span></h2>
-      <p class="mp-vb-text" data-reveal data-delay=".18s">Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.</p>
-      <div data-reveal data-delay=".26s"><a class="mp-vb-cta" href="#" data-scrollto="dotazione-type-h">Guarda la dotazione <svg viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><line x1="0" y1="6" x2="20" y2="6" /><path d="M15 1 L21 6 L15 11" /></svg></a></div>
+      <p class="mp-label" data-index="[ 03 ]" data-reveal>Aspetto vintage</p>
+      <h2 class="mp-vb-title" data-reveal><span class="mp-mask"><span style="--d:0.00s">Type H</span></span></h2>
+      <p class="mp-vb-text" data-reveal data-delay=".18s">La linea del Type H, la meccanica di oggi. Un mezzo che nessuno smette di guardare mentre lavora.</p>
+      
     </div>
     
   </section>
