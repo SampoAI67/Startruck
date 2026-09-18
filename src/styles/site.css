@@ -106,12 +106,62 @@ nav.wrap{display:flex; align-items:center; justify-content:space-between; height
   max-height:0; overflow:hidden; visibility:hidden;
   transition:max-height .38s cubic-bezier(.22,1,.36,1), visibility .38s;
 }
-body.nav-open .navpanel{max-height:60vh; visibility:visible;}
+body.nav-open .navpanel{max-height:80vh; overflow-y:auto; visibility:visible;}
 .navpanel a{
   padding:15px 0; border-bottom:1px solid var(--line);
   font-size:0.86rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--ink);
 }
 .navpanel a:last-child{border-bottom:none;}
+/* i tre modelli, rientrati sotto "Modelli" */
+.navpanel-sub{display:grid; padding:2px 0 8px 18px; border-bottom:1px solid var(--line);}
+.navpanel-sub a{padding:11px 0; border-bottom:none; font-size:0.8rem; color:var(--charcoal-dim);}
+.navpanel-sub a::before{content:"— "; opacity:.5;}
+
+/* ---- menu "Modelli" -------------------------------------------------------
+   Si apre al passaggio (dove c'e' un puntatore) e al clic (telefono, tastiera).
+   Il pannello e' sempre chiaro, anche quando la barra e' trasparente sopra
+   l'hero: per questo i suoi link hanno un colore esplicito, altrimenti
+   erediterebbero il bianco delle voci della barra. */
+.navdrop{position:relative;}
+.navdrop-btn{
+  display:inline-flex; align-items:center; gap:8px; padding:6px 0; background:none; border:0;
+  font-family:'Barlow'; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.12em; font-weight:400;
+  color:var(--charcoal-dim); white-space:nowrap; transition:color .2s;
+}
+header.site .navdrop-btn{color:rgba(253,252,249,0.72);}
+header.site .navdrop-btn:hover, header.site .navdrop.is-open .navdrop-btn{color:#fdfcf9;}
+body.nav-solid header.site .navdrop-btn{color:var(--charcoal-dim);}
+body.nav-solid header.site .navdrop-btn:hover, body.nav-solid header.site .navdrop.is-open .navdrop-btn{color:var(--ink);}
+.navdrop-caret{width:6px; height:6px; border-right:1px solid currentColor; border-bottom:1px solid currentColor; transform:translateY(-2px) rotate(45deg); transition:transform .25s;}
+.navdrop.is-open .navdrop-caret{transform:translateY(1px) rotate(-135deg);}
+.navdrop-menu{
+  position:absolute; top:calc(100% + 18px); left:50%; width:340px;
+  background:rgba(253,252,248,0.98); backdrop-filter:blur(10px);
+  border:1px solid var(--line); box-shadow:0 24px 50px -24px rgba(28,31,36,0.35);
+  padding:8px; opacity:0; visibility:hidden; transform:translate(-50%, 6px);
+  transition:opacity .22s ease, transform .22s ease, visibility .22s;
+}
+/* ponte invisibile fra la voce e il pannello: il puntatore che scende non lo chiude */
+.navdrop-menu::before{content:""; position:absolute; left:0; right:0; top:-20px; height:20px;}
+.navdrop.is-open .navdrop-menu{opacity:1; visibility:visible; transform:translate(-50%, 0);}
+@media(hover:hover){
+  /* .is-dismissed: chiuso con Esc mentre il puntatore e' ancora sopra */
+  .navdrop:hover:not(.is-dismissed) .navdrop-menu{opacity:1; visibility:visible; transform:translate(-50%, 0);}
+  .navdrop:hover:not(.is-dismissed) .navdrop-caret{transform:translateY(1px) rotate(-135deg);}
+}
+.navdrop-menu ul{list-style:none; display:grid; gap:2px;}
+body header.site .navdrop .navdrop-menu a{color:var(--ink); padding:0;}
+.navdrop-item{display:flex; align-items:center; gap:14px; padding:8px !important; transition:background .2s;}
+.navdrop-item:hover, .navdrop-item:focus-visible{background:var(--bronze-pale);}
+.navdrop-item img{width:96px; height:48px; object-fit:cover; flex:none; background:var(--bg-2);}
+.navdrop-item span{display:grid; gap:2px; letter-spacing:0; text-transform:none;}
+.navdrop-item b{font-family:'Barlow Condensed'; font-weight:700; font-size:1.05rem; text-transform:uppercase; letter-spacing:0.02em;}
+.navdrop-item small{font-family:'JetBrains Mono'; font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--charcoal-dim);}
+body header.site .navdrop .navdrop-menu .navdrop-all{
+  display:block; margin-top:6px; padding:12px 8px 6px !important; border-top:1px solid var(--line);
+  font-family:'JetBrains Mono'; font-size:0.66rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--charcoal-dim);
+}
+body header.site .navdrop .navdrop-menu .navdrop-all:hover{color:var(--ink);}
 header.site{transition:transform .45s cubic-bezier(.22,1,.36,1);}
 
 

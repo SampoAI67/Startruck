@@ -1,14 +1,10 @@
 ---
-import fs from 'node:fs';
-import path from 'node:path';
 import '../styles/home.css';
 import '../styles/about.css';
 import '../styles/model.css';
 import Site from '../layouts/Site.astro';
 import Hero from '../components/home/Hero.astro';
 import Ticker from '../components/home/Ticker.astro';
-import Manifesto from '../components/home/Manifesto.astro';
-import Process from '../components/home/Process.astro';
 import Clients from '../components/home/Clients.astro';
 import Story from '../components/about/Story.astro';
 import Place from '../components/about/Place.astro';
@@ -19,11 +15,9 @@ import Promise from '../components/about/Promise.astro';
 import Section from '../components/model/Section.astro';
 import ContactForm from '../components/model/ContactForm.astro';
 
-// Il video dall'alto dell'officina arriva dopo: basta salvarlo come
-// public/video/chi-siamo-drone.mp4 e ripubblicare. Finche' non c'e', l'hero
-// mostra la foto dell'ingresso con l'insegna.
-const DRONE = 'video/chi-siamo-drone.mp4';
-const hasDrone = fs.existsSync(path.join(process.cwd(), 'public', DRONE));
+// Hero: il reel della demo WordPress del cliente (Startruck-Reel-1-Edit-2.mov,
+// verticale 1080x1920). Su schermo largo se ne usa una fascia orizzontale
+// al centro, su telefono il fotogramma intero; il logo finale e' tagliato.
 ---
 <Site
   title="Chi siamo — l'officina | Startruck Italia"
@@ -33,23 +27,19 @@ const hasDrone = fs.existsSync(path.join(process.cwd(), 'public', DRONE));
     id="chi-siamo"
     eyebrow="Chi siamo — Pozzolo sul Mincio (MN)"
     text="Progettiamo e costruiamo a mano allestimenti in alluminio per il trasporto di auto di lusso, d'epoca e da corsa."
-    video={hasDrone ? DRONE : null}
-    poster="img/lemans-04.webp"
+    video="video/chi-siamo-hero.mp4"
+    videoMobile="video/chi-siamo-hero-mobile.mp4"
+    poster="img/chi-siamo-hero.webp"
+    wide
     ctas={[
       { href: '#sede', label: 'Vieni a trovarci' },
       { href: '#storia', label: 'La nostra storia' },
     ]}
   >
-    <Fragment slot="title">Un'officina.<br />Mezzi <em>su misura</em>.</Fragment>
+    <Fragment slot="title">Noi siamo:<br />estremamente leggeri,<br />incredibilmente robusti<br />ed <em>esteticamente superiori</em>.</Fragment>
   </Hero>
 
   <Ticker />
-
-  <Manifesto eyebrow="Il nostro modo di lavorare">
-    <span class="ml ml-1">Non vendiamo allestimenti da <span class="m-dim">catalogo.</span></span> <span class="ml ml-2">Li costruiamo a mano, uno per uno,</span> <span class="ml ml-3"><span class="m-strong">attorno alle auto che dovranno portare.</span></span>
-  </Manifesto>
-
-  <Process />
 
   <Story />
 

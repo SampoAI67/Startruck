@@ -15,7 +15,7 @@ import { base } from '../lib/base';
   var ctx = cv.getContext('2d');
 
   var VB_W = 1098, VB_H = 477;   // riquadro del tracciato disegnato in Figma
-  var STROKE = 47;               // larghezza di una gomma vera, non di un filo
+  var STROKE = 34;               // larghezza di una gomma: con due tracce affiancate, piu' snella di una sola
   var PITCH = 2;                 // battistrada allungato 2x nel senso di marcia
   var OVER = 150;                // quanto il canvas deborda ai lati della griglia
   var STEP = 2;     // lunghezza della fettina, in pixel di destinazione
@@ -63,6 +63,11 @@ import { base } from '../lib/base';
     }
     var k = kMain;
     var THICK = STROKE * kCross;
+    /* Due tracce affiancate, come le due ruote di un mezzo passato di li':
+       ciascuna sta a OFF dal tracciato, misurato perpendicolare alla marcia,
+       quindi nelle curve restano parallele invece di sovrapporsi. */
+    var OFF = THICK * 0.6 + 2.5;                              // gomme gemellate: vicine (+5px fra le due tracce)
+    var REACH = THICK / 2 + OFF;                              // ingombro dall'asse
 
     // quanto il tracciato entra prima della prima scheda e esce dopo l'ultima
     var beforePx, afterPx;
@@ -133,8 +138,8 @@ import { base } from '../lib/base';
         if (a < aMin) aMin = a;
         if (a > aMax) aMax = a;
       }
-      padTop = Math.max(20, -aMin + THICK / 2) + 2;
-      padBot = Math.max(20, aMax - gh + THICK / 2) + 2;
+      padTop = Math.max(20, -aMin + REACH) + 2;
+      padBot = Math.max(20, aMax - gh + REACH) + 2;
       h = gh + padTop + padBot;
       mainOrigin = padTop;
       crossMid = (gridRect.left - wrapRect.left) + gw / 2;     // asse della colonna
@@ -145,7 +150,7 @@ import { base } from '../lib/base';
         if (c < cMin) cMin = c;
         if (c > cMax) cMax = c;
       }
-      var need = Math.max(-cMin, cMax) + THICK / 2 - gh / 2;
+      var need = Math.max(-cMin, cMax) + REACH - gh / 2;
       padTop = padBot = Math.max(40, need) + 2;
       h = gh + padTop * 2;
       mainOrigin = 0;
@@ -169,36 +174,64 @@ import { base } from '../lib/base';
 
     var SW = img.naturalWidth, SH = img.naturalHeight;
     var scale = (THICK / SH) * PITCH;
-    var srcX = 0;
     var map = vert
       ? function (q) { return { x: cross(q) + crossMid, y: along(q) + mainOrigin }; }
       : function (q) { return { x: along(q),            y: cross(q) + crossMid };  };
 
-    var prev = map(pts[0]);
-    for (var z = 1; z < pts.length; z++) {
-      var cur = map(pts[z]);
-      var dx = cur.x - prev.x, dy = cur.y - prev.y;
-      var d = Math.sqrt(dx * dx + dy * dy);
-      if (d > 0.01) {
-        var ang = Math.atan2(dy, dx);
-        var srcW = d / scale;
-
-        ctx.save();
-        ctx.translate(prev.x, prev.y);
-        ctx.rotate(ang);
-        if (srcX + srcW <= SW) {
-          ctx.drawImage(img, srcX, 0, srcW, SH, 0, -THICK / 2, d + 0.6, THICK);
-        } else {
-          // la striscia e' finita a meta' fettina: si chiude e si riparte da capo
-          var first = SW - srcX, r = first / srcW;
-          ctx.drawImage(img, srcX, 0, first, SH, 0, -THICK / 2, d * r + 0.6, THICK);
-          ctx.drawImage(img, 0, 0, srcW - first, SH, d * r, -THICK / 2, d * (1 - r) + 0.6, THICK);
-        }
-        ctx.restore();
-        srcX = (srcX + srcW) % SW;
+    // l'asse sullo schermo, poi le due tracce spostate lungo la normale. La
+    // tangente si prende su qualche punto di distanza: sui passi da 2px la
+    // normale ballerebbe e il bordo della traccia verrebbe seghettato.
+    var axis = pts.map(map);
+    var side = function (sign) {
+      var out = [];
+      for (var i = 0; i < axis.length; i++) {
+        var a = axis[Math.max(0, i - 3)], b = axis[Math.min(axis.length - 1, i + 3)];
+        var tx = b.x - a.x, ty = b.y - a.y, tl = Math.sqrt(tx * tx + ty * ty) || 1;
+        out.push({ x: axis[i].x - (ty / tl) * OFF * sign, y: axis[i].y + (tx / tl) * OFF * sign });
       }
-      prev = cur;
+      /* Dove l'asse curva piu' stretto di OFF, la traccia interna torna su se
+         stessa e fa un nodo. Quei punti vanno all'indietro rispetto alla
+         marcia: si saltano, e la traccia taglia la curva come una gomma vera. */
+      var kept = [out[0]], last = 0;
+      for (var j = 1; j < out.length; j++) {
+        var ox = out[j].x - kept[kept.length - 1].x, oy = out[j].y - kept[kept.length - 1].y;
+        var ax = axis[j].x - axis[last].x, ay = axis[j].y - axis[last].y;
+        if (ox * ax + oy * ay > 0) { kept.push(out[j]); last = j; }
+      }
+      return kept;
+    };
+
+    function strip(line, srcX) {
+      var prev = line[0];
+      for (var z = 1; z < line.length; z++) {
+        var cur = line[z];
+        var dx = cur.x - prev.x, dy = cur.y - prev.y;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d > 0.01) {
+          var ang = Math.atan2(dy, dx);
+          var srcW = d / scale;
+
+          ctx.save();
+          ctx.translate(prev.x, prev.y);
+          ctx.rotate(ang);
+          if (srcX + srcW <= SW) {
+            ctx.drawImage(img, srcX, 0, srcW, SH, 0, -THICK / 2, d + 0.6, THICK);
+          } else {
+            // la striscia e' finita a meta' fettina: si chiude e si riparte da capo
+            var first = SW - srcX, r = first / srcW;
+            ctx.drawImage(img, srcX, 0, first, SH, 0, -THICK / 2, d * r + 0.6, THICK);
+            ctx.drawImage(img, 0, 0, srcW - first, SH, d * r, -THICK / 2, d * (1 - r) + 0.6, THICK);
+          }
+          ctx.restore();
+          srcX = (srcX + srcW) % SW;
+        }
+        prev = cur;
+      }
     }
+    // la seconda ruota parte da un altro punto del battistrada: due copie in
+    // fase si vedrebbero come un disegno duplicato, non come due gomme
+    strip(side(1), 0);
+    strip(side(-1), SW * 0.43);
   }
 
   var t = null;

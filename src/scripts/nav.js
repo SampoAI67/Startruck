@@ -14,6 +14,31 @@
   addEventListener('resize', function () { if (innerWidth > 860) set(false); });
 })();
 
+/* ===== Menu "Modelli" =================================================
+   Il passaggio del puntatore lo apre gia' via CSS; qui il clic (telefono in
+   orizzontale, tastiera), Esc e il clic fuori per chiuderlo. */
+(function () {
+  var drop = document.getElementById('navDrop');
+  if (!drop) return;
+  var btn = drop.querySelector('.navdrop-btn');
+  var set = function (open) {
+    drop.classList.toggle('is-open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  };
+  btn.addEventListener('click', function () {
+    drop.classList.remove('is-dismissed');
+    set(!drop.classList.contains('is-open'));
+  });
+  document.addEventListener('click', function (e) { if (!drop.contains(e.target)) set(false); });
+  drop.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { set(false); drop.classList.add('is-dismissed'); btn.focus(); }
+  });
+  // il passaggio del puntatore torna ad aprirlo appena se ne esce
+  drop.addEventListener('mouseleave', function () { drop.classList.remove('is-dismissed'); });
+  // uscire col tab dall'ultimo link chiude il menu
+  drop.addEventListener('focusout', function (e) { if (!drop.contains(e.relatedTarget)) set(false); });
+})();
+
 /* La barra segue la direzione dello scorrimento e cambia veste passato
    l'hero. Le pagine senza hero (quelle legali) la vogliono piena da subito:
    trasparente, sopra un fondo chiaro, sparirebbe. */

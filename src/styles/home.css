@@ -14,6 +14,10 @@
 .eyebrow::before{content:""; width:34px; height:1px; background:#c7c6c2;}
 .hero h1{font-size:clamp(2.1rem, 4.2vw, 3.2rem); color:#fdfcf9;}
 .hero h1 em{font-style:normal; color:#c7c6c2;}
+/* titolo lungo (Chi siamo): colonna piu' larga e corpo che scende di piu'
+   su telefono, dove "INCREDIBILMENTE" da sola riempie la riga */
+.hero-inner.hero-inner-wide{max-width:1000px;}
+.hero-inner-wide h1{font-size:clamp(1.55rem, 4vw, 3.1rem);}
 .hero p{margin-top:20px; font-size:1rem; color:#d6d3ca; max-width:400px; font-weight:300;}
 .hero-ctas{display:flex; gap:20px; margin-top:42px; flex-wrap:wrap;}
 .btn-primary{
@@ -61,8 +65,10 @@
 /* Il tracciato esce di ~124px sopra e sotto le schede: la sezione gli fa
    spazio, altrimenti l'ansa alta finisce sul paragrafo e quella bassa viene
    tagliata dal bordo della sezione. */
-.route-clip{overflow:hidden; padding-bottom:160px;}
-.route-clip .sec-head{margin-bottom:155px;}
+/* .section davanti: site.css (che da' a .section il padding generico) arriva nel
+   foglio DOPO questo, e a pari specificita' vincerebbe lui */
+.section.route-clip{overflow:hidden; padding-top:150px; padding-bottom:260px;}
+.route-clip .sec-head{margin-bottom:225px;}
 .route-src{position:absolute; width:0; height:0; overflow:hidden; pointer-events:none;}
 .route-canvas{position:absolute; left:-150px; z-index:0; pointer-events:none;}
 /* Il colore dei solchi fra le schede e un velo semitrasparente: sopra la
@@ -74,8 +80,8 @@
    in cui si vedono le anse, esattamente come su schermo largo le si
    vedono sopra e sotto la riga. */
 @media(max-width:860px){
-  .route-clip{padding-bottom:120px;}
-  .route-clip .sec-head{margin-bottom:105px;}
+  .section.route-clip{padding-top:110px; padding-bottom:160px;}
+  .route-clip .sec-head{margin-bottom:140px;}
   .route-wrap .process-grid{max-width:74%; margin-left:auto; margin-right:auto;}
   .route-wrap .process-item{padding:26px 22px;}
 }

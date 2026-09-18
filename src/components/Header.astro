@@ -1,31 +1,65 @@
 ---
 import { base } from '../lib/base';
+import { lines } from '../data/lines';
 
-// Le voci puntano alle sezioni della pagina di casa: da un'altra pagina ci si
-// torna, dalla casa si scorre e basta.
-const links = [
-  { href: base('/'), label: 'Home' },
-  { href: base('/chi-siamo/'), label: 'Chi siamo' },
-  { href: base('/#modelli'), label: 'Modelli' },
+// Le voci puntano alle pagine o alle sezioni della pagina di casa: da
+// un'altra pagina ci si torna, dalla casa si scorre e basta. "Modelli" apre
+// un menu con le tre linee, cosi' le pagine modello si raggiungono da ovunque.
+const CARD_POSTER: Record<string, string> = {
+  'le-mans': 'img/poster-lemans.webp',
+  privacy: 'img/poster-privacy.webp',
+  'type-h': 'img/poster-typeh.webp',
+};
+const models = lines.map((l) => ({
+  href: base(`/allestimenti/${l.slug}/`),
+  name: l.name,
+  tagline: l.tagline,
+  img: base(CARD_POSTER[l.slug] ?? l.hero.poster),
+}));
+const home = { href: base('/'), label: 'Home' };
+const about = { href: base('/chi-siamo/'), label: 'Chi siamo' };
+const allModels = { href: base('/#modelli'), label: 'Tutti i modelli' };
+const after = [
   { href: base('/#lavori'), label: 'Ultimi lavori' },
   { href: base('/#contatti'), label: 'Contatti' },
-];
-const panelLinks = [
-  ...links.slice(0, 4),
-  { href: base('/#processo'), label: 'Processo' },
-  links[4],
 ];
 ---
 <header class="site">
   <nav class="wrap" aria-label="Principale">
     <a href={base('/')} class="logo-img"><img src={base('logo-startruck.svg')} alt="Startruck Italia" width="588" height="100" /></a>
     <div class="navlinks">
-      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+      <a href={home.href}>{home.label}</a>
+      <a href={about.href}>{about.label}</a>
+      <div class="navdrop" id="navDrop">
+        <button class="navdrop-btn" type="button" aria-expanded="false" aria-controls="navDropMenu">
+          Modelli <span class="navdrop-caret" aria-hidden="true"></span>
+        </button>
+        <div class="navdrop-menu" id="navDropMenu">
+          <ul>
+            {models.map((m) => (
+              <li>
+                <a class="navdrop-item" href={m.href}>
+                  <img src={m.img} alt="" width="96" height="48" loading="lazy" decoding="async" />
+                  <span><b>{m.name}</b><small>{m.tagline}</small></span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a class="navdrop-all" href={allModels.href}>{allModels.label} →</a>
+        </div>
+      </div>
+      {after.map((l) => <a href={l.href}>{l.label}</a>)}
     </div>
     <a href={base('/#configuratore')} class="navcta"><span class="navcta-long">Configura </span>Preventivo</a>
     <button class="navtoggle" id="navToggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navPanel">☰</button>
     <div class="navpanel" id="navPanel">
-      {panelLinks.map((l) => <a href={l.href}>{l.label}</a>)}
+      <a href={home.href}>{home.label}</a>
+      <a href={about.href}>{about.label}</a>
+      <a href={allModels.href}>Modelli</a>
+      <div class="navpanel-sub">
+        {models.map((m) => <a href={m.href}>{m.name}</a>)}
+      </div>
+      {after.map((l) => <a href={l.href}>{l.label}</a>)}
     </div>
   </nav>
 </header>

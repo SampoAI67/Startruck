@@ -10,32 +10,39 @@ interface Props {
   text?: string;
   /** video di sfondo; null = nessun video, resta l'immagine di poster */
   video?: string | null;
+  /** versione verticale per il telefono (fino a 760px) */
+  videoMobile?: string;
   poster?: string;
   ctas?: { href: string; label: string }[];
+  /** titolo lungo: la colonna del testo si allarga */
+  wide?: boolean;
 }
 const {
   id = 'home',
   eyebrow = 'Made in Italy — Allestimenti su misura',
   text = 'Completamente in alluminio: leggeri, robusti e curati in ogni rifinitura.',
   video = 'video/startruck-reel.mp4',
+  videoMobile,
   poster = 'https://static.wixstatic.com/media/d56fb4_46c84cf020194791afba99d315b8882d~mv2.jpeg/v1/fill/w_1450,h_580,q_90,enc_avif,quality_auto/d56fb4_46c84cf020194791afba99d315b8882d~mv2.jpeg',
   ctas = [
     { href: '#configuratore', label: 'Richiedi un preventivo' },
     { href: '#modelli', label: 'Scopri gli allestimenti' },
   ],
+  wide = false,
 } = Astro.props;
 const posterSrc = poster.startsWith('http') ? poster : base(poster);
 ---
 <section class="hero" id={id}>
   {video ? (
     <video class="hero-video" autoplay muted loop playsinline poster={posterSrc}>
+      {videoMobile && <source src={base(videoMobile)} media="(max-width: 760px)" type="video/mp4" />}
       <source src={base(video)} type="video/mp4" />
     </video>
   ) : (
     <img class="hero-video" src={posterSrc} alt="" fetchpriority="high" />
   )}
   <div class="hero-overlay"></div>
-  <div class="wrap hero-inner">
+  <div class:list={['wrap hero-inner', { 'hero-inner-wide': wide }]}>
     <span class="eyebrow">{eyebrow}</span>
     <h1><slot name="title">Costruiti per correre.<br />Pensati per <em>durare</em>.</slot></h1>
     <p>{text}</p>
