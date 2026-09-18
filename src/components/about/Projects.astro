@@ -1,0 +1,54 @@
+---
+import { base } from '../../lib/base';
+
+// Progetti con un nome dietro, presi dai post Instagram del cliente: chi
+// l'ha commissionato o con chi e' stato costruito. Le foto sono quelle dei
+// post stessi (public/lavori), i link portano al post originale.
+const projects = [
+  {
+    name: 'Supreme Cars',
+    kind: 'Su misura',
+    img: 'lavori/lavoro-03.webp',
+    text: 'Un allestimento chiuso su base Mercedes, pensato su misura e vestito con la grafica del cliente.',
+    href: 'https://www.instagram.com/p/DdG70KjAB2l/',
+  },
+  {
+    name: 'Carrozzeria Caselani',
+    kind: 'Collaborazione',
+    img: 'lavori/lavoro-10.webp',
+    text: 'Il debutto del progetto 616N su base Fiat Ducato: carrozzeria retrò firmata Caselani, allestimento Startruck.',
+    href: 'https://www.instagram.com/p/DXgoMqEDb6B/',
+  },
+  {
+    name: 'Gimax Torino',
+    kind: 'Le Mans',
+    img: 'lavori/lavoro-17.webp',
+    text: 'Un allestimento Le Mans su base Fiat Ducato, realizzato per Gimax Torino.',
+    href: 'https://www.instagram.com/p/DTlGzy0DfJK/',
+  },
+];
+---
+<section class="section" id="progetti">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-eyebrow">Progetti e collaborazioni</span>
+        <h2>Costruiti con e per<br />chi fa sul serio.</h2>
+      </div>
+      <p class="sec-desc">Concessionarie, collezionisti, carrozzerie: alcuni dei nomi con cui abbiamo lavorato di recente.</p>
+    </div>
+    <div class="proj-grid">
+      {projects.map((p) => (
+        <a class="proj-card" href={p.href} target="_blank" rel="noopener">
+          <span class="proj-img"><img src={base(p.img)} alt={`Allestimento per ${p.name}`} width="760" height="760" loading="lazy" decoding="async" /></span>
+          <span class="proj-body">
+            <span class="proj-kind mono">{p.kind}</span>
+            <span class="proj-name">{p.name}</span>
+            <span class="proj-text">{p.text}</span>
+            <span class="proj-link mono">Vedi su Instagram →</span>
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

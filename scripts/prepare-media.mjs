@@ -19,13 +19,17 @@ const OUT_LOGO = 'public/logos';
 // Loop decorativi, sempre muti: bitrate alto inutile. CRF 30 + no audio + faststart.
 // `wm: true` = la clip è generata con Veo e porta il watermark in basso a destra:
 // si taglia il 12% inferiore prima dello scale (i soggetti sono centrati, non si perde nulla).
+// `to: s` = si taglia la clip a s secondi (per esempio prima di una dissolvenza al nero,
+// che in un loop si vedrebbe come un lampo scuro).
 const videos = [
   { in: 'STN LM HERO.mp4',        out: 'lemans-hero.mp4',         w: 1600, wm: true },
   { in: 'ST LM MOBILE.mp4',       out: 'lemans-hero-mobile.mp4',  w: 720  },
   { in: 'Le Mans Home.mp4',       out: 'lemans-detail.mp4',       w: 1440 },
   { in: 'Privacy Hero Video.mp4', out: 'privacy-hero.mp4',        w: 1600, wm: true },
   { in: 'Privacy Hero Mobile.mp4',out: 'privacy-hero-mobile.mp4', w: 720  },
-  { in: '1218(1).mp4',            out: 'privacy-detail.mp4',      w: 1440, wm: true },
+  // giro diurno attorno al mezzo, come quelli di Le Mans e Type H (il vecchio
+  // '1218(1).mp4' era una clip in studio al buio, fuori stile)
+  { in: 'Privacy Home.mp4',       out: 'privacy-detail.mp4',      w: 1440, to: 20 },
   { in: '0122.mp4',               out: 'typeh-hero.mp4',          w: 1600, wm: true },
   { in: 'TypeH home.mp4',         out: 'typeh-detail.mp4',        w: 1440, wm: true },
 ];
@@ -85,6 +89,7 @@ async function encodeVideos() {
         .join(',');
       await run('ffmpeg', [
         '-y', '-i', src,
+        ...(v.to ? ['-t', String(v.to)] : []),
         '-an',                                  // niente audio: i loop sono muti
         '-vf', filters,
         '-c:v', 'libx264', '-profile:v', 'high', '-preset', 'slow', '-crf', '30',

@@ -1,0 +1,33 @@
+---
+import { base } from '../../lib/base';
+
+// Mappa di Google a due clic: finche' non si preme il pulsante non c'e'
+// nessun iframe, quindi nessun cookie di terze parti (vedi cookie policy).
+// Il segnaposto ha la stessa misura della mappa, cosi' niente salta.
+// Si cerca per nome dell'attivita': "Str. Boschi" da sola e' una strada di
+// tre chilometri, Google invece conosce la scheda di Startruck Italia.
+const query = 'Startruck Italia, Strada Boschi, 46045 Pozzolo sul Mincio MN';
+const src = `https://maps.google.com/maps?q=${encodeURIComponent(query)}&z=15&output=embed`;
+---
+<div class="map" data-src={src}>
+  <div class="map-consent">
+    <span class="map-pin" aria-hidden="true"></span>
+    <p class="map-addr">Str. Boschi — 46045 Pozzolo sul Mincio (MN)</p>
+    <button class="map-load" type="button">Mostra la mappa</button>
+    <p class="map-note">La mappa è fornita da Google Maps: caricandola accetti i suoi cookie. <a href={base('/cookie-policy/')}>Cookie policy</a></p>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.map').forEach((box) => {
+    box.querySelector('.map-load')?.addEventListener('click', () => {
+      const f = document.createElement('iframe');
+      f.src = box.dataset.src ?? '';
+      f.title = 'Mappa: Startruck Italia a Pozzolo sul Mincio';
+      f.loading = 'lazy';
+      f.referrerPolicy = 'no-referrer-when-downgrade';
+      box.replaceChildren(f);
+      box.classList.add('is-loaded');
+    });
+  });
+</script>

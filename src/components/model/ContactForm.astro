@@ -2,15 +2,21 @@
 import { base } from '../../lib/base';
 import Arrow from './Arrow.astro';
 
-interface Props { model: string }
+interface Props {
+  /** senza modello (pagina Chi siamo) la richiesta e' generica e il
+   *  configuratore si apre da zero */
+  model?: string;
+}
 const { model } = Astro.props;
 const mail = 'startruck@outlook.it';
 // Sito statico: niente endpoint, il modulo apre la mail gia' compilata
 // (model-page.js). "Configura" porta al configuratore col modello scelto.
-const configure = base(`/?modello=${encodeURIComponent(model)}#configuratore`);
+const configure = model
+  ? base(`/?modello=${encodeURIComponent(model)}#configuratore`)
+  : base('/#configuratore');
 ---
 <div class="mp-cf">
-  <form class="mp-cf-form" data-mailto={mail} data-model={model} novalidate>
+  <form class="mp-cf-form" data-mailto={mail} data-model={model ?? 'Richiesta generica'} novalidate>
     <h2 class="mp-cf-formtitle">Richiedi un preventivo</h2>
     <div class="mp-cf-field">
       <label for="cf-name">Nome completo</label>
@@ -42,6 +48,6 @@ const configure = base(`/?modello=${encodeURIComponent(model)}#configuratore`);
       <li><a href={`mailto:${mail}`}>{mail}</a></li>
       <li class="mp-cf-addr">Str. Boschi — 46045 Pozzolo sul Mincio (MN)</li>
     </ul>
-    <a class="mp-cf-cfg" href={configure}>Configura {model} <Arrow /></a>
+    <a class="mp-cf-cfg" href={configure}>{model ? `Configura ${model}` : 'Configura il tuo allestimento'} <Arrow /></a>
   </div>
 </div>

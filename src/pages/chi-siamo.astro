@@ -1,4 +1,80 @@
 ---
-import Redirect from '../components/Redirect.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+import '../styles/home.css';
+import '../styles/about.css';
+import '../styles/model.css';
+import Site from '../layouts/Site.astro';
+import Hero from '../components/home/Hero.astro';
+import Ticker from '../components/home/Ticker.astro';
+import Manifesto from '../components/home/Manifesto.astro';
+import Process from '../components/home/Process.astro';
+import Clients from '../components/home/Clients.astro';
+import Story from '../components/about/Story.astro';
+import Place from '../components/about/Place.astro';
+import Material from '../components/about/Material.astro';
+import Projects from '../components/about/Projects.astro';
+import Events from '../components/about/Events.astro';
+import Promise from '../components/about/Promise.astro';
+import Section from '../components/model/Section.astro';
+import ContactForm from '../components/model/ContactForm.astro';
+
+// Il video dall'alto dell'officina arriva dopo: basta salvarlo come
+// public/video/chi-siamo-drone.mp4 e ripubblicare. Finche' non c'e', l'hero
+// mostra la foto dell'ingresso con l'insegna.
+const DRONE = 'video/chi-siamo-drone.mp4';
+const hasDrone = fs.existsSync(path.join(process.cwd(), 'public', DRONE));
 ---
-<Redirect to="/" />
+<Site
+  title="Chi siamo — l'officina | Startruck Italia"
+  description="Startruck Italia progetta e costruisce a mano allestimenti in alluminio per il trasporto di auto, nella sua officina di Pozzolo sul Mincio (MN)."
+>
+  <Hero
+    id="chi-siamo"
+    eyebrow="Chi siamo — Pozzolo sul Mincio (MN)"
+    text="Progettiamo e costruiamo a mano allestimenti in alluminio per il trasporto di auto di lusso, d'epoca e da corsa."
+    video={hasDrone ? DRONE : null}
+    poster="img/lemans-04.webp"
+    ctas={[
+      { href: '#sede', label: 'Vieni a trovarci' },
+      { href: '#storia', label: 'La nostra storia' },
+    ]}
+  >
+    <Fragment slot="title">Un'officina.<br />Mezzi <em>su misura</em>.</Fragment>
+  </Hero>
+
+  <Ticker />
+
+  <Manifesto eyebrow="Il nostro modo di lavorare">
+    <span class="ml ml-1">Non vendiamo allestimenti da <span class="m-dim">catalogo.</span></span> <span class="ml ml-2">Li costruiamo a mano, uno per uno,</span> <span class="ml ml-3"><span class="m-strong">attorno alle auto che dovranno portare.</span></span>
+  </Manifesto>
+
+  <Process />
+
+  <Story />
+
+  <Material />
+
+  <Projects />
+
+  <Events />
+
+  <Clients />
+
+  <Promise />
+
+  <Place />
+
+  <!-- lo stesso modulo delle pagine modello, con i loro stili (.mp): la
+       richiesta parte come "Richiesta generica" -->
+  <div class="mp" id="scrivici">
+    <Section tone="dark">
+      <ContactForm />
+    </Section>
+  </div>
+</Site>
+
+<script>
+  // comparse e invio del modulo: lo stesso script delle pagine modello
+  import '../scripts/model-page.js';
+</script>

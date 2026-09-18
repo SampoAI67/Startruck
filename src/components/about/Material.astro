@@ -1,0 +1,29 @@
+---
+// Perche' l'alluminio: tre ragioni, solo cose verificabili. Il carico utile
+// e' il dato reale di Le Mans (dal Wix del cliente).
+const points = [
+  { t: 'Leggero', d: 'Meno peso di struttura vuol dire più carico utile: su Le Mans fino a 1,5 t restando sotto le 3,5 t, quindi con la patente B.' },
+  { t: 'Senza ruggine', d: "L'alluminio regge sale, pioggia e lavaggi senza arrugginire: niente ritocchi di vernice sul pianale, stagione dopo stagione." },
+  { t: 'Lavorato a mano', d: 'Ogni pezzo è tagliato, assemblato e rifinito nella nostra officina, dalle stesse persone che hanno disegnato il mezzo.' },
+];
+---
+<section class="section about-dark" id="materiale">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-eyebrow">Il materiale</span>
+        <h2>Tutto in alluminio.<br />Per tre buone ragioni.</h2>
+      </div>
+      <p class="sec-desc">Il materiale decide quanto porti, quanto dura e come invecchia. Per questo non lo scegliamo a seconda del prezzo del momento.</p>
+    </div>
+    <div class="dark-grid">
+      {points.map((p, i) => (
+        <div class="dark-item">
+          <span class="pnum">{String(i + 1).padStart(2, '0')}</span>
+          <h3>{p.t}</h3>
+          <p>{p.d}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -149,6 +149,15 @@
 @media(min-width:768px) { .mp-sr{margin-top:5rem;} }
 @media(min-width:1000px){ .mp-sr{grid-template-columns:repeat(4, 1fr);} }
 .mp-sr.mp-sr-solo{margin-top:0;}
+/* su telefono i quattro numeri in colonna facevano 700px di scroll: due per
+   riga, piu' compatti */
+@media(max-width:639.98px){
+  .mp-sr{grid-template-columns:repeat(2, 1fr); column-gap:1.25rem;}
+  .mp-sr-item{padding:1.25rem 0;}
+  .mp-sr-value{font-size:2.1rem;}
+  .mp-sr-note{font-size:.82rem;}
+  .mp-light:has(> .mp-container > .mp-sr-solo){padding-block:3.5rem;}
+}
 .mp-sr-item{display:flex; flex-direction:column; gap:.45rem; padding:1.75rem 0; border-top:1px solid;}
 @media(min-width:640px){ .mp-sr-item{padding-inline-end:2rem;} }
 .mp-sr-value{
@@ -210,12 +219,13 @@
   .mp-gal-feature .mp-gal-item:first-child img{aspect-ratio:auto; height:100%;}
 }
 .mp-gal-frame{overflow:hidden; border-radius:var(--mp-r-md); background:var(--mp-surface);}
+/* Ferme al passaggio, come le card dei modelli in casa (richiesta del
+   cliente): cambia solo il colore, niente zoom. */
 .mp-gal-frame img{
   width:100%; aspect-ratio:3 / 2; object-fit:cover; display:block;
-  transform:scale(1.01); filter:grayscale(.15);
-  transition:transform .9s cubic-bezier(.22,1,.36,1), filter .6s;
+  filter:grayscale(.15); transition:filter .6s;
 }
-.mp-gal-item:hover .mp-gal-frame img{transform:scale(1.06); filter:grayscale(0);}
+.mp-gal-item:hover .mp-gal-frame img{filter:grayscale(0);}
 /* La foto cliccata passa nel riquadro grande, e quella grande prende il suo
    posto: nessun progetto resta per sempre il "principale". Il grande porta
    in fondo la striscia degli optional montati su quel mezzo. */
@@ -238,24 +248,16 @@
   .mp-gal-feature .mp-gal-item:first-child{grid-column:span 2;}
 }
 /* sotto i 640 sono tutte larghe uguali: niente scambio, striscia su ognuna */
+/* Sotto i 640 le foto sono tutte larghe uguali: niente scambio, e la
+   striscia degli optional scende SOTTO la foto invece di coprirla (sopra,
+   con tre voci, nascondeva mezzo mezzo). */
 @media(max-width:639.98px){
   .mp-gal-feature .mp-gal-item{cursor:default;}
-  .mp-gal-info{opacity:1; transform:none; padding-top:2.6rem;}
+  .mp-gal-info{position:static; opacity:1; transform:none; padding:.9rem 1rem 1rem; background:none; color:var(--mp-ink);}
+  .mp-gal-info-list li{border-color:var(--mp-hairline); font-size:.74rem;}
 }
 .mp-gal figcaption{margin-top:.75rem; font-size:.72rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; opacity:.5;}
 .mp-gal-title{margin-bottom:3.5rem;}
-
-/* ---- 06 · clienti (ClientLogos) --------------------------------------- */
-.mp-cl-title{
-  font-family:var(--mp-display); font-size:clamp(1.1rem, 2vw, 1.5rem); font-weight:600;
-  letter-spacing:-0.015em; text-align:center; margin-bottom:clamp(2.5rem, 5vw, 4rem); opacity:.65;
-}
-.mp-cl-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:clamp(1.5rem, 4vw, 3.5rem); align-items:center; justify-items:center;}
-@media(min-width:700px) { .mp-cl-grid{grid-template-columns:repeat(5, 1fr);} }
-@media(min-width:1100px){ .mp-cl-grid{grid-template-columns:repeat(9, 1fr);} }
-/* i file sono loghi BIANCHI su trasparenza: sui fondi chiari vanno invertiti */
-.mp-cl-grid img{width:auto; height:clamp(30px, 4vw, 44px); object-fit:contain; opacity:.55; filter:invert(1); transition:opacity .35s;}
-.mp-cl-grid li:hover img{opacity:1;}
 
 /* ---- 07 · domande frequenti (Faq) ------------------------------------- */
 .mp-faq-wrap{display:grid; gap:2rem 4rem;}
@@ -287,8 +289,7 @@
 .mp-others{display:grid; gap:1.5rem;}
 @media(min-width:768px){ .mp-others{grid-template-columns:repeat(2, 1fr);} }
 .mp-ol{position:relative; display:block; overflow:hidden; border-radius:var(--mp-r-lg); aspect-ratio:16 / 9; color:#fff;}
-.mp-ol img{width:100%; height:100%; object-fit:cover; transition:transform 1s cubic-bezier(.22,1,.36,1);}
-.mp-ol:hover img{transform:scale(1.05);}
+.mp-ol img{width:100%; height:100%; object-fit:cover;}
 .mp-ol-scrim{position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,.1) 65%);}
 .mp-ol-body{position:absolute; left:clamp(1.25rem, 3vw, 2rem); bottom:clamp(1.25rem, 3vw, 2rem); display:flex; flex-direction:column; gap:.3rem;}
 .mp-ol-tag{font-size:.66rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.65);}
@@ -328,8 +329,9 @@
 .mp-cf-aside .mp-label{margin-bottom:1.5rem;}
 .mp-cf-kicker{font-weight:400 !important; font-size:clamp(1.15rem, 2.4vw, 1.9rem); letter-spacing:-0.02em; opacity:.7;}
 .mp-cf-shout{font-family:var(--mp-display); font-weight:700; font-size:clamp(2.6rem, 8vw, 6rem); line-height:.92; letter-spacing:-0.035em; margin:.2em 0 1.2em;}
-.mp-cf-contacts{display:grid; gap:.7rem; font-size:.95rem;}
-.mp-cf-contacts a{transition:opacity .2s;}
+.mp-cf-contacts{display:grid; font-size:.95rem;}
+.mp-cf-contacts a{display:inline-block; padding:.55rem 0; transition:opacity .2s;}
+.mp-cf-contacts .mp-cf-addr{padding:.55rem 0;}
 .mp-cf-contacts a:hover{opacity:.6;}
 .mp-cf-addr{opacity:.6;}
 /* Le vecchie pagine del cliente portavano al configuratore con il modello

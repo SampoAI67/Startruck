@@ -7,7 +7,7 @@ import Section from '../../components/model/Section.astro';
 import StatRow from '../../components/model/StatRow.astro';
 import SpecTabs from '../../components/model/SpecTabs.astro';
 import Gallery from '../../components/model/Gallery.astro';
-import ChassisLogos from '../../components/model/ChassisLogos.astro';
+import Clients from '../../components/home/Clients.astro';
 import Faq from '../../components/model/Faq.astro';
 import OtherLines from '../../components/model/OtherLines.astro';
 import ContactForm from '../../components/model/ContactForm.astro';
@@ -66,10 +66,10 @@ const others = lines.filter((l) => l.slug !== line.slug);
       <Gallery images={line.gallery} captions={line.captions} notes={line.galleryOptionals} />
     </Section>
 
-    <!-- 06 · telai (grigio) -->
-    <Section tone="surface" pad="tight">
-      <ChassisLogos title={`Chi ha scelto ${line.name}`} />
-    </Section>
+    <!-- 06 · clienti: lo stesso carosello della pagina di casa. Il titolo
+         resta "Startruck Italia": sono clienti dell'officina, non per forza
+         di questa linea. -->
+    <Clients />
 
     <!-- 07 · domande frequenti (bianco) -->
     <Section tone="light" label="Domande frequenti" index="[ 06 ]">

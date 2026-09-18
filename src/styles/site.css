@@ -167,9 +167,28 @@ header.site{transition:transform .45s cubic-bezier(.22,1,.36,1);}
   .foot-legal{flex-direction:column; align-items:flex-start; gap:8px;}
 }
 
+/* Fra tablet e portatile piccolo cinque voci e il pulsante non stanno alla
+   spaziatura piena: si stringono, e il pulsante perde "Configura". */
+@media(max-width:1180px){
+  .navlinks{gap:24px;}
+  .navlinks a{white-space:nowrap;}
+}
+@media(max-width:1100px){
+  .navcta-long{display:none;}
+}
+
 @media(max-width:860px){
   .navlinks{display:none;}
   .navtoggle{display:block;}
+  /* "Configura preventivo" su due righe schiacciava il marchio: su telefono
+     resta solo "Preventivo", e il pulsante si stringe a misura di barra. */
+  .navcta-long{display:none;}
+  .navcta{padding:10px 16px; margin-left:auto; margin-right:8px;}
+  /* bersagli da dito: almeno 44px, anche dove il testo e' piccolo */
+  .navtoggle{display:grid; place-items:center; flex:none; width:44px; height:44px; padding:0;}
+  .foot-list{gap:0;}
+  .foot-list a, .foot-legal a{display:inline-block; padding:12px 0;}
+  .foot-legal{gap:0;}
 }
 
 @media(prefers-reduced-motion:reduce){

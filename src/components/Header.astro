@@ -5,14 +5,15 @@ import { base } from '../lib/base';
 // torna, dalla casa si scorre e basta.
 const links = [
   { href: base('/'), label: 'Home' },
+  { href: base('/chi-siamo/'), label: 'Chi siamo' },
   { href: base('/#modelli'), label: 'Modelli' },
   { href: base('/#lavori'), label: 'Ultimi lavori' },
   { href: base('/#contatti'), label: 'Contatti' },
 ];
 const panelLinks = [
-  ...links.slice(0, 3),
+  ...links.slice(0, 4),
   { href: base('/#processo'), label: 'Processo' },
-  links[3],
+  links[4],
 ];
 ---
 <header class="site">
@@ -21,7 +22,7 @@ const panelLinks = [
     <div class="navlinks">
       {links.map((l) => <a href={l.href}>{l.label}</a>)}
     </div>
-    <a href={base('/#configuratore')} class="navcta">Configura preventivo</a>
+    <a href={base('/#configuratore')} class="navcta"><span class="navcta-long">Configura </span>Preventivo</a>
     <button class="navtoggle" id="navToggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navPanel">☰</button>
     <div class="navpanel" id="navPanel">
       {panelLinks.map((l) => <a href={l.href}>{l.label}</a>)}

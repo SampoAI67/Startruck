@@ -1,8 +1,14 @@
+---
+// La frase-manifesto in tre righe spezzate a mano. Senza slot e' quella
+// della pagina di casa; .ml e' una riga, .m-dim attenuato, .m-strong pieno.
+interface Props { eyebrow?: string }
+const { eyebrow = 'Il nostro perché' } = Astro.props;
+---
 <section class="section">
   <div class="wrap">
     <div class="manifesto">
-      <span class="sec-eyebrow">Il nostro perché</span>
-      <p><span class="ml ml-1">Il resto del settore tratta il trasporto come una <span class="m-dim">specifica</span></span> <span class="ml ml-2"><span class="m-dim">tecnica.</span> Noi lo trattiamo come ciò</span> <span class="ml ml-3">che è davvero: <span class="m-strong">la custodia di valore in movimento.</span></span></p>
+      <span class="sec-eyebrow">{eyebrow}</span>
+      <p><slot><span class="ml ml-1">Il resto del settore tratta il trasporto come una <span class="m-dim">specifica</span></span> <span class="ml ml-2"><span class="m-dim">tecnica.</span> Noi lo trattiamo come ciò</span> <span class="ml ml-3">che è davvero: <span class="m-strong">la custodia di valore in movimento.</span></span></slot></p>
     </div>
   </div>
 </section>

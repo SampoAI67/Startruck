@@ -1,18 +1,46 @@
 ---
 import { base } from '../../lib/base';
+
+// Hero a tutto schermo sotto la barra trasparente. Senza props e' quello
+// della pagina di casa; le altre pagine passano i loro testi, e il titolo
+// (che ha <br> ed <em>) arriva nello slot "title".
+interface Props {
+  id?: string;
+  eyebrow?: string;
+  text?: string;
+  /** video di sfondo; null = nessun video, resta l'immagine di poster */
+  video?: string | null;
+  poster?: string;
+  ctas?: { href: string; label: string }[];
+}
+const {
+  id = 'home',
+  eyebrow = 'Made in Italy — Allestimenti su misura',
+  text = 'Completamente in alluminio: leggeri, robusti e curati in ogni rifinitura.',
+  video = 'video/startruck-reel.mp4',
+  poster = 'https://static.wixstatic.com/media/d56fb4_46c84cf020194791afba99d315b8882d~mv2.jpeg/v1/fill/w_1450,h_580,q_90,enc_avif,quality_auto/d56fb4_46c84cf020194791afba99d315b8882d~mv2.jpeg',
+  ctas = [
+    { href: '#configuratore', label: 'Richiedi un preventivo' },
+    { href: '#modelli', label: 'Scopri gli allestimenti' },
+  ],
+} = Astro.props;
+const posterSrc = poster.startsWith('http') ? poster : base(poster);
 ---
-<section class="hero" id="home">
-  <video class="hero-video" autoplay muted loop playsinline poster="https://static.wixstatic.com/media/d56fb4_46c84cf020194791afba99d315b8882d~mv2.jpeg/v1/fill/w_1450,h_580,q_90,enc_avif,quality_auto/d56fb4_46c84cf020194791afba99d315b8882d~mv2.jpeg">
-    <source src={base('video/startruck-reel.mp4')} type="video/mp4" />
-  </video>
+<section class="hero" id={id}>
+  {video ? (
+    <video class="hero-video" autoplay muted loop playsinline poster={posterSrc}>
+      <source src={base(video)} type="video/mp4" />
+    </video>
+  ) : (
+    <img class="hero-video" src={posterSrc} alt="" fetchpriority="high" />
+  )}
   <div class="hero-overlay"></div>
   <div class="wrap hero-inner">
-    <span class="eyebrow">Made in Italy — Allestimenti su misura</span>
-    <h1>Costruiti per correre.<br />Pensati per <em>durare</em>.</h1>
-    <p>Completamente in alluminio: leggeri, robusti e curati in ogni rifinitura.</p>
+    <span class="eyebrow">{eyebrow}</span>
+    <h1><slot name="title">Costruiti per correre.<br />Pensati per <em>durare</em>.</slot></h1>
+    <p>{text}</p>
     <div class="hero-ctas">
-      <a href="#configuratore" class="btn-primary">Richiedi un preventivo</a>
-      <a href="#modelli" class="btn-ghost">Scopri gli allestimenti</a>
+      {ctas.map((c, i) => <a href={c.href} class={i === 0 ? 'btn-primary' : 'btn-ghost'}>{c.label}</a>)}
     </div>
   </div>
 </section>

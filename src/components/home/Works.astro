@@ -9,6 +9,10 @@ import data from '../../data/lavori.json';
 // lavoro e' una terna di post, quindi servono due righe di terne intere.
 const posts = data.posts.slice(0, Math.floor(data.posts.length / 6) * 6);
 const cols = posts.length / 2;
+// Rotaia infinita: la striscia e' scritta tre volte, e work-rail.js tiene lo
+// scorrimento sulla copia centrale (vedi li'). Le copie laterali sono solo
+// decorative: fuori dall'albero accessibile e fuori dal tab.
+const copies = [false, true, true];
 ---
 <section class="section alt" id="lavori">
   <div class="wrap">
@@ -20,12 +24,16 @@ const cols = posts.length / 2;
     </div>
   </div>
   <div class="work-rail" id="workRail">
-    <div class="work-strip" style={`--cols:${cols}`}>
-      {posts.map((p) => (
-        <a class="work-cell" href={p.permalink || undefined} target={p.permalink ? '_blank' : undefined} rel={p.permalink ? 'noopener' : undefined}>
-          <img src={base(p.img)} alt={p.caption ?? ''} loading="lazy" decoding="async" />
-          {p.caption && <span class="work-cap">{p.caption}</span>}
-        </a>
+    <div class="work-loop">
+      {copies.map((copy) => (
+        <div class="work-strip" style={`--cols:${cols}`} aria-hidden={copy ? 'true' : undefined}>
+          {posts.map((p) => (
+            <a class="work-cell" href={p.permalink || undefined} target={p.permalink ? '_blank' : undefined} rel={p.permalink ? 'noopener' : undefined} tabindex={copy ? -1 : undefined}>
+              <img src={base(p.img)} alt={copy ? '' : (p.caption ?? '')} loading="lazy" decoding="async" />
+              {p.caption && <span class="work-cap">{p.caption}</span>}
+            </a>
+          ))}
+        </div>
       ))}
     </div>
   </div>

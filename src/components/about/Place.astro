@@ -1,0 +1,25 @@
+---
+import MapEmbed from './MapEmbed.astro';
+
+// La sede: mappa (a due clic, vedi MapEmbed) e recapiti. "Indicazioni
+// stradali" apre il navigatore del telefono direttamente.
+const address = 'Str. Boschi, 46045 Pozzolo sul Mincio (MN)';
+const directions = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent('Startruck Italia, Str. Boschi, 46045 Pozzolo sul Mincio MN')}`;
+---
+<section class="section alt about-place" id="sede">
+  <div class="wrap place-grid">
+    <MapEmbed />
+    <div>
+      <span class="sec-eyebrow">Dove siamo</span>
+      <h2>Vieni a vedere<br />come lavoriamo.</h2>
+      <p class="place-lead">L'officina è a Pozzolo sul Mincio, fra Mantova e il lago di Garda. Qui progettiamo, costruiamo e consegniamo ogni allestimento: passa a trovarci e guarda i mezzi dal vivo.</p>
+      <div class="contact-item"><span class="mono">Sede</span><div class="val">{address}</div></div>
+      <div class="contact-item"><span class="mono">Telefono</span><div class="val"><a href="tel:+393408427538">+39 340 842 7538</a></div></div>
+      <div class="contact-item"><span class="mono">Email</span><div class="val"><a href="mailto:startruck@outlook.it">startruck@outlook.it</a></div></div>
+      <div class="place-ctas">
+        <a class="btn-dark" href={directions} target="_blank" rel="noopener">Indicazioni stradali</a>
+        <a class="btn-line" href="#scrivici">Scrivici</a>
+      </div>
+    </div>
+  </div>
+</section>

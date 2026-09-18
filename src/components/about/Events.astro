@@ -1,0 +1,36 @@
+---
+import { base } from '../../lib/base';
+
+// Gare, raduni e fiere: Startruck non e' solo officina.
+// SEGNAPOSTO: queste sono le foto che abbiamo gia', scelte fra quelle fuori
+// dall'officina. Vanno sostituite con le foto delle gare e degli eventi del
+// cliente: la prima e' il riquadro grande, le altre tre le piccole.
+const shots = [
+  { img: 'img/typeh-01.webp', tag: 'Eventi', text: 'Type H in esposizione' },
+  { img: 'lavori/lavoro-05.webp', tag: 'Raduni', text: 'Passato e presente, fianco a fianco' },
+  { img: 'img/typeh-02.webp', tag: 'In viaggio', text: 'Due Type H, una sola strada' },
+  { img: 'img/typeh-05.webp', tag: 'Sempre operativi', text: 'Anche di notte, anche sulla neve' },
+];
+---
+<section class="section about-dark" id="eventi">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="sec-eyebrow">Fuori dall'officina</span>
+        <h2>Ci trovi anche<br />dove le auto corrono.</h2>
+      </div>
+      <p class="sec-desc">Gare, raduni, fiere: i nostri mezzi lavorano accanto alle auto che trasportano, e noi con loro.</p>
+    </div>
+    <div class="ev-grid">
+      {shots.map((s) => (
+        <figure class="ev-item">
+          <img src={base(s.img)} alt={s.text} loading="lazy" decoding="async" />
+          <figcaption><span class="mono">{s.tag}</span>{s.text}</figcaption>
+        </figure>
+      ))}
+    </div>
+    <p class="ev-more mono">
+      Le trasferte e i dietro le quinte su <a href="https://www.instagram.com/startruckitalia/" target="_blank" rel="noopener">@startruckitalia</a>
+    </p>
+  </div>
+</section>
