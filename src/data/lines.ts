@@ -32,6 +32,23 @@ export interface Line {
    *  la striscia "Optional installati" della galleria. */
   galleryOptionals?: string[][];
   faq?: { q: string; a: string }[];
+  /** titolo dell'apertura al posto del nome (il nome resta nel titolo della pagina) */
+  heroTitle?: string;
+  /** testo sotto al titolo dell'apertura, al posto di quello comune */
+  heroText?: string;
+  /** linea fatta insieme a un'altra azienda: logo sotto al titolo e sezione dedicata */
+  partner?: Partner;
+  /** senza la sezione Dotazione / Optionals (e senza il banner che la precede) */
+  hideSpecs?: boolean;
+}
+
+export interface Partner {
+  name: string;
+  url: string;
+  logo: string;
+  title: string;
+  text: string[];
+  models: { name: string; base: string; text: string; img: string; href?: string }[];
 }
 
 // I sette elementi di serie sono quelli elencati dal cliente su Wix.
@@ -129,8 +146,6 @@ export const lines: Line[] = [
     stats: [
       { value: 'Vano chiuso', label: 'Struttura', note: 'Nessuna visibilità dall’esterno, in sosta come in viaggio.' },
       { value: 'Su misura', label: 'Ancoraggi', note: 'Posizionati sulle vetture che trasporti davvero.' },
-      { value: 'B', label: 'Patente', note: 'Progettato per restare nei 3,5 t.' },
-      { value: '24/7', label: 'Reperibilità', note: 'Chi ha costruito il mezzo risponde anche dopo la consegna.' },
     ],
     equipment: equipmentNames,
     dotazione: dotazioneFor('Privacy'),
@@ -160,10 +175,10 @@ export const lines: Line[] = [
     hero: { video: 'video/typeh-hero.mp4', poster: 'img/typeh-hero.webp' },
     detail: { video: 'video/typeh-detail.mp4', poster: 'img/typeh-detail.webp' },
     stats: [
-      { value: 'Su misura', label: 'Carrozzeria', note: 'Ogni pannello è costruito e rifinito a mano.' },
-      { value: 'Telaio moderno', label: 'Meccanica', note: 'L’estetica è d’epoca, l’affidabilità è di oggi.' },
-      { value: 'B', label: 'Patente', note: 'Progettato per restare nei 3,5 t.' },
-      { value: '1 di 1', label: 'Personalizzazione', note: 'Colori e finiture scelti insieme, pezzo unico.' },
+      // la carrozzeria retro' e' il kit di Caselani: il merito va a loro
+      { value: 'Spirito retrò.', label: 'Stile', note: 'Le linee dei commerciali storici, firmate Carrozzeria Caselani.' },
+      { value: 'Telaio moderno.', label: 'Meccanica', note: 'L’estetica è d’epoca, l’affidabilità è di oggi.' },
+      { value: 'Kit', label: 'Carrozzeria', note: 'Pannellatura in vetroresina.' },
     ],
     equipment: equipmentNames,
     dotazione: dotazioneFor('Type H'),
@@ -179,6 +194,37 @@ export const lines: Line[] = [
     ],
     captions: ['Type H — profilo', 'Dettaglio frontale', 'Vano di carico', 'Finiture', 'Interni', 'Retro'],
     galleryOptionals: optionalsDaConfermare(6),
+    heroTitle: 'Design Retro',
+    heroText: 'Identità, storia e originalità.',
+    hideSpecs: true,
+    // Fonti: caselani.com (typeh.php, 616n.php) e Wikipedia "Caselani".
+    // Il ruolo di Startruck nella collaborazione va confermato dal cliente.
+    partner: {
+      name: 'Carrozzeria Caselani',
+      url: 'https://www.caselani.com',
+      logo: 'img/caselani-logo.webp',
+      title: 'Linee Caselani,\nallestimento Startruck.',
+      text: [
+        'Carrozzeria Caselani nasce nel 1998 a Sospiro, in provincia di Cremona. Dal 2017 ridisegna i veicoli commerciali di oggi con le forme di quelli storici: il Type H è prodotto su licenza ufficiale Citroën.',
+        'Loro vestono il mezzo, noi lo allestiamo: sulla carrozzeria retrò montiamo il pianale in alluminio e tutto ciò che serve al trasporto. Sotto resta la meccanica moderna del veicolo di base, con i suoi sistemi di sicurezza.',
+      ],
+      models: [
+        {
+          name: 'Type H',
+          base: 'Su Citroën Jumper',
+          text: 'Ispirato al Citroën HY, l’icona dei furgoni francesi del dopoguerra, con le sue nervature longitudinali.',
+          img: 'img/typeh-03.webp',
+          href: 'https://www.caselani.com/typeh.php',
+        },
+        {
+          name: '616N',
+          base: 'Su Fiat Ducato',
+          text: 'Ispirato ai Fiat 615 e 616, i camion leggeri che dal 1952 al 1966 hanno lavorato per l’Italia del boom economico.',
+          img: 'lavori/lavoro-10.webp',
+          href: 'https://www.caselani.com/616n.php',
+        },
+      ],
+    },
   },
 ];
 

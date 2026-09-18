@@ -10,6 +10,7 @@ import Gallery from '../../components/model/Gallery.astro';
 import Clients from '../../components/home/Clients.astro';
 import Faq from '../../components/model/Faq.astro';
 import OtherLines from '../../components/model/OtherLines.astro';
+import Collab from '../../components/model/Collab.astro';
 import ContactForm from '../../components/model/ContactForm.astro';
 import { lines, type Line } from '../../data/lines';
 
@@ -19,6 +20,10 @@ export function getStaticPaths() {
 
 const { line } = Astro.props as { line: Line };
 const others = lines.filter((l) => l.slug !== line.slug);
+// l'invito dell'apertura porta alla sezione che la pagina ha davvero
+const cta = line.hideSpecs && line.partner
+  ? { label: 'Scopri la collaborazione', href: '#collaborazione' }
+  : { label: 'Guarda la dotazione', href: '#dotazione' };
 ---
 <Site title={`${line.name} — ${line.tagline} | Startruck Italia`} description={line.description}>
   <div class="mp">
@@ -27,9 +32,10 @@ const others = lines.filter((l) => l.slug !== line.slug);
     <VideoBanner
       video={line.detail.video}
       poster={line.detail.poster}
-      title={line.name}
-      text="Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada."
-      cta={{ label: 'Guarda la dotazione', href: '#dotazione' }}
+      title={line.heroTitle ?? line.name}
+      logo={line.partner && { src: line.partner.logo, alt: line.partner.name, href: line.partner.url }}
+      text={line.heroText ?? 'Niente è lì per caso: ogni scelta costruttiva nasce da un problema vero incontrato su strada.'}
+      cta={cta}
       heading="h1"
       first
       scrollCue
@@ -43,6 +49,14 @@ const others = lines.filter((l) => l.slug !== line.slug);
       <StatRow stats={line.stats} solo />
     </Section>
 
+    <!-- linea fatta con un partner (Type H con Caselani): chi sono e i modelli -->
+    {line.partner && (
+      <Section tone="surface" id="collaborazione" label={`In collaborazione con ${line.partner.name}`} index="[ ✱ ]">
+        <Collab partner={line.partner} />
+      </Section>
+    )}
+
+    {!line.hideSpecs && (<>
     <!-- 03 · il modello (nero) -->
     <VideoBanner
       video={line.hero.video}
@@ -59,6 +73,7 @@ const others = lines.filter((l) => l.slug !== line.slug);
     <Section tone="dark" id="dotazione" label="Cosa c'è a bordo" index="[ 04 ]">
       <SpecTabs dotazione={line.dotazione} optionals={line.optionals} image={line.gallery[2]} />
     </Section>
+    </>)}
 
     <!-- 05 · i progetti (bianco) -->
     <Section tone="light" label="Più iconici" index="[ 05 ]">

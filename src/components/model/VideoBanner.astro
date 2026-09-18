@@ -17,10 +17,12 @@ interface Props {
   first?: boolean;
   heading?: 'h1' | 'h2';
   scrollCue?: boolean;
+  /** firma sotto al titolo: "by" + logo del partner */
+  logo?: { src: string; alt: string; href: string };
 }
 const {
   video, videoMobile, poster, eyebrow, index, title, text, cta,
-  height = 'full', first = false, heading: Heading = 'h2', scrollCue = false,
+  height = 'full', first = false, heading: Heading = 'h2', scrollCue = false, logo,
 } = Astro.props;
 const titleLines = title.split('\n');
 ---
@@ -37,6 +39,11 @@ const titleLines = title.split('\n');
     <Heading class="mp-vb-title" data-reveal>
       {titleLines.map((l, i) => <span class="mp-mask"><span style={`--d:${(i * 0.09).toFixed(2)}s`}>{l}</span></span>)}
     </Heading>
+    {logo && (
+      <a class="mp-vb-by" href={logo.href} target="_blank" rel="noopener" data-reveal data-delay=".12s">
+        <span>by</span><img src={base(logo.src)} alt={logo.alt} width="636" height="140" />
+      </a>
+    )}
     {text && <p class="mp-vb-text" data-reveal data-delay=".18s">{text}</p>}
     {cta && <div data-reveal data-delay=".26s"><a class="mp-vb-cta" href={cta.href}>{cta.label} <Arrow /></a></div>}
   </div>

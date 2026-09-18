@@ -6,7 +6,7 @@ interface Props {
 }
 const { stats, solo = false } = Astro.props;
 ---
-<ul class:list={['mp-sr', { 'mp-sr-solo': solo }]}>
+<ul class:list={['mp-sr', { 'mp-sr-solo': solo }]} style={`--cols:${Math.min(stats.length, 4)}`}>
   {stats.map((s, i) => (
     <li class="mp-sr-item mp-rule" data-reveal data-delay={`${(i * 0.08).toFixed(2)}s`}>
       <span class="mp-sr-value" data-count={s.value}>{s.value}</span>

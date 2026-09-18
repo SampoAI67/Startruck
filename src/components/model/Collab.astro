@@ -1,0 +1,39 @@
+---
+import { base } from '../../lib/base';
+import type { Partner } from '../../data/lines';
+import Arrow from './Arrow.astro';
+
+// Linea fatta insieme a un'altra carrozzeria: chi sono, chi fa cosa, e i
+// modelli della collaborazione. I link dei modelli portano alle loro pagine.
+interface Props { partner: Partner }
+const { partner } = Astro.props;
+const titleLines = partner.title.split('\n');
+---
+<div class="mp-co">
+  <div class="mp-co-head">
+    <h2 class="mp-display-2" data-reveal>
+      {titleLines.map((l, i) => <span class="mp-mask"><span style={`--d:${(i * 0.09).toFixed(2)}s`}>{l}</span></span>)}
+    </h2>
+    <div class="mp-co-text">
+      {partner.text.map((t, i) => <p class="mp-soft" data-reveal data-delay={`${(0.08 + i * 0.06).toFixed(2)}s`}>{t}</p>)}
+      <a class="mp-co-link" href={partner.url} target="_blank" rel="noopener" data-reveal data-delay=".2s">
+        <img src={base(partner.logo)} alt={partner.name} width="636" height="140" loading="lazy" decoding="async" />
+        <span>Visita il sito <Arrow /></span>
+      </a>
+    </div>
+  </div>
+  <ul class="mp-co-models">
+    {partner.models.map((m, i) => (
+      <li data-reveal data-delay={`${(i * 0.08).toFixed(2)}s`}>
+        <a class="mp-co-card" href={m.href ?? partner.url} target="_blank" rel="noopener">
+          <span class="mp-co-img"><img src={base(m.img)} alt={`${m.name} — ${m.base}`} width="1280" height="853" loading="lazy" decoding="async" /></span>
+          <span class="mp-co-body">
+            <span class="mp-co-base">{m.base}</span>
+            <span class="mp-co-name">{m.name}</span>
+            <span class="mp-co-desc mp-soft">{m.text}</span>
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>

@@ -7,7 +7,7 @@
    arriva in fondo e' gia' tornata al punto di partenza, e non si vede.
    I marchi non sono nostri: restano nei loro colori, scalati ad altezza
    uguale perche' una fila di loghi si legge per altezza, non per area. */
-.clients{background:var(--white); border-block:1px solid var(--line); padding:64px 0; overflow:hidden;}
+.clients{background:var(--bg); border-top:1px solid var(--line); padding:64px 0; overflow:hidden;}
 .clients-in{display:grid; grid-template-columns:minmax(220px, 300px) 1fr; gap:48px; align-items:center; max-width:1180px; margin:0 auto; padding:0 32px;}
 .clients h2{font-size:clamp(1.4rem,2.3vw,1.9rem); line-height:1.15;}
 .clients-rows{display:grid; gap:18px; min-width:0;

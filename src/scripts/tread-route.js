@@ -15,7 +15,7 @@ import { base } from '../lib/base';
   var ctx = cv.getContext('2d');
 
   var VB_W = 1098, VB_H = 477;   // riquadro del tracciato disegnato in Figma
-  var STROKE = 34;               // larghezza di una gomma: con due tracce affiancate, piu' snella di una sola
+  var STROKE = 22;               // larghezza di una gomma: con due tracce affiancate, piu' snella di una sola
   var PITCH = 2;                 // battistrada allungato 2x nel senso di marcia
   var OVER = 150;                // quanto il canvas deborda ai lati della griglia
   var STEP = 2;     // lunghezza della fettina, in pixel di destinazione
@@ -66,7 +66,10 @@ import { base } from '../lib/base';
     /* Due tracce affiancate, come le due ruote di un mezzo passato di li':
        ciascuna sta a OFF dal tracciato, misurato perpendicolare alla marcia,
        quindi nelle curve restano parallele invece di sovrapporsi. */
-    var OFF = THICK * 0.6 + 2.5;                              // gomme gemellate: vicine (+5px fra le due tracce)
+    // gomme gemellate: fra i bordi interni delle due tracce restano GAP px,
+    // fissi, cosi' la distanza non si restringe insieme alle tracce
+    var GAP = 12;
+    var OFF = THICK / 2 + GAP / 2;
     var REACH = THICK / 2 + OFF;                              // ingombro dall'asse
 
     // quanto il tracciato entra prima della prima scheda e esce dopo l'ultima
