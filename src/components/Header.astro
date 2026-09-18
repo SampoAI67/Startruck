@@ -19,8 +19,9 @@ const models = lines.map((l) => ({
 const home = { href: base('/'), label: 'Home' };
 const about = { href: base('/chi-siamo/'), label: 'Chi siamo' };
 const allModels = { href: base('/#modelli'), label: 'Tutti i modelli' };
+// "In vendita" porta alla vetrina Subito del cliente: esterna, nuova scheda
 const after = [
-  { href: base('/#lavori'), label: 'Ultimi lavori' },
+  { href: 'https://impresapiu.subito.it/shops/44050-startruck-italia', label: 'In vendita', external: true },
   { href: base('/#contatti'), label: 'Contatti' },
 ];
 ---
@@ -48,7 +49,7 @@ const after = [
           <a class="navdrop-all" href={allModels.href}>{allModels.label} →</a>
         </div>
       </div>
-      {after.map((l) => <a href={l.href}>{l.label}</a>)}
+      {after.map((l) => <a href={l.href} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener' : undefined}>{l.label}</a>)}
     </div>
     <a href={base('/#configuratore')} class="navcta"><span class="navcta-long">Configura </span>Preventivo</a>
     <button class="navtoggle" id="navToggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navPanel">☰</button>
@@ -59,7 +60,7 @@ const after = [
       <div class="navpanel-sub">
         {models.map((m) => <a href={m.href}>{m.name}</a>)}
       </div>
-      {after.map((l) => <a href={l.href}>{l.label}</a>)}
+      {after.map((l) => <a href={l.href} target={l.external ? '_blank' : undefined} rel={l.external ? 'noopener' : undefined}>{l.label}</a>)}
     </div>
   </nav>
 </header>
